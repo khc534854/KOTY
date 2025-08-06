@@ -1,22 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerKart/C_PlayerKart.h"
+#include "KOTY/PlayerKart/C_PlayerKart.h"
+
+
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-
+	
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	RootComponent = BoxComponent;
+	
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	StaticMeshComponent->SetupAttachment(BoxComponent);
+	
+	
 }
 
 // Called when the game starts or when spawned
 void AC_PlayerKart::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
+	
 	
 }
 
