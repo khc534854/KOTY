@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KOTY/PlayerKart/C_PlayerKart.h"
+#include "PlayerKart/C_PlayerKart.h"
 #include "DrawDebugHelpers.h" // 디버그 라인 그리기용 (선택 사항)
+#include "Math/UnitConversion.h"
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
@@ -15,17 +16,20 @@ AC_PlayerKart::AC_PlayerKart()
 	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(BoxComponent);
+
+	TArray<FVector> WheelLocations;
+	WheelLocations.Add(FVector(120, 70, 0));
+	WheelLocations.Add(FVector(120, -70, 0));
+	WheelLocations.Add(FVector(-120, 70, 0));
+	WheelLocations.Add(FVector(-120, -70, 0));
 	
 	for (int a = 0; a < 4; a++)
 	{
-		WheelsComponents.Push(CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WheelComponent") + a));
+		FString WheelComponentName = FString::Printf(TEXT("WheelComponent_%d"), a);
+		WheelsComponents.Push(CreateDefaultSubobject<UStaticMeshComponent>(FName(*WheelComponentName)));
 		WheelsComponents[a]->SetupAttachment(BoxComponent);
+		WheelsComponents[a]->SetRelativeLocation(WheelLocations[a]);
 	}
-	
-	WheelsComponents[0]->SetRelativeLocation(FVector( 120,  70, 0));
-	WheelsComponents[1]->SetRelativeLocation(FVector( 120, -70, 0));
-	WheelsComponents[2]->SetRelativeLocation(FVector(-120,  70, 0));
-	WheelsComponents[3]->SetRelativeLocation(FVector(-120, -70, 0));
 
 	MaxAccelerationTime = Acceleration * 2;
 }
@@ -55,26 +59,34 @@ void AC_PlayerKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsAcceleration)
+	if (!bIsAcceleration && bIsGround)
 	{
 		DegreaseAccelerationTime();
 	}
+	CheckIsGround();
 	
 	for (int a = 0; a < 4; a++)
 	{
-		Suspension(WheelsComponents[a]);
+		//Suspension(WheelsComponents[a]);
+	}
+	FVector NewLocation;
+
+	SetActorRotation(FMath::Lerp(GetActorForwardVector().Rotation(), BeforeDirection.Rotation(), GetWorld()->GetDeltaSeconds() * 10));
+	
+	
+	
+	if (!bIsGround)
+	{
+		NewLocation = GetActorLocation() + (GetActorForwardVector() * CurSpeed * DeltaTime + FVector(0, 0, -20.0));
+	}
+	else
+	{
+		SetCurrentSpeed();
+		NewLocation = GetActorLocation() + GetActorForwardVector() * CurSpeed * DeltaTime;
 	}
 	
-	SetCurrentSpeed();
-	FVector NewLocation = GetActorLocation() + GetActorForwardVector() * CurSpeed * DeltaTime;
 
 	SetActorLocation(NewLocation);
-	
-	
-
-	UE_LOG(LogTemp, Display, TEXT("Acceleration Time : %f"), AccelerationTime);
-	UE_LOG(LogTemp, Display, TEXT("Current Speed : %f"), CurSpeed);
-	
 }
 
 // Called to bind functionality to input
@@ -91,6 +103,17 @@ void AC_PlayerKart::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		{
 			EnhancedInputComponent->BindAction(AccelerationAction, ETriggerEvent::Triggered, this, &AC_PlayerKart::StartAccelerator);
 			EnhancedInputComponent->BindAction(AccelerationAction, ETriggerEvent::Completed, this, &AC_PlayerKart::EndAccelerator);
+		}
+
+		if (HandlingAction)
+		{
+			EnhancedInputComponent->BindAction(HandlingAction, ETriggerEvent::Triggered, this, &AC_PlayerKart::HandlingStart);
+			EnhancedInputComponent->BindAction(HandlingAction, ETriggerEvent::Completed, this, &AC_PlayerKart::HandlingEnd);
+		}
+
+		if (DriftAction)
+		{
+			EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Triggered, this, &AC_PlayerKart::Drift);
 		}
 	}
 }
@@ -124,6 +147,11 @@ void AC_PlayerKart::SetCurrentSpeed()
 	}
 }
 
+void AC_PlayerKart::SetDirection()
+{
+	CurDirection = GetActorForwardVector();
+}
+
 void AC_PlayerKart::DegreaseAccelerationTime()
 {
 	if (AccelerationTime > 0)
@@ -134,6 +162,8 @@ void AC_PlayerKart::DegreaseAccelerationTime()
 	{
 		AccelerationTime = FMath::Clamp(AccelerationTime + (GetWorld()->GetDeltaSeconds() * BrakePower), MaxAccelerationTime * -1.f,0.f);
 	}
+
+	
 }
 
 void AC_PlayerKart::Suspension(USceneComponent* Component)
@@ -180,8 +210,60 @@ void AC_PlayerKart::Suspension(USceneComponent* Component)
 			(HitResult.TraceStart - HitResult.TraceEnd) * 65000;
 		
 		BoxComponent->AddForceAtLocation(Force, Component->GetComponentLocation());
+		bIsGround = true;
+	}
+	else
+	{
+		bIsGround = false;
 	}
 	
+}
+
+void AC_PlayerKart::CheckIsGround()
+{
+	FVector StartLocation = GetActorLocation();
+	
+	// 라인 트레이스 끝 위치 (예: 현재 위치에서 아래로 1000cm)
+	FVector EndLocation = StartLocation - (GetActorUpVector() * 80);
+	
+	// 충돌 결과를 담을 구조체
+	FHitResult HitResult;
+	
+	// 충돌 쿼리 매개변수
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this); // 충돌 체크에서 자기 자신을 무시하도록 설정
+	QueryParams.bTraceComplex = false; // 단순 충돌(Simple Collision)만 체크
+	
+	// Line Trace 실행
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		StartLocation,
+		EndLocation,
+		ECollisionChannel::ECC_Visibility, // 충돌 채널 (예: Visibility)
+		QueryParams
+	);
+	
+	// 디버그 라인 그리기 (선택 사항)
+	DrawDebugLine(
+		GetWorld(),
+		StartLocation,
+		EndLocation,
+		bHit ? FColor::Red : FColor::Green,
+		false, // 영구 표시 여부
+		-1.0f, // 표시 시간 (-1.0f는 한 프레임만)
+		0,
+		1.0f // 선의 두께
+	);
+	
+	// 충돌이 발생했을 때의 로직
+	if (bHit)
+	{
+		bIsGround = true;
+	}
+	else
+	{
+		bIsGround = false;
+	}
 }
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
@@ -198,7 +280,9 @@ void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
 		AccelerationTime -= GetWorld()->DeltaTimeSeconds;
 	}
 
-	AccelerationTime = FMath::Clamp(AccelerationTime, -MaxAccelerationTime, MaxAccelerationTime); 
+	AccelerationTime = FMath::Clamp(AccelerationTime, -MaxAccelerationTime, MaxAccelerationTime);
+
+	
 }
 
 void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
@@ -206,3 +290,56 @@ void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
 	bIsAcceleration = false;
 }
 
+void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
+{
+	if (!bIsHandling)
+	{
+		bIsHandling = true;
+		BeforeDirection = GetActorForwardVector();
+	}
+	
+
+	
+	
+	float HandlingDir = Value.Get<float>();
+
+	FRotator HandlingRotator = GetActorRotation();
+
+	if (bIsDrift)
+	{
+		HandlingRotator = FRotator(0, FMath::Clamp(HandlingDir * 1 * HandlingValue, -10.f, 10.f), 0);
+
+		FVector Force;
+		
+		if (HandlingDir > 0)
+		{
+			FVector ForceLocation = WheelsComponents[3]->GetComponentLocation();
+			Force =  FVector(0, HandlingDir * HandlingValue * 1000,0);
+			BoxComponent->AddForceAtLocation(Force, ForceLocation);
+		}
+		else if (HandlingDir < 0)
+		{
+			FVector ForceLocation = WheelsComponents[2]->GetComponentLocation();
+			Force = FVector(0, HandlingDir * HandlingValue * 1000,0);
+			BoxComponent->AddForceAtLocation(Force, ForceLocation);
+		}
+	}
+	else
+	{
+		HandlingRotator = FRotator(0, FMath::Clamp(HandlingDir * 1 * HandlingValue, -10.f, 10.f), 0);
+	}
+	
+	
+	SetActorRotation(GetActorRotation() + HandlingRotator);
+}
+
+void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
+{
+	bIsHandling = false;
+
+}
+
+void AC_PlayerKart::Drift(const FInputActionValue& Value)
+{
+	bIsDrift = Value.Get<bool>();
+}

@@ -12,6 +12,10 @@ public class KOTY : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+		PublicIncludePaths.AddRange(new string[] {
+			"KOTY" // "Source/KOTY" 폴더를 포함 경로로 추가
+		});
+		
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		
