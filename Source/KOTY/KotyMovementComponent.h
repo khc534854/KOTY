@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float SurfaceElasticity;
 	
+	UFUNCTION(BlueprintCallable)
+    FVector FindTrackSurface(float TraceRadius = 100.f, int NumRays = 32) const;
+	
 public:
 	virtual void InitializeComponent() override;
 	

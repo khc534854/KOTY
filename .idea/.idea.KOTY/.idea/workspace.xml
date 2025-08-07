@@ -13,17 +13,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_MoveCompTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_MoveCompTester.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/MT_Turtle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BombItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BombThrowTester.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_Turtle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_TurtleItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_TurtleTestShooter.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
     </list>
@@ -32,17 +24,23 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/MovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -52,22 +50,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;LJW&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ 프로젝트.KOTY.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "LJW",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ 프로젝트.KOTY">
     <configuration name="KOTY" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -190,12 +189,14 @@
       <workItem from="1754493623891" duration="4913000" />
       <workItem from="1754552486517" duration="374000" />
       <workItem from="1754552881055" duration="362000" />
+      <workItem from="1754573914793" duration="9406000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
