@@ -25,13 +25,28 @@ protected:
 	float LinearDrag;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
+	FVector MoveDir;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
+	float MoveSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	FVector MoveVelocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	float Elasticity;
+	float SurfaceElasticity;
 	
 public:
+	virtual void InitializeComponent() override;
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
-	void Init(bool InbSimulate, const FVector& InGravityDir, float InGravityForce, float InLinearDrag);
+	UFUNCTION(BlueprintCallable)
+	void Init(
+		const bool InbSimulate,
+		const FVector& InMoveVelocity,
+		const FVector& InGravityDir,
+		const float InGravityForce,
+		const float InLinearDrag,
+		const float InSurfaceElasticity);
 };
