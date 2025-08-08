@@ -34,6 +34,7 @@ public:
 	void DegreaseAccelerationTime();
 	void Suspension(USceneComponent* Component);
 	void CheckIsGround();
+	void SaveVelocity();
 	
 	//input
 	void StartAccelerator(const FInputActionValue& Value);
@@ -83,6 +84,9 @@ protected:
 	float AccelerationTime = 0;
 	UPROPERTY(BlueprintReadOnly)
 	float MaxAccelerationTime = 0;
+
+	UPROPERTY(BlueprintReadOnly)
+	float AccelerationDir = 0;
 	
 	UPROPERTY(BlueprintReadOnly)
 	float CurSpeed = 0.f;
@@ -95,6 +99,9 @@ protected:
 	float BrakePower = 1.f;
 
 	// Handling
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> VelocityHistory;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float HandlingValue = 1.f;
 
