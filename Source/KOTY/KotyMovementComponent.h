@@ -6,6 +6,8 @@
 #include "GameFramework/MovementComponent.h"
 #include "KotyMovementComponent.generated.h"
 
+class USphereComponent;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KOTY_API UKotyMovementComponent : public UMovementComponent
 {
@@ -24,20 +26,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float LinearDrag;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	FVector MoveDir;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement", meta=(Display="ActiveConstantHorizonSpeed"))
+	bool bConstantHorizonSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement", meta=(EditCondition="bConstantHorizonSpeed"))
+	float ConstantHorizonSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	float MoveSpeed;
+	float StepUpLimit = 3;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	FVector MoveVelocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float SurfaceElasticity;
+
+	UPROPERTY()
+	USphereComponent* SphereComp; 
 	
 	UFUNCTION(BlueprintCallable)
-    FVector FindTrackSurface(float TraceRadius = 100.f, int NumRays = 32) const;
+    FHitResult LineTraceGravityDirTrack(FVector Start) const;
 	
 public:
 	virtual void InitializeComponent() override;
@@ -45,11 +53,22 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void Init(
+	void ThrowConstantHorizon(
 		const bool InbSimulate,
-		const FVector& InMoveVelocity,
-		const FVector& InGravityDir,
+		const FVector InGravityDir,
+		const float InGravityForce,
+		const float InConstantHorizonSpeed,
+		const float InStepUpLimit,
+		const FVector InMoveVelocity,
+		const float InSurfaceElasticity);
+
+	UFUNCTION(BlueprintCallable)
+	void ThrowLinearDrag(
+		const bool InbSimulate,
+		const FVector InGravityDir,
 		const float InGravityForce,
 		const float InLinearDrag,
+		const float InStepUpLimit,
+		const FVector InMoveVelocity,
 		const float InSurfaceElasticity);
 };

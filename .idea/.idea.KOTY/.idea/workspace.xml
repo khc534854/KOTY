@@ -13,11 +13,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/BombItem.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/BombItem.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/TurtleItem.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/TurtleItem.h" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,12 +39,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/HitResult.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/MovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -52,7 +63,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ 프로젝트.KOTY.executor": "Run",
+    "C/C++ 프로젝트.KOTY.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -63,7 +74,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "com.intellij.platform.ide.impl.presentationAssistant.PresentationAssistantConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -190,6 +201,10 @@
       <workItem from="1754552486517" duration="374000" />
       <workItem from="1754552881055" duration="362000" />
       <workItem from="1754573914793" duration="9406000" />
+      <workItem from="1754610946835" duration="73000" />
+      <workItem from="1754611036111" duration="11086000" />
+      <workItem from="1754624197275" duration="5849000" />
+      <workItem from="1754633278672" duration="136000" />
     </task>
     <servers />
   </component>
@@ -198,6 +213,11 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="dotnet:OpenTelemetry.Api" />
+    <option featureType="dependencySupport" implementationName="dotnet:OpenTelemetry" />
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.ApplicationInsights" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -229,5 +249,9 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

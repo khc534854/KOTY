@@ -10,18 +10,19 @@
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_MoveCompTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_MoveCompTester.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/BP_RoadSpline.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_RoadSpline.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/MT_Turtle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BombItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BombThrowTester.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_Turtle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_TurtleItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/TurtleItem/BP_TurtleTestShooter.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/_GENERATED/user/Box_BF3BDA5F.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/_GENERATED/user/Box_BF3BDA5F.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/BombItem.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/BombItem.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/TurtleItem.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/TurtleItem.h" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +39,7 @@
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Logging/LogMacros.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/String/FormatStringSanErrors.inl" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -225,12 +227,15 @@
       <workItem from="1754492017963" duration="69000" />
       <workItem from="1754524723524" duration="26308000" />
       <workItem from="1754553274327" duration="4437000" />
+      <workItem from="1754623285857" duration="761000" />
+      <workItem from="1754633428481" duration="7123000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
@@ -250,6 +255,11 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp</url>
+          <line>101</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
