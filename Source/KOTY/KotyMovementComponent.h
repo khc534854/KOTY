@@ -42,7 +42,7 @@ protected:
 	float SurfaceElasticity;
 
 	UPROPERTY()
-	USphereComponent* SphereComp; 
+	USphereComponent* SphereComp;
 	
 	UFUNCTION(BlueprintCallable)
     FHitResult LineTraceGravityDirTrack(FVector Start) const;
