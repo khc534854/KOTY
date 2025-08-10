@@ -3,6 +3,7 @@
 
 #include "PlayerKart/C_PlayerKart.h"
 #include "DrawDebugHelpers.h" // 디버그 라인 그리기용 (선택 사항)
+#include "Math/UnrealMathUtility.h"
 #include "Math/UnitConversion.h"
 
 // Sets default values
@@ -32,6 +33,17 @@ AC_PlayerKart::AC_PlayerKart()
 	}
 
 	MaxAccelerationTime = Acceleration * 2;
+
+	// Camera
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+
+	// 기본 카메라 설정
+	SpringArm->TargetArmLength = 500.0f; // 카메라와 대상 사이의 거리
+	SpringArm->bUsePawnControlRotation = true;
 }
 
 // Called when the game starts or when spawned
@@ -68,7 +80,9 @@ void AC_PlayerKart::Tick(float DeltaTime)
 	{
 		DegreaseAccelerationTime();
 	}
-	
+
+	CameraMove();
+
 	// 서스펜션
 	for (int a = 0; a < 4; a++)
 	{
@@ -93,7 +107,8 @@ void AC_PlayerKart::Tick(float DeltaTime)
 	SetActorLocation(NewLocation);
 
 	//UE_LOG(LogTemp, Display, TEXT("CurSpeed: %f"), CurSpeed);
-	UE_LOG(LogTemp, Display, TEXT("CurDirection: %f, %f, %f"), CurDirection.X, CurDirection.Y, CurDirection.Z);
+	UE_LOG(LogTemp, Display, TEXT("CurRot: %f, %f, %f"), GetActorRotation().Pitch, GetActorRotation().Roll, GetActorRotation().Yaw);
+	UE_LOG(LogTemp, Display, TEXT("CameraRot: %f, %f, %f"), SpringArm->GetComponentRotation().Pitch, SpringArm->GetComponentRotation().Roll, SpringArm->GetComponentRotation().Yaw);
 }
 
 // Called to bind functionality to input
@@ -276,6 +291,40 @@ void AC_PlayerKart::SaveVelocity()
 	if (VelocityHistory.Num() > 60)
 	{
 		VelocityHistory.RemoveAt(0);
+	}
+}
+
+void AC_PlayerKart::CameraMove()
+{
+	if (SpringArm)
+	{
+		// 현재 속도를 가져와서 최대 속도 대비 비율을 계산합니다.
+		float SpeedRatio = FMath::Clamp(CurSpeed / MaxSpeed, 0.0f, 1.0f);
+
+		// 속도 비율에 따라 목표 스프링 암 길이를 계산합니다.
+		// MinSpringArmLength와 MaxSpringArmLength는 UPROPERTY로 선언하여 조절할 수 있습니다.
+		float MinSpringArmLength = 300.f; // 정지 시 길이
+		float MaxSpringArmLength = 500.f; // 최대 속도 시 길이
+		float TargetArmLength = FMath::Lerp(MinSpringArmLength, MaxSpringArmLength, SpeedRatio);
+
+		// 현재 길이를 목표 길이로 부드럽게 보간합니다.
+		float ArmLengthLerpSpeed = 5.0f;
+		SpringArm->TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, GetWorld()->DeltaTimeSeconds *ArmLengthLerpSpeed);
+	}
+
+	// 2. 후행 카메라 회전(Yaw)
+	if (SpringArm)
+	{
+
+		float TargetActorRotation = GetActorRotation().Yaw;
+
+		float ClampedTargetYaw = FMath::Clamp(TargetActorRotation, -1.f, 1.f);
+
+		float NewYaw = FMath::Lerp(SpringArm->GetComponentRotation().Yaw, ClampedTargetYaw, GetWorld()->DeltaTimeSeconds);
+
+		FRotator NewRotation = FRotator(SpringArm->GetComponentRotation().Pitch, NewYaw, SpringArm->GetComponentRotation().Roll);
+
+		SpringArm->SetWorldRotation(NewRotation);
 	}
 }
 

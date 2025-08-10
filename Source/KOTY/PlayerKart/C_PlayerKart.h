@@ -9,6 +9,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "C_PlayerKart.generated.h"
 
 using namespace std;
@@ -35,6 +37,7 @@ public:
 	void Suspension(USceneComponent* Component);
 	void CheckIsGround();
 	void SaveVelocity();
+	void CameraMove();
 	
 	//input
 	void StartAccelerator(const FInputActionValue& Value);
@@ -45,6 +48,15 @@ public:
 
 	
 protected:
+	// Camera
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UCameraComponent* Camera;
+
+
+	// Movement
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
 	UBoxComponent* BoxComponent;
 	
