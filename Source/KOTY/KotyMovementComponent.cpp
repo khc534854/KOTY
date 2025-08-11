@@ -78,7 +78,7 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 		//UE_LOG(LogTemp, Log, TEXT("%f %f %f"), NewGravityDir.X, NewGravityDir.Y, NewGravityDir.Z);
 
 		//구면 보간을 통해 적절하게 중력 재설정
-		GravityDir = FVector::SlerpNormals(GravityDir, NewGravityDir, 1);
+		GravityDir = FVector::SlerpNormals(GravityDir, NewGravityDir, 0.5);
 	}
 	
 #pragma endregion
@@ -106,8 +106,6 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 
 #pragma endregion 
 
-	
-	
 	//옵션이 활성화되어 있다면 충돌 등으로 인해 손실된 수평 속도를 복귀시킨다
 	if (bConstantHorizonSpeed)
 	{
@@ -165,13 +163,18 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 			const FVector Impact = CollisionDot * SurfaceNormal;
 
 			//충분한 충격량을 가질 때에만 반사 연산
-			if (CollisionDot > 100)
+			if (CollisionDot > 10)
 			{
 				//지면에 대한 반사 처리
 				MoveVelocity = MoveVelocity + Impact + Impact * ElasticityAgainstGravity;	
 			}
+			else
+			{
+				//지면에 대한 정사영 처리
+				MoveVelocity = MoveVelocity + Impact;
+			}
 
-			UE_LOG(LogTemp, Log, TEXT("Surface"));
+			//UE_LOG(LogTemp, Log, TEXT("Surface"));
 
 			//충돌 최종 처리
 			MoveUpdatedComponent(MoveVelocity * DeltaTime, UpdatedComponent->GetComponentQuat(), false);	
