@@ -9,13 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BP_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BP_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_RoadSpline.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_RoadSpline.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,19 +26,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/UnrealMathUtility.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/Team/KOTY/Source/KOTY/PlayerKart/C_PlayerKart.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Logging/LogMacros.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/String/FormatStringSanErrors.inl" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/MovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/KOTY.uproject" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -55,8 +45,9 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Uproject.KOTY.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;KHC&quot;,
+    &quot;Uproject.KOTY.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;LJW&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -73,7 +64,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.6\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Project\Team\KOTY\KOTY.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\prays\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -85,7 +76,7 @@
         <option name="CONFIGURATION" value="DebugGame" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Project\Team\KOTY\Binaries\Win64\KOTY-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-DebugGame.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -99,7 +90,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.6\Engine\Binaries\Win64\UnrealEditor.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Project\Team\KOTY\KOTY.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\prays\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -111,7 +102,7 @@
         <option name="CONFIGURATION" value="Development" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Project\Team\KOTY\Binaries\Win64\KOTY.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -124,7 +115,7 @@
         <option name="CONFIGURATION" value="Shipping" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Project\Team\KOTY\Binaries\Win64\KOTY-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-Shipping.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -224,15 +215,21 @@
       <workItem from="1754387911046" duration="383000" />
       <workItem from="1754438460477" duration="1840000" />
       <workItem from="1754440576431" duration="6576000" />
-      <workItem from="1754463991161" duration="10650000" />
-      <workItem from="1754524608867" duration="1648000" />
-      <workItem from="1754526414332" duration="17773000" />
+      <workItem from="1754491943910" duration="15000" />
+      <workItem from="1754492017963" duration="69000" />
+      <workItem from="1754524723524" duration="26308000" />
+      <workItem from="1754553274327" duration="4437000" />
+      <workItem from="1754623285857" duration="761000" />
+      <workItem from="1754633428481" duration="7123000" />
+      <workItem from="1754750053393" duration="7876000" />
+      <workItem from="1754804179132" duration="3295000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
