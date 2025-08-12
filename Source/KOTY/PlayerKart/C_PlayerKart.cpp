@@ -1,6 +1,7 @@
 #include "PlayerKart/C_PlayerKart.h"
 #include "DrawDebugHelpers.h"
 #include "Math/UnrealMathUtility.h"
+#include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
@@ -29,7 +30,7 @@ AC_PlayerKart::AC_PlayerKart()
 
 	MaxAccelerationTime = Acceleration * 2;
 
-	// Camera
+	// Camera Setting
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 
@@ -37,8 +38,7 @@ AC_PlayerKart::AC_PlayerKart()
 	Camera->SetupAttachment(SpringArm);
 	
 	SpringArm->TargetArmLength = 600.0f; 
-    
-
+	
 	SpringArm->bUsePawnControlRotation = false;
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
@@ -65,7 +65,6 @@ void AC_PlayerKart::BeginPlay()
 		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		if (Subsystem)
 		{
-			// 입력 매핑 컨텍스트를 추가합니다.
 			if (InputMappingContext)
 			{
 				Subsystem->AddMappingContext(InputMappingContext, 0);
@@ -95,6 +94,8 @@ void AC_PlayerKart::Tick(float DeltaTime)
 		StaticMeshComponent->SetRelativeLocation(FVector(FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, -70, DeltaTime), 0, 0));
 		ForwardFriction = 1.6f;
 	}
+
+	
 	
 	FVector NewLocation;
 
@@ -142,20 +143,21 @@ void AC_PlayerKart::SetVelocity()
 {
 	const FVector ForwardVector = GetActorForwardVector();
 	const FVector RightVector = GetActorRightVector();
-	const float ForwardSpeed = FVector::DotProduct(CurVelocity, ForwardVector);
-	const float SidewaysSpeed = FVector::DotProduct(CurVelocity, RightVector);
+	const float ForwardSpeed = FVector::DotProduct(CurVelocity, ForwardVector); // 정면 속도
+	const float SidewaysSpeed = FVector::DotProduct(CurVelocity, RightVector);  // 측면 속도
 	
 	// 가속 힘 계산
 	const FVector ThrustForce = GetActorForwardVector() * AccelerationDir * AccelerationForce;
+	
 	// 마찰력 계산
-	const float CurrentSidewaysFriction = bIsDrift ? DriftSidewaysFriction : SidewaysFriction;
-	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * CurrentSidewaysFriction;
-	const FVector ForwardFrictionForce = -ForwardVector * ForwardSpeed * ForwardFriction;
+	const float CurrentSidewaysFriction = bIsDrift ? DriftSidewaysFriction : SidewaysFriction; // 드리프트 시 측면 마찰력 설정
+	const FVector ForwardFrictionForce = -ForwardVector * ForwardSpeed * ForwardFriction; // 정면 마찰력
+	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * CurrentSidewaysFriction; // 측면 마찰력
 
-	FVector SlopeGravityForce = FVector::ZeroVector;
+	FVector SlopeGravityForce = FVector::ZeroVector; // 중력
 	if (bIsGround)
 	{
-		// 일반적인 중력(아래 방향)을 경사면에 투영하여, 미끄러지는 힘만 추출합니다.
+		// 중력 경사면 투영
 		const FVector GravityVector(0.f, 0.f, GetWorld()->GetGravityZ());
 		SlopeGravityForce = GravityVector - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal);
 	}
@@ -170,20 +172,19 @@ void AC_PlayerKart::SetVelocity()
 	
 	if (bIsGround)
 	{
-		// 차가 경사면에서 뜨거나 파고들지 않도록 속도를 지면 방향으로 투영합니다.
 		CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
 	}
 	
 	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed);
 
-	const float CurrentSpeed = CurVelocity.Size();
+	CurSpeed = CurVelocity.Size();
 	
-	if (CurrentSpeed > KINDA_SMALL_NUMBER && !FMath::IsNearlyZero(HandlingDir))
+	if (CurSpeed > KINDA_SMALL_NUMBER && !FMath::IsNearlyZero(HandlingDir))
 	{
 		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
 			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
 			FVector2D(1.f, 0.4f),     // 출력 범위 (회전 배율)
-			CurrentSpeed
+			CurSpeed
 		);
 		
 		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
@@ -273,7 +274,7 @@ void AC_PlayerKart::CameraMove()
 	float MaxSpringArmLength = 500.f; // 최대 속도 시 길이
 	float TargetArmLength = FMath::Lerp(MinSpringArmLength, MaxSpringArmLength, SpeedRatio);
 
-		// 현재 길이를 목표 길이로 부드럽게 보간합니다.
+		// 보간
 	float ArmLengthLerpSpeed = 5.0f;
 	SpringArm->TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, GetWorld()->DeltaTimeSeconds *ArmLengthLerpSpeed);
 }
@@ -328,7 +329,6 @@ void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)
 {
 	if (!bIsGround)
 	{
-		// (선택사항) 공중에 있을 때는 차체를 수평으로 천천히 되돌릴 수 있습니다.
 		FRotator LevelRotation = GetActorRotation();
 		LevelRotation.Pitch = 0.f;
 		LevelRotation.Roll = 0.f;
@@ -336,16 +336,13 @@ void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)
 		return;
 	}
 
-	// 1. 목표 회전값 계산
-	// 현재 차의 앞 방향을 지면의 경사(GroundNormal)에 투영하여, 경사면 위에서의 '진짜' 앞 방향을 계산합니다.
-	// 이렇게 하면 Yaw(좌우 방향)는 유지하면서 Pitch와 Roll만 경사면에 맞게 계산됩니다.
+	// 평명 프로젝션
 	const FVector ForwardVectorOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
     
-	// 계산된 앞 방향과, 지면이 정의하는 위쪽 방향(GroundNormal)을 사용하여 목표 회전값을 만듭니다.
+	// 목표 회전값
 	const FRotator TargetRotation = FRotationMatrix::MakeFromX(ForwardVectorOnGround).Rotator();
 
-	// 2. 부드러운 보간(Interpolation)
-	// 현재 회전값에서 목표 회전값으로 부드럽게 변경합니다.
+	//보간
 	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
 
 	SetActorRotation(NewRotation);
@@ -381,7 +378,12 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		bIsGround = false;
 		return;
 	}
-	bIsDrift = true;
+	
+	if (!bIsDrift)
+	{
+		bIsDrift = true;
+	}
+	
 }
 
 void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
