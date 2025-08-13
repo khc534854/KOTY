@@ -17,6 +17,15 @@ AC_KartBase::AC_KartBase()
 	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(BoxComponent);
+
+	WheelL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WheelL"));
+	WheelL->SetupAttachment(StaticMeshComponent);
+
+	WheelR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WheelR"));
+	WheelR->SetupAttachment(StaticMeshComponent);
+
+	WheelB = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WheelB"));
+	WheelB->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +45,11 @@ void AC_KartBase::Tick(float DeltaTime)
 	SetVelocity();
 	//UpdateSuspension(DeltaTime);
 	UpdateBodyRotation(DeltaTime);
+
+	// back wheel move
+	WheelB->SetRelativeRotation(WheelB->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
+	WheelL->SetRelativeRotation(WheelL->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
+	WheelR->SetRelativeRotation(WheelR->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
 	
 	if (!bIsDrift)
 	{
@@ -53,6 +67,28 @@ void AC_KartBase::Tick(float DeltaTime)
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
 	SetActorLocation(NewLocation);
+
+	if (bIsGround)
+	{
+		FHitResult GroundSnapHit;
+		FVector StartPoint = GetActorLocation();
+		// 차체 아래로 짧게 라인을 쏴서 정확한 지면 위치를 다시 찾습니다.
+		FVector EndPoint = StartPoint - GroundNormal * 50.f; // GroundNormal을 사용해 어떤 각도의 표면에서도 작동
+        
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+
+		if (GetWorld()->LineTraceSingleByChannel(GroundSnapHit, StartPoint, EndPoint, ECC_Visibility, QueryParams))
+		{
+			// 라인 트레이스가 감지한 지면의 위치에, 차의 절반 높이를 더해 최종 위치를 설정합니다.
+			// 이렇게 하면 차의 바닥이 항상 지면 위에 위치하게 됩니다.
+			const float KartHalfHeight = 51.f; // 박스 콜리전의 절반 높이 (조절 필요)
+			FVector TargetLocation = GroundSnapHit.ImpactPoint + GroundNormal * KartHalfHeight;
+
+			// 최종적으로 계산된 위치로 액터를 '보정'합니다. Sweep은 false로 하여 순간이동 시킵니다.
+			SetActorLocation(TargetLocation, false);
+		}
+	}
 }
 
 void AC_KartBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -66,11 +102,9 @@ void AC_KartBase::Stun()
 }
 
 void AC_KartBase::CheckIsGround()
-{
+{	
 	FVector StartLocation = GetActorLocation();
-	
-	// 라인 트레이스 끝 위치 (예: 현재 위치에서 아래로 1000cm)
-	FVector EndLocation = StartLocation - (GetActorUpVector() * 100.f);
+	FVector EndLocation = StartLocation - (GetActorUpVector() * 70.f);
 	
 	// 충돌 결과를 담을 구조체
 	FHitResult HitResult;
@@ -89,14 +123,14 @@ void AC_KartBase::CheckIsGround()
 		QueryParams
 	);
 	
-	// 디버그 라인 그리기 (선택 사항)
+	// 디버그 라인
 	DrawDebugLine(
 		GetWorld(),
 		StartLocation,
 		EndLocation,
 		bHit ? FColor::Red : FColor::Green,
 		false, // 영구 표시 여부
-		-1.0f, // 표시 시간 (-1.0f는 한 프레임만)
+		-1.0f,
 		0,
 		1.0f // 선의 두께
 	);
@@ -116,25 +150,50 @@ void AC_KartBase::CheckIsGround()
 
 void AC_KartBase::UpdateBodyRotation(float DeltaTime)
 {
-	if (!bIsGround)
+	// 현재 조향(Yaw)이 적용된 회전 값을 가져옵니다.
+	const FRotator CurrentRotation = GetActorRotation();
+
+	// 목표가 될 회전 값을 선언합니다.
+	FRotator TargetRotation;
+
+	if (bIsGround)
 	{
-		FRotator LevelRotation = GetActorRotation();
-		LevelRotation.Pitch = 0.f;
-		LevelRotation.Roll = 0.f;
-		SetActorRotation(FMath::RInterpTo(GetActorRotation(), LevelRotation, DeltaTime, 2.0f));
-		return;
+		const FVector ForwardOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
+		const FRotator RotationOnGround = FRotationMatrix::MakeFromZX(GroundNormal, ForwardOnGround).Rotator();
+		TargetRotation = FRotator(RotationOnGround.Pitch, CurrentRotation.Yaw, RotationOnGround.Roll);
+		const FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
+		SetActorRotation(NewRotation);
 	}
-
-	// 평명 프로젝션
-	const FVector ForwardVectorOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
+	else
+	{
+		const FVector UpVectorInAir = -GravityDirection;
+		const FVector ForwardVectorInAir = GetActorForwardVector();
+		const FRotator TargetRotationInAir = FRotationMatrix::MakeFromZX(UpVectorInAir, ForwardVectorInAir).Rotator();
+		const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotationInAir, DeltaTime, 2);
+		SetActorRotation(NewRotation);
+	}
     
-	// 목표 회전값
-	const FRotator TargetRotation = FRotationMatrix::MakeFromX(ForwardVectorOnGround).Rotator();
-
-	//보간
-	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
-
-	SetActorRotation(NewRotation);
+	// 최종적으로 계산된 목표 회전값을 향해 부드럽게 보간합니다.
+	
+	// if (!bIsGround)
+	// {
+	// 	FRotator LevelRotation = GetActorRotation();
+	// 	LevelRotation.Pitch = 0.f;
+	// 	LevelRotation.Roll = 0.f;
+	// 	SetActorRotation(FMath::RInterpTo(GetActorRotation(), LevelRotation, DeltaTime, 2.0f));
+	// 	return;
+	// }
+	//
+	// // 평면 프로젝션
+	// const FVector ForwardVectorOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
+ //    
+	// // 목표 회전값
+	// const FRotator TargetRotation = FRotationMatrix::MakeFromZX(GroundNormal, ForwardVectorOnGround).Rotator();
+	//
+	// //보간
+	// const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
+	//
+	// SetActorRotation(NewRotation);
 }
 
 void AC_KartBase::SetVelocity()
@@ -152,32 +211,58 @@ void AC_KartBase::SetVelocity()
 	const FVector ForwardFrictionForce = -ForwardVector * ForwardSpeed * ForwardFriction; // 정면 마찰력
 	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * CurrentSidewaysFriction; // 측면 마찰력
 
-	FVector SlopeGravityForce = FVector::ZeroVector; // 중력
-	if (bIsGround)
-	{
-		// 중력 경사면 투영
-		const FVector GravityVector(0.f, 0.f, GetWorld()->GetGravityZ());
-		SlopeGravityForce = GravityVector - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal);
-	}
-	
-	// 최종 힘 계산
-	const FVector TotalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + SlopeGravityForce;
+	const float GravityMagnitude = 980.f;
+	const FVector GravityForce = -GroundNormal * GravityMagnitude * 2;
 
-	// 속도 업데이트
-	CurVelocity += TotalForce * GetWorld()->GetDeltaSeconds();
-
-	CurVelocity.Z += GetWorld()->GetGravityZ() * GetWorld()->GetDeltaSeconds() * 2.f;
+	FVector FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + GravityForce;
+	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
 	
+	// if (bIsGround)
+	// {
+	// 	// 땅에 있을 땐 미끄러지는 힘만 적용
+	// 	FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + (GravityForce - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal));
+	// 	 
+	// }
+	// else // 공중에 있을 때
+	// {
+	// 	// 공중에 있을 땐 중력 전체를 적용
+	// 	FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + GravityForce * 2.f;
+	// }
+    
+	// 2. 속도 업데이트
+    
+	// 3. 지면 밀착 로직 (기존과 동일하지만, 이제 모든 표면에서 작동)
 	if (bIsGround)
 	{
 		CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
 	}
 	
+	// FVector SlopeGravityForce = FVector::ZeroVector; // 중력
+	// if (bIsGround)
+	// {
+	// 	// 중력 경사면 투영
+	// 	const FVector GravityVector(0.f, 0.f, GetWorld()->GetGravityZ());
+	// 	SlopeGravityForce = GravityVector - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal);
+	// }
+	
+	// 최종 힘 계산
+	// const FVector TotalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + SlopeGravityForce;
+	//
+	// // 속도 업데이트
+	// CurVelocity += TotalForce * GetWorld()->GetDeltaSeconds();
+	//
+	// CurVelocity.Z += GetWorld()->GetGravityZ() * GetWorld()->GetDeltaSeconds() * 2.f;
+	//
+	// if (bIsGround)
+	// {
+	// 	CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
+	// }
+	
 	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed);
 
 	CurSpeed = CurVelocity.Size();
 	
-	if (CurSpeed > KINDA_SMALL_NUMBER && !FMath::IsNearlyZero(HandlingDir))
+	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
 	{
 		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
 			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)

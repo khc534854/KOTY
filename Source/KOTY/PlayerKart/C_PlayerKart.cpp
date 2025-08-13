@@ -184,12 +184,17 @@ void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 {
 	bIsHandling = true;
 	HandlingDir = Value.Get<float>();
+	WheelL->SetRelativeRotation(FRotator(180, 180 + 30 * HandlingDir, 0));
+	WheelR->SetRelativeRotation(FRotator(0, 30 * HandlingDir, 0));
 }
 
 void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
 {
 	HandlingDir = 0;
 	bIsHandling = false;
+
+	WheelL->SetRelativeRotation(FRotator(180, 180, 0));
+	WheelR->SetRelativeRotation(FRotator(0, 0, 0));
 }
 void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 {
@@ -202,6 +207,7 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 	if (!bIsDrift)
 	{
 		bIsDrift = true;
+		CurVelocity += GroundNormal * DriftHopImpulse;
 	}
 	
 }

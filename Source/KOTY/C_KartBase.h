@@ -42,6 +42,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body")
 	UStaticMeshComponent* StaticMeshComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WheelL")
+	UStaticMeshComponent* WheelL;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WheelR")
+	UStaticMeshComponent* WheelR;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WheelB")
+	UStaticMeshComponent* WheelB;
+	
+
 	//Acceleration
 
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
@@ -105,7 +115,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Visual")
 	float BodyRotationInterpolationSpeed = 5.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Drift")
+	float DriftHopImpulse = 200.f;
+
 	FVector GroundNormal = FVector::UpVector;
+	FVector GravityDirection = FVector(0.f, 0.f, -1.f);
 
 	// Suspension
 	float VerticalVelocity;
