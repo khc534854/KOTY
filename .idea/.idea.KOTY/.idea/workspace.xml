@@ -6,6 +6,7 @@
     <projectFile kind="Docker">../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
     <projectFile kind="Docker">../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
+    <projectFile kind="Docker">../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/KOTY.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -14,22 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/MT_BlackBomb.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ThrowItem/MT_BlackBomb.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/Input/IMC_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/Input/IMC_Player.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SUSPENSION_KART.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SUSPENSION_KART.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/Tire_MK9.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/Tire_MK9.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_DS_Wario_Stadium/DS_Wario_Stadium.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_DS_Wario_Stadium/DS_Wario_Stadium.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_DS_Wario_Stadium/ws_NS_warioface00.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_DS_Wario_Stadium/ws_NS_warioface00.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/TestLevel/TestTrack.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/TestLevel/TestTrack.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,20 +31,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/HitResult.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/MovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SplineComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SplineMeshComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/StaticMesh.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -74,13 +57,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "C/C++ Project.KOTY.executor": "Run",
     "C/C++ 프로젝트.KOTY.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Notification.DisplayName-DoNotAsk-Rider": "Rider",
     "Notification.DoNotAsk-Rider": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "KHC",
+    "git-widget-placeholder": "BSJ",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -91,7 +75,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="C/C++ 프로젝트.KOTY">
+  <component name="RunManager" selected="C/C++ Project.KOTY">
     <configuration name="KOTY" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
         <option name="CONFIGURATION" value="Development_Editor" />
@@ -181,19 +165,23 @@
         <option name="Build" />
       </method>
     </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile (1)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
           <option name="containerName" value="epicgames.perforce.fixture" />
           <option name="contextFolderPath" value="C:\Project\Team\KOTY" />
           <option name="sourceFilePath" value="../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (2)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="C:\Project\KOTY" />
+          <option name="sourceFilePath" value="../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
         </settings>
       </deployment>
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
@@ -206,6 +194,13 @@
           <option name="contextFolderPath" value="C:\Users\user\Documents\Unreal Projects\KOTY" />
           <option name="sourceFilePath" value="../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
         </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
       </deployment>
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
@@ -235,8 +230,7 @@
       <workItem from="1754811951699" duration="2051000" />
       <workItem from="1754983949082" duration="823000" />
       <workItem from="1754985624986" duration="3846000" />
-      <workItem from="1755053770664" duration="4919000" />
-      <workItem from="1755067401050" duration="15362000" />
+      <workItem from="1754990221717" duration="3848000" />
     </task>
     <servers />
   </component>
