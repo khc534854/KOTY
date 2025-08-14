@@ -271,3 +271,8 @@ FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start)
 	//충돌 결과 구조체 반환
 	return Hit;
 }
+
+void UKotyMovementComponent::SLerpVelocity(const FVector TargetDir)
+{
+	MoveVelocity = FVector::SlerpVectorToDirection(MoveVelocity, TargetDir, 0.5);
+}
