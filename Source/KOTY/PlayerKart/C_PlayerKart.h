@@ -47,6 +47,7 @@ public:
 	void HandlingEnd(const FInputActionValue& Value);
 	void DriftStart(const FInputActionValue& Value);
 	void DriftEnd(const FInputActionValue& Value);
+	void Mushroom(const FInputActionValue& Value);
 
 	
 protected:
@@ -57,8 +58,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* Camera;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Status")
-	TArray<USceneComponent*> WheelsComponents;
+	// UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Status")
+	// TArray<USceneComponent*> WheelsComponents;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputMappingContext* InputMappingContext;
@@ -71,4 +72,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* DriftAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* AddSpeedAction;
 };

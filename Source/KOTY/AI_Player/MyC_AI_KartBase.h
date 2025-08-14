@@ -14,9 +14,9 @@ class KOTY_API AMyC_AI_KartBase : public AC_KartBase
 {
 	GENERATED_BODY()
 	
-	virtual void Stun();
-	virtual void CheckIsGround();
-	virtual void UpdateBodyRotation(float DeltaTime);
-	virtual void SetVelocity();
-	virtual void UpdateSuspension(float DeltaTime);
+	virtual void Stun() override;
+	virtual void CheckIsGround() override;
+	virtual void UpdateBodyRotation(float DeltaTime) override;
+	virtual void SetVelocity() override;
+	virtual void UpdateSuspension(float DeltaTime) override;
 };

@@ -2,8 +2,8 @@
 
 
 #include "C_KartBase.h"
-
 #include "Components/BoxComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -26,6 +26,13 @@ AC_KartBase::AC_KartBase()
 
 	WheelB = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WheelB"));
 	WheelB->SetupAttachment(StaticMeshComponent);
+
+	ExhaustPipe.Add(CreateDefaultSubobject<USceneComponent>(TEXT("ExhaustPipeL")));
+	ExhaustPipe.Add(CreateDefaultSubobject<USceneComponent>(TEXT("ExhaustPipeR")));
+	for (auto i : ExhaustPipe)
+	{
+		i->SetupAttachment(StaticMeshComponent);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -47,20 +54,28 @@ void AC_KartBase::Tick(float DeltaTime)
 	UpdateBodyRotation(DeltaTime);
 
 	// back wheel move
-	WheelB->SetRelativeRotation(WheelB->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
-	WheelL->SetRelativeRotation(WheelL->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
-	WheelR->SetRelativeRotation(WheelR->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * AccelerationDir));
-	
+	WheelB->SetRelativeRotation(WheelB->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * 0.001f * FVector::DotProduct(CurVelocity, GetActorForwardVector())));
+	WheelL->SetRelativeRotation(WheelL->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * 0.001f * FVector::DotProduct(CurVelocity, GetActorForwardVector())));
+	WheelR->SetRelativeRotation(WheelR->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * 0.001f * FVector::DotProduct(CurVelocity, GetActorForwardVector())));
+
+
+	// StaticMesh 움직여서 드리프트 효과
 	if (!bIsDrift)
 	{
-		StaticMeshComponent->SetRelativeLocation(FVector(FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, 70, DeltaTime), 0, 0));
+		//StaticMeshComponent->SetRelativeLocation(FVector(FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, 70, DeltaTime), 0, 0));
 		ForwardFriction = 0.8f;
 	}
 	else
 	{
-		StaticMeshComponent->SetRelativeLocation(FVector(FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, -70, DeltaTime), 0, 0));
+		//StaticMeshComponent->SetRelativeLocation(FVector(FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, -70, DeltaTime), 0, 0));
 		ForwardFriction = 1.6f;
 	}
+	//StaticMeshComponent->SetRelativeLocation(StaticMeshComponent->GetRelativeLocation() + (MeshMoveDirection * DeltaTime));
+	StaticMeshComponent->SetRelativeLocation(FVector(
+		FMath::Lerp(StaticMeshComponent->GetRelativeLocation().X, MeshMoveDirection.X, DeltaTime),
+		0,
+		FMath::Lerp(StaticMeshComponent->GetRelativeLocation().Z, MeshMoveDirection.Z, DeltaTime * 10)));
+			
 	
 	FVector NewLocation;
 
@@ -88,6 +103,43 @@ void AC_KartBase::Tick(float DeltaTime)
 			// 최종적으로 계산된 위치로 액터를 '보정'합니다. Sweep은 false로 하여 순간이동 시킵니다.
 			SetActorLocation(TargetLocation, false);
 		}
+	}
+
+	// 부스트 이펙트
+	//PlayBoostEffect();
+	if (bIsBoosting)
+	{
+		BoostTimer -= DeltaTime;
+		if (BoostTimer <= 0.f)
+		{
+			bIsBoosting = false;
+			AddSpeed = 0.f;
+			
+			for (UNiagaraComponent* Effect : ActiveBoostEffects)
+			{
+				if (IsValid(Effect)) // 컴포넌트가 유효한지 확인
+				{
+					Effect->DestroyComponent();
+				}
+			}
+			// 배열을 비워 깨끗한 상태로 만듭니다.
+			ActiveBoostEffects.Empty();
+		}
+	}
+
+	
+	// 부스트 감소
+	if (AddSpeed > KINDA_SMALL_NUMBER)
+	{
+		AddSpeed -= DeltaTime * 1000.f;
+	}
+
+	// 매쉬 위치 복귀 
+	if (MeshMoveDirection.Z > KINDA_SMALL_NUMBER)
+	{
+		MeshMoveDirection.Z -= DeltaTime * 1500.f;
+		if (MeshMoveDirection.Z < KINDA_SMALL_NUMBER)
+			MeshMoveDirection.Z = 0;
 	}
 }
 
@@ -258,7 +310,7 @@ void AC_KartBase::SetVelocity()
 	// 	CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
 	// }
 	
-	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed);
+	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
 
 	CurSpeed = CurVelocity.Size();
 	
@@ -305,5 +357,52 @@ void AC_KartBase::SetVelocity()
 void AC_KartBase::UpdateSuspension(float DeltaTime)
 {
 	// 서스펜션 구현
+}
+
+void AC_KartBase::StartAddSpeed(float Add)
+{
+	AddSpeed = Add;
+
+	bIsBoosting = true;
+	PlayBoostEffect();
+	
+	CurVelocity += GetActorForwardVector() * AddSpeed;
+}
+
+void AC_KartBase::DriftUpAction()
+{
+	MeshMoveDirection.Z = 150.f;
+}
+
+void AC_KartBase::PlayBoostEffect()
+{
+	//ActiveBoostEffects.Empty();
+
+	BoostTimer = BoostDuration;
+	
+	if (ActiveBoostEffects.IsEmpty())
+	{
+		for (USceneComponent* Pipe : ExhaustPipe)
+		{
+			if (Pipe && BoostEffect)
+			{
+				UNiagaraComponent* EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+					BoostEffect,              
+					Pipe,
+					NAME_None,
+					FVector::ZeroVector,      // 상대 위치
+					FRotator(0, -90, 0),    // 상대 회전
+					EAttachLocation::KeepRelativeOffset,
+					false                     
+				);
+
+				if (EffectComponent)
+				{
+					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+					ActiveBoostEffects.Add(EffectComponent);
+				}
+			}
+		}
+	}
 }
 

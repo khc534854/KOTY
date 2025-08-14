@@ -86,6 +86,11 @@ void AC_PlayerKart::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 			EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Triggered, this, &AC_PlayerKart::DriftStart);
 			EnhancedInputComponent->BindAction(DriftAction, ETriggerEvent::Completed, this, &AC_PlayerKart::DriftEnd);
 		}
+
+		if (AddSpeedAction)
+		{
+			EnhancedInputComponent->BindAction(AddSpeedAction, ETriggerEvent::Started, this, &AC_PlayerKart::Mushroom);
+		}
 	}
 }
 
@@ -112,48 +117,48 @@ void AC_PlayerKart::CameraMove()
 
 void AC_PlayerKart::UpdateSuspension(float DeltaTime)
 {
-	float TotalSuspensionForce = 0.f;
-	int GroundedWheels = 0;
-
-	// 4개의 바퀴에 대해 각각 라인 트레이스를 실행합니다.
-	for (USceneComponent* Wheel : WheelsComponents)
-	{
-		FVector WheelLocation = Wheel->GetComponentLocation();
-		FVector EndLocation = WheelLocation - (GetActorUpVector() * SuspensionLength);
-		FHitResult HitResult;
-		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActor(this);
-
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, WheelLocation, EndLocation, ECC_Visibility, QueryParams))
-		{
-			// 바퀴가 땅에 닿았을 때
-			GroundedWheels++;
-
-			// 1) 스프링 힘 계산
-			float CompressionRatio = 1.f - (HitResult.Distance / SuspensionLength);
-			float SpringForce = CompressionRatio * SuspensionStiffness;
-
-			// 2) 댐핑 힘 계산
-			float DampingForce = VerticalVelocity * SuspensionDamping;
-
-			TotalSuspensionForce += SpringForce - DampingForce;
-		}
-	}
-    
-	float AverageSuspensionForce = 0.f;
-	if (GroundedWheels > 0)
-	{
-		AverageSuspensionForce = TotalSuspensionForce / GroundedWheels;
-	}
-
-	// --- 중력 및 수직 속도 업데이트 ---
-	float GravityForce = GetWorld()->GetGravityZ();
-	VerticalVelocity += (GravityForce + AverageSuspensionForce) * DeltaTime;
-
-	if (GroundedWheels > 0 && VerticalVelocity < 0)
-	{
-		VerticalVelocity = 0; 
-	}
+	// float TotalSuspensionForce = 0.f;
+	// int GroundedWheels = 0;
+	//
+	// // 4개의 바퀴에 대해 각각 라인 트레이스를 실행합니다.
+	// for (USceneComponent* Wheel : WheelsComponents)
+	// {
+	// 	FVector WheelLocation = Wheel->GetComponentLocation();
+	// 	FVector EndLocation = WheelLocation - (GetActorUpVector() * SuspensionLength);
+	// 	FHitResult HitResult;
+	// 	FCollisionQueryParams QueryParams;
+	// 	QueryParams.AddIgnoredActor(this);
+	//
+	// 	if (GetWorld()->LineTraceSingleByChannel(HitResult, WheelLocation, EndLocation, ECC_Visibility, QueryParams))
+	// 	{
+	// 		// 바퀴가 땅에 닿았을 때
+	// 		GroundedWheels++;
+	//
+	// 		// 1) 스프링 힘 계산
+	// 		float CompressionRatio = 1.f - (HitResult.Distance / SuspensionLength);
+	// 		float SpringForce = CompressionRatio * SuspensionStiffness;
+	//
+	// 		// 2) 댐핑 힘 계산
+	// 		float DampingForce = VerticalVelocity * SuspensionDamping;
+	//
+	// 		TotalSuspensionForce += SpringForce - DampingForce;
+	// 	}
+	// }
+ //    
+	// float AverageSuspensionForce = 0.f;
+	// if (GroundedWheels > 0)
+	// {
+	// 	AverageSuspensionForce = TotalSuspensionForce / GroundedWheels;
+	// }
+	//
+	// // --- 중력 및 수직 속도 업데이트 ---
+	// float GravityForce = GetWorld()->GetGravityZ();
+	// VerticalVelocity += (GravityForce + AverageSuspensionForce) * DeltaTime;
+	//
+	// if (GroundedWheels > 0 && VerticalVelocity < 0)
+	// {
+	// 	VerticalVelocity = 0; 
+	// }
 }
 
 void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)
@@ -206,15 +211,32 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 	
 	if (!bIsDrift)
 	{
+		//StaticMeshComponent->SetRelativeLocation(StaticMeshComponent->GetRelativeLocation() + FVector(0, 0, 50));
+		
 		bIsDrift = true;
+		DriftUpAction();
+		MeshMoveDirection.X = -70.f;
 		CurVelocity += GroundNormal * DriftHopImpulse;
 	}
-	
+	else
+	{
+		//StaticMeshComponent->SetRelativeLocation(FVector(0, 0, FMath::Lerp(StaticMeshComponent->GetRelativeLocation().Z, -50, GetWorld()->DeltaTimeSeconds)));
+	}
 }
 
 void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 {
-	bIsDrift = false;
+	if (bIsDrift)
+	{
+		MeshMoveDirection.X = 70.f;
+		bIsDrift = false;
+		StartAddSpeed(1500.f);
+	}
+}
+
+void AC_PlayerKart::Mushroom(const FInputActionValue& Value)
+{
+	StartAddSpeed(3000.f);
 }
 
 

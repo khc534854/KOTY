@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "NiagaraComponent.h"
 #include "C_KartBase.generated.h"
 
 UCLASS()
@@ -35,6 +36,10 @@ public:
 	virtual void SetVelocity();
 	virtual void UpdateSuspension(float DeltaTime);
 
+	void StartAddSpeed(float Add);
+	void DriftUpAction();
+	void PlayBoostEffect();
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
 	UBoxComponent* BoxComponent;
@@ -51,9 +56,23 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WheelB")
 	UStaticMeshComponent* WheelB;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Boost")
+	TArray<USceneComponent*> ExhaustPipe;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* BoostEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* DriftEffect;
+	
+	TArray<UNiagaraComponent*> ActiveBoostEffects;
+
+	bool bIsBoosting = false;
+	float BoostTimer = 0;
+	float BoostDuration = 1.5f;
+	
 	//Acceleration
-
+public:
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
 	float AccelerationForce = 3500.f; // 가속 힘
 
@@ -83,11 +102,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Kart Settings")
 	float MaxSpeed = 3000.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Kart Settings")
+	float AddSpeed = 0.f;
+
 	float SpeedRatio = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Kart Settings")
 	float BrakePower = 1.f;
 
+	FVector MeshMoveDirection;
+	
 	// Handling
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Kart Settings")
@@ -119,8 +143,12 @@ protected:
 	float DriftHopImpulse = 200.f;
 
 	FVector GroundNormal = FVector::UpVector;
-	FVector GravityDirection = FVector(0.f, 0.f, -1.f);
 
+public:
+	UPROPERTY(BlueprintReadOnly)
+	FVector GravityDirection = FVector(0.f, 0.f, -1.f);
+	
+protected:
 	// Suspension
 	float VerticalVelocity;
 
