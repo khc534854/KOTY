@@ -9,20 +9,12 @@
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemTester.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_KardGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_KardGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_MoveCompTester.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_BlackBombItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_GreenTurtleItem.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemBase.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/BP_ThrowItemTester.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/MT_BlackBomb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ThrowItem/MT_GreenTurtle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/PhysicsItem/BP_BlackBombItem.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/PhysicsItem/BP_GreenTurtleItem.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/PhysicsItem/BP_PhysicsItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/PhysicsItem/BP_PhysicsItemTester.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/PhysicsItem/MT_BlackBomb.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/PhysicsItem/MT_GreenTurtle.uasset" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,6 +227,8 @@
       <workItem from="1754804179132" duration="3295000" />
       <workItem from="1755153924607" duration="4853000" />
       <workItem from="1755168568793" duration="3885000" />
+      <workItem from="1755349956649" duration="170000" />
+      <workItem from="1755350164326" duration="2040000" />
     </task>
     <servers />
   </component>
