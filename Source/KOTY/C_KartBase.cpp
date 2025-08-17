@@ -33,6 +33,13 @@ AC_KartBase::AC_KartBase()
 	{
 		i->SetupAttachment(StaticMeshComponent);
 	}
+
+	WheelBackDrift.Add(CreateDefaultSubobject<USceneComponent>(TEXT("WheelBackDriftL")));
+	WheelBackDrift.Add(CreateDefaultSubobject<USceneComponent>(TEXT("WheelBackDriftR")));
+	for (auto i : WheelBackDrift)
+	{
+		i->SetupAttachment(StaticMeshComponent);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -82,6 +89,7 @@ void AC_KartBase::Tick(float DeltaTime)
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
 	SetActorLocation(NewLocation);
+	//SetActorLocation(NewLocation, true);
 
 	if (bIsGround)
 	{
@@ -127,6 +135,19 @@ void AC_KartBase::Tick(float DeltaTime)
 		}
 	}
 
+	if (!bIsDrift)
+	{
+		for (UNiagaraComponent* Effect : ActiveDriftEffects)
+		{
+			if (IsValid(Effect)) // 컴포넌트가 유효한지 확인
+			{
+				Effect->DestroyComponent();
+			}
+		}
+		// 배열을 비워 깨끗한 상태로 만듭니다.
+		ActiveDriftEffects.Empty();
+	}
+
 	
 	// 부스트 감소
 	if (AddSpeed > KINDA_SMALL_NUMBER)
@@ -156,7 +177,7 @@ void AC_KartBase::Stun()
 void AC_KartBase::CheckIsGround()
 {	
 	FVector StartLocation = GetActorLocation();
-	FVector EndLocation = StartLocation - (GetActorUpVector() * 70.f);
+	FVector EndLocation = StartLocation - (GetActorUpVector() * 65.f);
 	
 	// 충돌 결과를 담을 구조체
 	FHitResult HitResult;
@@ -391,15 +412,45 @@ void AC_KartBase::PlayBoostEffect()
 					Pipe,
 					NAME_None,
 					FVector::ZeroVector,      // 상대 위치
-					FRotator(0, -90, 0),    // 상대 회전
+					FRotator(0, -90, 0),   // 상대 회전
 					EAttachLocation::KeepRelativeOffset,
 					false                     
 				);
 
 				if (EffectComponent)
 				{
+					EffectComponent->SetRelativeScale3D(FVector(0.8f));
 					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
 					ActiveBoostEffects.Add(EffectComponent);
+				}
+			}
+		}
+	}
+}
+
+void AC_KartBase::PlayDriftEffect()
+{
+	if (ActiveDriftEffects.IsEmpty())
+	{
+		for (USceneComponent* Wheel : WheelBackDrift)
+		{
+			if (Wheel && DriftEffect)
+			{
+				UNiagaraComponent* EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+					DriftEffect,
+					Wheel,
+					NAME_None,
+					FVector::ZeroVector,      // 상대 위치
+					FRotator(0, 0, 90),   // 상대 회전
+					EAttachLocation::KeepRelativeOffset,
+					false
+				);
+
+				if (EffectComponent)
+				{
+					EffectComponent->SetRelativeScale3D(FVector(0.8f));
+					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+					ActiveDriftEffects.Add(EffectComponent);
 				}
 			}
 		}

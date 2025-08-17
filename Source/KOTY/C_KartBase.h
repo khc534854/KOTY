@@ -39,6 +39,7 @@ public:
 	void StartAddSpeed(float Add);
 	void DriftUpAction();
 	void PlayBoostEffect();
+	void PlayDriftEffect();
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
@@ -59,6 +60,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Boost")
 	TArray<USceneComponent*> ExhaustPipe;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Drift")
+	TArray<USceneComponent*> WheelBackDrift;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
 	UNiagaraSystem* BoostEffect;
 
@@ -66,6 +70,7 @@ protected:
 	UNiagaraSystem* DriftEffect;
 	
 	TArray<UNiagaraComponent*> ActiveBoostEffects;
+	TArray<UNiagaraComponent*> ActiveDriftEffects;
 
 	bool bIsBoosting = false;
 	float BoostTimer = 0;

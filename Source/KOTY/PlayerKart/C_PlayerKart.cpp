@@ -111,8 +111,19 @@ void AC_PlayerKart::CameraMove()
 	float TargetArmLength = FMath::Lerp(MinSpringArmLength, MaxSpringArmLength, SpeedRatio);
 
 		// 보간
-	float ArmLengthLerpSpeed = 5.0f;
+
+	float ArmLengthLerpSpeed;
+	if (bIsDrift)
+	{
+		ArmLengthLerpSpeed = 2.f;
+	}
+	else
+	{
+		ArmLengthLerpSpeed = 5.f;
+	}
+
 	SpringArm->TargetArmLength = FMath::Lerp(SpringArm->TargetArmLength, TargetArmLength, GetWorld()->DeltaTimeSeconds *ArmLengthLerpSpeed);
+	
 }
 
 void AC_PlayerKart::UpdateSuspension(float DeltaTime)
@@ -215,6 +226,7 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		
 		bIsDrift = true;
 		DriftUpAction();
+		PlayDriftEffect();
 		MeshMoveDirection.X = -70.f;
 		CurVelocity += GroundNormal * DriftHopImpulse;
 	}
