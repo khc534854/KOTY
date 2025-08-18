@@ -34,12 +34,13 @@ public:
 	virtual void CheckIsGround();
 	virtual void UpdateBodyRotation(float DeltaTime);
 	virtual void SetVelocity();
+	virtual void SetFlyVelocity();
 	virtual void UpdateSuspension(float DeltaTime);
 
 	void StartAddSpeed(float Add);
 	void DriftUpAction();
 	void PlayBoostEffect();
-	void PlayDriftEffect();
+	void PlayDriftEffect(int EffectType, float DriftStartDir);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
@@ -67,7 +68,15 @@ protected:
 	UNiagaraSystem* BoostEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
-	UNiagaraSystem* DriftEffect;
+	UNiagaraSystem* DriftEffect1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* DriftEffect2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* DriftEffect3;
+
+	uint32 CurrentDriftType = 0;
 	
 	TArray<UNiagaraComponent*> ActiveBoostEffects;
 	TArray<UNiagaraComponent*> ActiveDriftEffects;
@@ -99,7 +108,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurVelocity;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Kart Settings")
+	UPROPERTY(BlueprintReadWrite, Category = "Kart Settings")
 	float AccelerationDir = 0;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Kart Settings")
@@ -116,6 +125,7 @@ public:
 	float BrakePower = 1.f;
 
 	FVector MeshMoveDirection;
+	FRotator MeshRotationDirection = FRotator(0, -90.f, 0);
 	
 	// Handling
 
@@ -149,8 +159,10 @@ public:
 
 	FVector GroundNormal = FVector::UpVector;
 
+	float AirTime = 0;
+
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector GravityDirection = FVector(0.f, 0.f, -1.f);
 	
 protected:
@@ -165,5 +177,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Suspension")
 	float SuspensionDamping = 5.f; // 서스펜션의 댐핑 (출렁거림을 줄여줌)
-	
+
+	float DriftTime = 0;
 };

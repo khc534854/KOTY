@@ -75,4 +75,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* AddSpeedAction;
+
+
+	float DriftStartDir;
 };

@@ -56,7 +56,14 @@ void AC_KartBase::Tick(float DeltaTime)
 
 	CheckIsGround();
 
-	SetVelocity();
+	if (bIsGround)
+	{
+		SetVelocity();
+	}
+	else
+	{
+		SetFlyVelocity();
+	}
 	//UpdateSuspension(DeltaTime);
 	UpdateBodyRotation(DeltaTime);
 
@@ -83,13 +90,16 @@ void AC_KartBase::Tick(float DeltaTime)
 		0,
 		FMath::Lerp(StaticMeshComponent->GetRelativeLocation().Z, MeshMoveDirection.Z, DeltaTime * 10)));
 			
-	
+	StaticMeshComponent->SetRelativeRotation(FRotator(
+		0,
+		FMath::Lerp(StaticMeshComponent->GetRelativeRotation().Yaw, MeshRotationDirection.Yaw, DeltaTime * 10),
+		0));
 	FVector NewLocation;
 
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
-	SetActorLocation(NewLocation);
-	//SetActorLocation(NewLocation, true);
+	//SetActorLocation(NewLocation);
+	SetActorLocation(NewLocation, true);
 
 	if (bIsGround)
 	{
@@ -147,6 +157,7 @@ void AC_KartBase::Tick(float DeltaTime)
 		// 배열을 비워 깨끗한 상태로 만듭니다.
 		ActiveDriftEffects.Empty();
 	}
+
 
 	
 	// 부스트 감소
@@ -213,10 +224,12 @@ void AC_KartBase::CheckIsGround()
 	{
 		bIsGround = true;
 		GroundNormal = HitResult.ImpactNormal;
+		AirTime = 0;
 	}
 	else
 	{
 		bIsGround = false;
+		AirTime += GetWorld()->DeltaTimeSeconds;
 		GroundNormal = FVector::UpVector;
 	}
 }
@@ -239,7 +252,7 @@ void AC_KartBase::UpdateBodyRotation(float DeltaTime)
 	}
 	else
 	{
-		const FVector UpVectorInAir = -GravityDirection;
+		const FVector UpVectorInAir = -FVector(0, 0, -1);
 		const FVector ForwardVectorInAir = GetActorForwardVector();
 		const FRotator TargetRotationInAir = FRotationMatrix::MakeFromZX(UpVectorInAir, ForwardVectorInAir).Rotator();
 		const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotationInAir, DeltaTime, 2);
@@ -281,11 +294,12 @@ void AC_KartBase::SetVelocity()
 	
 	// 마찰력 계산
 	const float CurrentSidewaysFriction = bIsDrift ? DriftSidewaysFriction : SidewaysFriction; // 드리프트 시 측면 마찰력 설정
-	const FVector ForwardFrictionForce = -ForwardVector * ForwardSpeed * ForwardFriction; // 정면 마찰력
-	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * CurrentSidewaysFriction; // 측면 마찰력
+	const FVector ForwardFrictionForce = -ForwardVector * ForwardSpeed * (bIsDrift ? ForwardFriction * 0.4f : ForwardFriction); // 정면 마찰력 
+	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * CurrentSidewaysFriction; // 측면 마찰력 * FMath::Clamp((bIsDrift? DriftTime : 1), 0, 16.f)
 
 	const float GravityMagnitude = 980.f;
 	const FVector GravityForce = -GroundNormal * GravityMagnitude * 2;
+	GravityDirection = GravityForce.GetSafeNormal();
 
 	FVector FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + GravityForce;
 	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
@@ -357,20 +371,67 @@ void AC_KartBase::SetVelocity()
 	}
 
 	FRotator TargetRotation;
-	if (bIsGround)
-	{
-		// 지면의 기울기(GroundNormal)와 현재 차의 앞 방향을 기준으로 목표 회전값을 계산
-		TargetRotation = FRotationMatrix::MakeFromZX(GroundNormal, GetActorForwardVector()).Rotator();
-	}
-	else
-	{
-		// 공중에 있을 땐 차체의 기울기를 수평으로 되돌림
-		TargetRotation = GetActorRotation();
-		TargetRotation.Pitch = 0.f;
-		TargetRotation.Roll = 0.f;
-	}
+	// 지면의 기울기(GroundNormal)와 현재 차의 앞 방향을 기준으로 목표 회전값을 계산
+	TargetRotation = FRotationMatrix::MakeFromZX(GroundNormal, GetActorForwardVector()).Rotator();
+	
+
 	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), BodyRotationInterpolationSpeed);
 	SetActorRotation(NewRotation);
+	
+	SpeedRatio = CurVelocity.Size() / MaxSpeed;
+}
+
+void AC_KartBase::SetFlyVelocity()
+{
+	const FVector RightVector = GetActorRightVector();
+	const float SidewaysSpeed = FVector::DotProduct(CurVelocity, RightVector);  // 측면 속도
+	
+	const FVector SidewaysFrictionForce = -RightVector * SidewaysSpeed * 20.f; 
+	// 가속 힘 계산
+	const FVector ThrustForce = GetActorForwardVector() * AccelerationDir * AccelerationForce;
+	
+	const float GravityMagnitude = 980.f;
+	const FVector GravityForce = -GroundNormal * GravityMagnitude * 2;
+	GravityDirection = GravityForce.GetSafeNormal();
+
+	FVector FinalForce = ThrustForce + GravityForce + SidewaysFrictionForce;
+	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
+	
+	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
+
+	CurSpeed = CurVelocity.Size();
+
+	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
+	{
+		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
+			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
+			FVector2D(0.3f, 0.1f),     // 출력 범위 (회전 배율)
+			CurSpeed
+		);
+		
+		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
+
+		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
+		if (ForwardDot < 0.0f)
+		{
+			// 뒤로 움직이고 있을 때, 회전방향 반대
+			TurnThisFrame *= -1.0f;
+		}
+		
+		const FRotator RotationDelta(0.f, TurnThisFrame, 0.f);
+		AddActorLocalRotation(RotationDelta);
+	}
+	
+	FRotator TargetRotation;
+	// 공중에 있을 땐 차체의 기울기를 수평으로 되돌림
+	TargetRotation = GetActorRotation();
+	TargetRotation.Pitch = 0.f;
+	TargetRotation.Roll = 0.f;
+	
+	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 0.5f);
+	SetActorRotation(NewRotation);
+
+
 	
 	SpeedRatio = CurVelocity.Size() / MaxSpeed;
 }
@@ -428,32 +489,90 @@ void AC_KartBase::PlayBoostEffect()
 	}
 }
 
-void AC_KartBase::PlayDriftEffect()
+void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDir)
 {
-	if (ActiveDriftEffects.IsEmpty())
+	if (EffectType != CurrentDriftType)
 	{
-		for (USceneComponent* Wheel : WheelBackDrift)
+		for (UNiagaraComponent* Effect : ActiveDriftEffects)
 		{
-			if (Wheel && DriftEffect)
+			if (IsValid(Effect))
 			{
-				UNiagaraComponent* EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
-					DriftEffect,
-					Wheel,
-					NAME_None,
-					FVector::ZeroVector,      // 상대 위치
-					FRotator(0, 0, 90),   // 상대 회전
-					EAttachLocation::KeepRelativeOffset,
-					false
-				);
-
-				if (EffectComponent)
+				Effect->DestroyComponent();
+			}
+		}
+		ActiveDriftEffects.Empty();
+		
+		//if (ActiveBoostEffects.IsEmpty())
+		{
+			for (USceneComponent* Wheel : WheelBackDrift)
+			{
+				if (Wheel)
 				{
-					EffectComponent->SetRelativeScale3D(FVector(0.8f));
-					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
-					ActiveDriftEffects.Add(EffectComponent);
+					UNiagaraComponent* EffectComponent;
+				
+					if (EffectType == 1 && DriftEffect1)
+					{
+						CurrentDriftType = 1;
+						EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+						DriftEffect1,
+						Wheel,
+						NAME_None,
+						FVector::ZeroVector,      // 상대 위치
+						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						EAttachLocation::KeepRelativeOffset,
+						false);
+					
+						if (EffectComponent)
+						{
+							EffectComponent->SetRelativeScale3D(FVector(0.8f));
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							ActiveDriftEffects.Add(EffectComponent);
+						}
+					}
+					else if (EffectType == 2 && DriftEffect2)
+					{
+						CurrentDriftType = 2;
+						EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+						DriftEffect2,
+						Wheel,
+						NAME_None,
+						FVector::ZeroVector,      // 상대 위치
+						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						EAttachLocation::KeepRelativeOffset,
+						false);
+					
+						if (EffectComponent)
+						{						
+							EffectComponent->SetRelativeScale3D(FVector(0.8f));
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							ActiveDriftEffects.Add(EffectComponent);
+						}
+					}
+					else if (EffectType == 3 && DriftEffect3)
+					{					
+						CurrentDriftType = 3;
+						EffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+						DriftEffect3,
+						Wheel,
+						NAME_None,
+						FVector::ZeroVector,      // 상대 위치
+						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						EAttachLocation::KeepRelativeOffset,
+						false);
+					
+						if (EffectComponent)
+						{
+							EffectComponent->SetRelativeScale3D(FVector(0.8f));
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							ActiveDriftEffects.Add(EffectComponent);
+						}
+					}
+
 				}
 			}
 		}
 	}
+
+	
 }
 

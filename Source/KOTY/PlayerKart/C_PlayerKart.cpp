@@ -115,7 +115,7 @@ void AC_PlayerKart::CameraMove()
 	float ArmLengthLerpSpeed;
 	if (bIsDrift)
 	{
-		ArmLengthLerpSpeed = 2.f;
+		ArmLengthLerpSpeed = 0.5f;
 	}
 	else
 	{
@@ -219,21 +219,33 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		bIsGround = false;
 		return;
 	}
+	DriftTime += GetWorld()->GetDeltaSeconds();
 	
 	if (!bIsDrift)
 	{
+		DriftStartDir = HandlingDir;
 		//StaticMeshComponent->SetRelativeLocation(StaticMeshComponent->GetRelativeLocation() + FVector(0, 0, 50));
-		
 		bIsDrift = true;
 		DriftUpAction();
-		PlayDriftEffect();
+		//PlayDriftEffect();
 		MeshMoveDirection.X = -70.f;
+		MeshRotationDirection.Yaw = -90.f + HandlingDir * 30.f;
 		CurVelocity += GroundNormal * DriftHopImpulse;
 	}
-	else
+	
+	if (DriftTime > 1.f && DriftTime < 2.0f)
 	{
-		//StaticMeshComponent->SetRelativeLocation(FVector(0, 0, FMath::Lerp(StaticMeshComponent->GetRelativeLocation().Z, -50, GetWorld()->DeltaTimeSeconds)));
+		PlayDriftEffect(1, DriftStartDir);
 	}
+	else if (DriftTime > 2.0f && DriftTime < 3.5f)
+	{
+		PlayDriftEffect(2, DriftStartDir);
+	}
+	else if (DriftTime > 3.5f)
+	{
+		PlayDriftEffect(3, DriftStartDir);
+	}
+	
 }
 
 void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
@@ -242,7 +254,22 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 	{
 		MeshMoveDirection.X = 70.f;
 		bIsDrift = false;
-		StartAddSpeed(1500.f);
+		MeshRotationDirection.Yaw = -90.f;
+		if (DriftTime > 1.f && DriftTime < 2.f)
+		{
+			StartAddSpeed(1500.f);
+		}
+		else if (DriftTime > 2.f && DriftTime < 3.5f)
+		{
+			StartAddSpeed(2000.f);
+		}
+		else if (DriftTime > 3.5f)
+		{
+			StartAddSpeed(2500.f);
+		}
+		
+		DriftTime = 0;
+		CurrentDriftType = 0;
 	}
 }
 
