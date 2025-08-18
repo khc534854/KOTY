@@ -65,7 +65,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurVelocity;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Kart Settings")
+	UPROPERTY(BlueprintReadWrite, Category = "Kart Settings")
 	float AccelerationDir = 0;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Kart Settings")
