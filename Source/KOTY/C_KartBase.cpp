@@ -98,8 +98,8 @@ void AC_KartBase::Tick(float DeltaTime)
 
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
-	//SetActorLocation(NewLocation);
-	SetActorLocation(NewLocation, true);
+	SetActorLocation(NewLocation);
+	//SetActorLocation(NewLocation, true);
 
 	if (bIsGround)
 	{
