@@ -46,6 +46,9 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
     FHitResult LineTraceGravityDirTrack(FVector Start) const;
+
+	UFUNCTION(BlueprintCallable)
+	void SLerpVelocity(FVector TargetDir);
 	
 public:
 	virtual void InitializeComponent() override;
