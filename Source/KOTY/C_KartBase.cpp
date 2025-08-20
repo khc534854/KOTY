@@ -4,6 +4,7 @@
 #include "C_KartBase.h"
 #include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -12,7 +13,7 @@ AC_KartBase::AC_KartBase()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	BoxComponent = CreateDefaultSubobject<USphereComponent>(TEXT("BoxComponent"));
 	RootComponent = BoxComponent;
 	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
@@ -64,7 +65,7 @@ void AC_KartBase::Tick(float DeltaTime)
 	{
 		SetFlyVelocity();
 	}
-	//UpdateSuspension(DeltaTime);
+
 	UpdateBodyRotation(DeltaTime);
 
 	// back wheel move
@@ -98,8 +99,14 @@ void AC_KartBase::Tick(float DeltaTime)
 
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
-	SetActorLocation(NewLocation);
-	//SetActorLocation(NewLocation, true);
+	//SetActorLocation(NewLocation);
+	FHitResult Hit;
+	SetActorLocation(NewLocation, true, &Hit);
+
+	if (Hit.bBlockingHit)
+	{
+		HandleCollision(Hit);
+	}
 
 	if (bIsGround)
 	{
@@ -157,8 +164,6 @@ void AC_KartBase::Tick(float DeltaTime)
 		// 배열을 비워 깨끗한 상태로 만듭니다.
 		ActiveDriftEffects.Empty();
 	}
-
-
 	
 	// 부스트 감소
 	if (AddSpeed > KINDA_SMALL_NUMBER)
@@ -188,7 +193,7 @@ void AC_KartBase::Stun()
 void AC_KartBase::CheckIsGround()
 {	
 	FVector StartLocation = GetActorLocation();
-	FVector EndLocation = StartLocation - (GetActorUpVector() * 65.f);
+	FVector EndLocation = StartLocation - (GetActorUpVector() * 1000.f);
 	
 	// 충돌 결과를 담을 구조체
 	FHitResult HitResult;
@@ -222,7 +227,11 @@ void AC_KartBase::CheckIsGround()
 	// 충돌이 발생했을 때의 로직
 	if (bHit)
 	{
-		bIsGround = true;
+		if (HitResult.Distance < 65.f)
+			bIsGround = true;
+		else
+			bIsGround = false;
+			
 		GroundNormal = HitResult.ImpactNormal;
 		AirTime = 0;
 	}
@@ -236,50 +245,66 @@ void AC_KartBase::CheckIsGround()
 
 void AC_KartBase::UpdateBodyRotation(float DeltaTime)
 {
-	// 현재 조향(Yaw)이 적용된 회전 값을 가져옵니다.
-	const FRotator CurrentRotation = GetActorRotation();
+	// Yaw
+	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
+	{
+		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
+			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
+			FVector2D(1.f, 0.4f),     // 출력 범위 (회전 배율)
+			CurSpeed
+		);
+		
+		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
 
-	// 목표가 될 회전 값을 선언합니다.
+		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
+		if (ForwardDot < 0.0f)
+		{
+			// 뒤로 움직이고 있을 때, 회전방향 반대
+			TurnThisFrame *= -1.0f;
+		}
+		
+		const FRotator RotationDelta(0.f, TurnThisFrame, 0.f);
+		AddActorLocalRotation(RotationDelta);
+	}
+
+	// Pitch, Roll
+	const FRotator CurrentRotation = GetActorRotation();
 	FRotator TargetRotation;
 
-	if (bIsGround)
+	float InterpSpeed = BodyRotationInterpolationSpeed;
+	
+	if (bIsInPostCollisionState)
 	{
-		const FVector ForwardOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
-		const FRotator RotationOnGround = FRotationMatrix::MakeFromZX(GroundNormal, ForwardOnGround).Rotator();
-		TargetRotation = FRotator(RotationOnGround.Pitch, CurrentRotation.Yaw, RotationOnGround.Roll);
-		const FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
-		SetActorRotation(NewRotation);
+		TargetRotation = PostCollisionTargetRotation;
+		InterpSpeed = CollisionRotationSpeed; // 충돌 시에는 더 빠르게 회전
+
+		// 목표 각도에 거의 도달했다면, 충돌 후 상태를 해제합니다.
+		if (CurrentRotation.Equals(TargetRotation, 1.0f))
+		{
+			bIsInPostCollisionState = false;
+		}
 	}
 	else
 	{
-		const FVector UpVectorInAir = -FVector(0, 0, -1);
-		const FVector ForwardVectorInAir = GetActorForwardVector();
-		const FRotator TargetRotationInAir = FRotationMatrix::MakeFromZX(UpVectorInAir, ForwardVectorInAir).Rotator();
-		const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotationInAir, DeltaTime, 2);
-		SetActorRotation(NewRotation);
+		if (bIsGround)
+		{
+			// 땅에 있을 때: 경사면에 맞춤
+			const FVector ForwardOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
+			const FRotator RotationOnGround = FRotationMatrix::MakeFromZX(GroundNormal, ForwardOnGround).Rotator();
+			TargetRotation = FRotator(RotationOnGround.Pitch, CurrentRotation.Yaw, RotationOnGround.Roll);
+		}
+		else
+		{
+			// 공중에 있을 때: 동적 중력에 맞춤
+			const FVector UpVectorInAir = -GravityDirection;
+			const FVector ForwardVectorInAir = GetActorForwardVector();
+			TargetRotation = FRotationMatrix::MakeFromZX(UpVectorInAir, ForwardVectorInAir).Rotator();
+		}
 	}
-    
-	// 최종적으로 계산된 목표 회전값을 향해 부드럽게 보간합니다.
-	
-	// if (!bIsGround)
-	// {
-	// 	FRotator LevelRotation = GetActorRotation();
-	// 	LevelRotation.Pitch = 0.f;
-	// 	LevelRotation.Roll = 0.f;
-	// 	SetActorRotation(FMath::RInterpTo(GetActorRotation(), LevelRotation, DeltaTime, 2.0f));
-	// 	return;
-	// }
-	//
-	// // 평면 프로젝션
-	// const FVector ForwardVectorOnGround = FVector::VectorPlaneProject(GetActorForwardVector(), GroundNormal).GetSafeNormal();
- //    
-	// // 목표 회전값
-	// const FRotator TargetRotation = FRotationMatrix::MakeFromZX(GroundNormal, ForwardVectorOnGround).Rotator();
-	//
-	// //보간
-	// const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, BodyRotationInterpolationSpeed);
-	//
-	// SetActorRotation(NewRotation);
+	// 최종 목표 회전값 보간
+	const FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, InterpSpeed);
+	SetActorRotation(NewRotation);
+
 }
 
 void AC_KartBase::SetVelocity()
@@ -304,80 +329,14 @@ void AC_KartBase::SetVelocity()
 	FVector FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + GravityForce;
 	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
 	
-	// if (bIsGround)
-	// {
-	// 	// 땅에 있을 땐 미끄러지는 힘만 적용
-	// 	FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + (GravityForce - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal));
-	// 	 
-	// }
-	// else // 공중에 있을 때
-	// {
-	// 	// 공중에 있을 땐 중력 전체를 적용
-	// 	FinalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + GravityForce * 2.f;
-	// }
-    
-	// 2. 속도 업데이트
-    
-	// 3. 지면 밀착 로직 (기존과 동일하지만, 이제 모든 표면에서 작동)
+	// 지면 밀착
 	if (bIsGround)
 	{
 		CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
 	}
 	
-	// FVector SlopeGravityForce = FVector::ZeroVector; // 중력
-	// if (bIsGround)
-	// {
-	// 	// 중력 경사면 투영
-	// 	const FVector GravityVector(0.f, 0.f, GetWorld()->GetGravityZ());
-	// 	SlopeGravityForce = GravityVector - (FVector::DotProduct(GravityVector, GroundNormal) * GroundNormal);
-	// }
-	
-	// 최종 힘 계산
-	// const FVector TotalForce = ThrustForce + SidewaysFrictionForce + ForwardFrictionForce + SlopeGravityForce;
-	//
-	// // 속도 업데이트
-	// CurVelocity += TotalForce * GetWorld()->GetDeltaSeconds();
-	//
-	// CurVelocity.Z += GetWorld()->GetGravityZ() * GetWorld()->GetDeltaSeconds() * 2.f;
-	//
-	// if (bIsGround)
-	// {
-	// 	CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
-	// }
-	
 	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
-
 	CurSpeed = CurVelocity.Size();
-	
-	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
-	{
-		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
-			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
-			FVector2D(1.f, 0.4f),     // 출력 범위 (회전 배율)
-			CurSpeed
-		);
-		
-		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
-
-		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
-		if (ForwardDot < 0.0f)
-		{
-			// 뒤로 움직이고 있을 때, 회전방향 반대
-			TurnThisFrame *= -1.0f;
-		}
-		
-		const FRotator RotationDelta(0.f, TurnThisFrame, 0.f);
-		AddActorLocalRotation(RotationDelta);
-	}
-
-	FRotator TargetRotation;
-	// 지면의 기울기(GroundNormal)와 현재 차의 앞 방향을 기준으로 목표 회전값을 계산
-	TargetRotation = FRotationMatrix::MakeFromZX(GroundNormal, GetActorForwardVector()).Rotator();
-	
-
-	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), BodyRotationInterpolationSpeed);
-	SetActorRotation(NewRotation);
-	
 	SpeedRatio = CurVelocity.Size() / MaxSpeed;
 }
 
@@ -398,47 +357,77 @@ void AC_KartBase::SetFlyVelocity()
 	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
 	
 	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
-
 	CurSpeed = CurVelocity.Size();
-
-	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
-	{
-		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
-			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
-			FVector2D(0.3f, 0.1f),     // 출력 범위 (회전 배율)
-			CurSpeed
-		);
-		
-		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
-
-		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
-		if (ForwardDot < 0.0f)
-		{
-			// 뒤로 움직이고 있을 때, 회전방향 반대
-			TurnThisFrame *= -1.0f;
-		}
-		
-		const FRotator RotationDelta(0.f, TurnThisFrame, 0.f);
-		AddActorLocalRotation(RotationDelta);
-	}
-	
-	FRotator TargetRotation;
-	// 공중에 있을 땐 차체의 기울기를 수평으로 되돌림
-	TargetRotation = GetActorRotation();
-	TargetRotation.Pitch = 0.f;
-	TargetRotation.Roll = 0.f;
-	
-	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 0.5f);
-	SetActorRotation(NewRotation);
-
-
-	
 	SpeedRatio = CurVelocity.Size() / MaxSpeed;
 }
 
 void AC_KartBase::UpdateSuspension(float DeltaTime)
 {
 	// 서스펜션 구현
+}
+//
+// void AC_KartBase::UpdateRotation()
+// {
+// 	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
+// 	{
+// 		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
+// 			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
+// 			FVector2D(1, 0.4f),     // 출력 범위 (회전 배율)
+// 			CurSpeed
+// 		);
+// 		
+// 		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
+//
+// 		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
+// 		if (ForwardDot < 0.0f)
+// 		{
+// 			// 뒤로 움직이고 있을 때, 회전방향 반대
+// 			TurnThisFrame *= -1.0f;
+// 		}
+// 		
+// 		const FRotator RotationDelta(0.f, TurnThisFrame, 0.f);
+// 		AddActorLocalRotation(RotationDelta);
+// 	}
+// 	
+// 	FRotator TargetRotation;
+// 	// 공중에 있을 땐 차체의 기울기를 수평으로 되돌림
+// 	TargetRotation = GetActorRotation();
+// 	TargetRotation.Pitch = 0.f;
+// 	TargetRotation.Roll = 0.f;
+// 	
+// 	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 0.5f);
+// 	SetActorRotation(NewRotation);
+// }
+
+void AC_KartBase::HandleCollision(const FHitResult& HitResult)
+{
+	const FVector ReflectedVelocity = FMath::GetReflectionVector(CurVelocity, HitResult.ImpactNormal);
+	CurVelocity = ReflectedVelocity * CollisionDampingFactor;
+
+	const float ImpactDot = FVector::DotProduct(GetActorForwardVector(), HitResult.ImpactNormal);
+
+	// 45도에 해당하는 Cosine 값 (약 0.707)
+	const float FortyFiveDegreesInDot = FMath::Cos(FMath::DegreesToRadians(45.f));
+
+	FVector TargetForwardDirection;
+
+	// 입사각이 45도 이상일 경우 (정면 충돌에 가까울 때)
+	if (FMath::Abs(ImpactDot) > FortyFiveDegreesInDot)
+	{
+		// 규칙 2: 노멀값에 평행한 방향 (벽에서 튕겨 나오는 방향)으로 차체를 정렬
+		TargetForwardDirection = -HitResult.ImpactNormal;
+	}
+	else // 입사각이 45도 이하일 경우 (비스듬히 긁혔을 때)
+	{
+		// 규칙 1: 노멀값에 수직인 방향 (벽면과 평행하게 미끄러질 방향)으로 차체를 정렬
+		TargetForwardDirection = FVector::VectorPlaneProject(GetActorForwardVector(), HitResult.ImpactNormal);
+	}
+    
+	// 3. 계산된 목표 회전값을 변수에 저장하고, 충돌 후 상태를 활성화합니다.
+	PostCollisionTargetRotation = FRotationMatrix::MakeFromX(TargetForwardDirection).Rotator();
+	PostCollisionTargetRotation.Roll = 0.f;
+	PostCollisionTargetRotation.Pitch = 0.f;
+	bIsInPostCollisionState = true;
 }
 
 void AC_KartBase::StartAddSpeed(float Add)
@@ -489,7 +478,7 @@ void AC_KartBase::PlayBoostEffect()
 	}
 }
 
-void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDir)
+void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 {
 	if (EffectType != CurrentDriftType)
 	{
@@ -518,7 +507,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDir)
 						Wheel,
 						NAME_None,
 						FVector::ZeroVector,      // 상대 위치
-						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						FRotator(0, DriftStartDirEffect * -45, 0),   // 상대 회전
 						EAttachLocation::KeepRelativeOffset,
 						false);
 					
@@ -537,7 +526,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDir)
 						Wheel,
 						NAME_None,
 						FVector::ZeroVector,      // 상대 위치
-						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						FRotator(0, DriftStartDirEffect * -45, 0),   // 상대 회전
 						EAttachLocation::KeepRelativeOffset,
 						false);
 					
@@ -556,7 +545,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDir)
 						Wheel,
 						NAME_None,
 						FVector::ZeroVector,      // 상대 위치
-						FRotator(0, DriftStartDir * -45, 0),   // 상대 회전
+						FRotator(0, DriftStartDirEffect * -45, 0),   // 상대 회전
 						EAttachLocation::KeepRelativeOffset,
 						false);
 					

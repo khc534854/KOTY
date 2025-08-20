@@ -77,5 +77,4 @@ protected:
 	class UInputAction* AddSpeedAction;
 
 
-	float DriftStartDir;
 };

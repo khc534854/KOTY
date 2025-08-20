@@ -37,14 +37,17 @@ public:
 	virtual void SetFlyVelocity();
 	virtual void UpdateSuspension(float DeltaTime);
 
+	//void UpdateRotation();
+
+	void HandleCollision(const FHitResult& HitResult);
 	void StartAddSpeed(float Add);
 	void DriftUpAction();
 	void PlayBoostEffect();
-	void PlayDriftEffect(int EffectType, float DriftStartDir);
+	void PlayDriftEffect(int EffectType, float DriftStartDirEffect);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
-	UBoxComponent* BoxComponent;
+	class USphereComponent* BoxComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body")
 	UStaticMeshComponent* StaticMeshComponent;
@@ -160,7 +163,19 @@ public:
 	FVector GroundNormal = FVector::UpVector;
 
 	float AirTime = 0;
+	
+	float DriftStartDir;
+	
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
+	float CollisionDampingFactor = 0.4f;
 
+	bool bIsInPostCollisionState = false; // 현재 충돌 후 상태인지 여부
+	FRotator PostCollisionTargetRotation;   // 충돌 후 따라가야 할 목표 회전값
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
+	float CollisionRotationSpeed = 6.0f;
+
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector GravityDirection = FVector(0.f, 0.f, -1.f);

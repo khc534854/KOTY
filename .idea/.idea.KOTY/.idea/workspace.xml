@@ -13,7 +13,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="" />
+    <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/C_MenuController.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/C_MenuController.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseButtonWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseButtonWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/PrototypeMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/PrototypeMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_3.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_5.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Lakitu/Tex/mat_5.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KOTY.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,15 +47,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/Vector.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/HitResult.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/MovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SplineComponent.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SplineMeshComponent.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/StaticMesh.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Plugins/Media/MediaFrameworkUtilities/Source/MediaFrameworkUtilities/Private/MediaBundle.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Plugins/MetaHuman/MetaHumanCharacter/Source/MetaHumanCharacterEditor/Private/MetaHumanInvisibleDrivingActor.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/XLocLocalization/XLocLocalizationProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -58,7 +74,7 @@
     &quot;Notification.DoNotAsk-Rider&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;KHC&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -216,6 +232,10 @@
       <workItem from="1755153909186" duration="9000" />
       <workItem from="1755275282188" duration="1708000" />
       <workItem from="1755485138104" duration="12052000" />
+      <workItem from="1755606024316" duration="602000" />
+      <workItem from="1755648396508" duration="346000" />
+      <workItem from="1755648788003" duration="307000" />
+      <workItem from="1755649142958" duration="20960000" />
     </task>
     <servers />
   </component>

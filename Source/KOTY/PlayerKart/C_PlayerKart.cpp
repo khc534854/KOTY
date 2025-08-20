@@ -219,6 +219,19 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		bIsGround = false;
 		return;
 	}
+
+	if (HandlingDir == 0)
+	{
+		//DriftUpAction();
+		return;
+	}
+
+	const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
+	if (ForwardDot < 0.0f)
+	{
+		return;
+	}
+	
 	DriftTime += GetWorld()->GetDeltaSeconds();
 	
 	if (!bIsDrift)
