@@ -57,6 +57,12 @@ void AC_KartBase::Tick(float DeltaTime)
 
 	CheckIsGround();
 
+	if (bIsStunned)
+	{
+		UpdateStunEffect(DeltaTime);
+		//return;
+	}
+
 	if (bIsGround)
 	{
 		SetVelocity();
@@ -188,6 +194,19 @@ void AC_KartBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void AC_KartBase::Stun()
 {
 	// 스턴 구현
+
+	if (bIsStunned)
+	{
+		return;
+	}
+
+	// 속도 80% 감소
+	CurVelocity *= StunSpeedMultiplier;
+
+	// 스턴 상태를 활성화, 타이머를 초기화
+	bIsStunned = true;
+	StunRotationTimer = 0.f;
+
 }
 
 void AC_KartBase::CheckIsGround()
@@ -563,5 +582,22 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 	}
 
 	
+}
+
+void AC_KartBase::UpdateStunEffect(float DeltaTime)
+{
+	StunRotationTimer += DeltaTime;
+
+	float Alpha = FMath::Clamp(StunRotationTimer / StunDuration, 0.f, 1.f);
+
+	float CurrentRoll = FMath::Lerp(0.f, 360.f, Alpha);
+
+	StaticMeshComponent->SetRelativeRotation(FRotator(0.f, 0.f, CurrentRoll));
+
+	if (StunRotationTimer >= StunDuration)
+	{
+		bIsStunned = false;
+		StaticMeshComponent->SetRelativeRotation(FRotator::ZeroRotator); // 메시 회전을 원래대로 리셋
+	}
 }
 

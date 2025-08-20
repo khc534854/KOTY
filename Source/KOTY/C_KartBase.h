@@ -30,7 +30,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	virtual void Stun();
+
 	virtual void CheckIsGround();
 	virtual void UpdateBodyRotation(float DeltaTime);
 	virtual void SetVelocity();
@@ -44,6 +46,7 @@ public:
 	void DriftUpAction();
 	void PlayBoostEffect();
 	void PlayDriftEffect(int EffectType, float DriftStartDirEffect);
+	void UpdateStunEffect(float DeltaTime);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
@@ -174,6 +177,16 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
 	float CollisionRotationSpeed = 6.0f;
+
+	//Stun
+	bool bIsStunned = false;      // 현재 스턴 상태인지 여부
+	float StunRotationTimer = 0.f; // 스턴 애니메이션 경과 시간
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Stun")
+	float StunDuration = 0.8f;  // 스턴 메시가 한 바퀴 도는 데 걸리는 시간
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Stun")
+	float StunSpeedMultiplier = 0.2f;
 
 	
 public:
