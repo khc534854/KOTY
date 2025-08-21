@@ -34,9 +34,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float StepUpLimit = 3;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
-	FVector MoveVelocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float SurfaceElasticity;
@@ -46,9 +43,6 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
     FHitResult LineTraceGravityDirTrack(FVector Start) const;
-
-	UFUNCTION(BlueprintCallable)
-	void SLerpVelocity(FVector TargetDir);
 	
 public:
 	virtual void InitializeComponent() override;
@@ -62,7 +56,7 @@ public:
 		const float InGravityForce,
 		const float InConstantHorizonSpeed,
 		const float InStepUpLimit,
-		const FVector InMoveVelocity,
+		const FVector InVelocity,
 		const float InSurfaceElasticity);
 
 	UFUNCTION(BlueprintCallable)
@@ -72,6 +66,9 @@ public:
 		const float InGravityForce,
 		const float InLinearDrag,
 		const float InStepUpLimit,
-		const FVector InMoveVelocity,
+		const FVector InVelocity,
 		const float InSurfaceElasticity);
+
+	UFUNCTION(BlueprintCallable)
+	void SLerpVelocity(FVector TargetDir);
 };
