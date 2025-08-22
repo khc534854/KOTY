@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
+#include "Utility/C_MathUtility.h"
 
 
 // Sets default values
@@ -56,13 +57,7 @@ void AC_KartBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckIsGround();
-
-	if (bIsStunned)
-	{
-		UpdateStunEffect(DeltaTime);
-		//return;
-	}
-
+	
 	if (bIsGround)
 	{
 		SetVelocity();
@@ -72,8 +67,24 @@ void AC_KartBase::Tick(float DeltaTime)
 		SetFlyVelocity();
 	}
 
+	FHitResult Hit;
+	FVector NewLocation;
+	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
+	SetActorLocation(NewLocation, true, &Hit);
+
+	if (Hit.bBlockingHit)
+	{
+		HandleCollision(Hit);
+	}
+	
 	UpdateBodyRotation(DeltaTime);
 
+	if (bIsStunned)
+	{
+		UpdateStunEffect(DeltaTime);
+		return;
+	}
+	
 	// back wheel move
 	WheelB->SetRelativeRotation(WheelB->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * 0.001f * FVector::DotProduct(CurVelocity, GetActorForwardVector())));
 	WheelL->SetRelativeRotation(WheelL->GetRelativeRotation() +  FRotator(0 , 0, DeltaTime * CurSpeed * 0.001f * FVector::DotProduct(CurVelocity, GetActorForwardVector())));
@@ -101,18 +112,9 @@ void AC_KartBase::Tick(float DeltaTime)
 		0,
 		FMath::Lerp(StaticMeshComponent->GetRelativeRotation().Yaw, MeshRotationDirection.Yaw, DeltaTime * 10),
 		0));
-	FVector NewLocation;
 
-	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
 	
 	//SetActorLocation(NewLocation);
-	FHitResult Hit;
-	SetActorLocation(NewLocation, true, &Hit);
-
-	if (Hit.bBlockingHit)
-	{
-		HandleCollision(Hit);
-	}
 
 	if (bIsGround)
 	{
@@ -267,12 +269,22 @@ void AC_KartBase::UpdateBodyRotation(float DeltaTime)
 	// Yaw
 	if (CurSpeed > 100.f && !FMath::IsNearlyZero(HandlingDir))
 	{
-		const float TurnMultiplier = FMath::GetMappedRangeValueClamped(
+		float TurnMultiplier;
+		if (bIsDrift)
+		{
+			TurnMultiplier = FMath::GetMappedRangeValueClamped(
+			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
+			FVector2D(1.f, 0.6f),     // 출력 범위 (회전 배율)
+			CurSpeed);
+		}
+		else
+		{
+			TurnMultiplier = FMath::GetMappedRangeValueClamped(
 			FVector2D(0.f, MaxSpeed), // 입력 범위 (현재 속도)
 			FVector2D(1.f, 0.4f),     // 출력 범위 (회전 배율)
-			CurSpeed
-		);
-		
+			CurSpeed);
+		}
+
 		float TurnThisFrame = TurnSpeed * TurnMultiplier * HandlingDir * GetWorld()->GetDeltaSeconds();
 
 		const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
@@ -590,9 +602,11 @@ void AC_KartBase::UpdateStunEffect(float DeltaTime)
 
 	float Alpha = FMath::Clamp(StunRotationTimer / StunDuration, 0.f, 1.f);
 
-	float CurrentRoll = FMath::Lerp(0.f, 360.f, Alpha);
+	float EasedAlpha = UC_MathUtility::EaseOutElastic(Alpha);
+	
+	float CurrentRoll = FMath::Lerp(0.f, 360.f, EasedAlpha);
 
-	StaticMeshComponent->SetRelativeRotation(FRotator(0.f, 0.f, CurrentRoll));
+	StaticMeshComponent->SetRelativeRotation( StaticMeshComponent->GetRelativeRotation() + FRotator(0.f, 0.f, CurrentRoll));
 
 	if (StunRotationTimer >= StunDuration)
 	{

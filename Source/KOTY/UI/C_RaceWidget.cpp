@@ -9,14 +9,6 @@ void UC_RaceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	CurrentTime += InDeltaTime;
-	
-	if (CurrentTime >= 2.0f)
-	{
-		FString r = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/StartGo.StartGo'");
-		ChangeImg(IMG_Ready, r);
-	}
-
 	
 }
 

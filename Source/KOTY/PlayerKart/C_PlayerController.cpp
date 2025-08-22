@@ -11,9 +11,14 @@ void AC_PlayerController::BeginPlay()
 	if (HUDWidgetClass)
 	{
 		CurrentHUD = CreateWidget<UUserWidget>(this, HUDWidgetClass);
-		if (CurrentHUD)
-		{
-			CurrentHUD->AddToViewport();
-		}
+
+	}
+}
+
+void AC_PlayerController::SetReady()
+{
+	if (CurrentHUD)
+	{
+		CurrentHUD->AddToViewport();
 	}
 }

@@ -19,33 +19,35 @@ public:
 
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	void ChangeImg(UImage* TargetImg, FString Resource);
+	
 public:
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Ready;
 	
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_ItemSlot;	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_FirstItem;	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_SecondItem;
 	
 	UPROPERTY(meta = (BindWidget))
 	UImage* IMG_Coin;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* TXT_Coin;
 
 	UPROPERTY(meta = (BindWidget))
 	UImage* IMG_Laps;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* TXT_Laps;
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_CurRank;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Map;
 
 	float CurTime = 0.f;
@@ -53,5 +55,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTexture2D* NewTexture;
 
-	float CurrentTime = 0;;
+	float CurrentTime = -5.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_Three = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Start3.Start3'");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_Two = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Start2.Start2'");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_One = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Start1.Start1'");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_Go = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/StartGo.StartGo'");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_Finish = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Finish.Finish'");
 };

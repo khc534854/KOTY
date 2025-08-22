@@ -42,11 +42,13 @@ public:
 	//void UpdateRotation();
 
 	void HandleCollision(const FHitResult& HitResult);
+	UFUNCTION(BlueprintCallable)
 	void StartAddSpeed(float Add);
 	void DriftUpAction();
 	void PlayBoostEffect();
 	void PlayDriftEffect(int EffectType, float DriftStartDirEffect);
 	void UpdateStunEffect(float DeltaTime);
+
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")

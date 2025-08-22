@@ -17,6 +17,9 @@ class KOTY_API AC_PlayerController : public APlayerController
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetReady();
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
