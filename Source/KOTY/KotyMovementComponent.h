@@ -71,4 +71,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SLerpVelocity(FVector TargetDir);
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetGravityDir() const;
 };

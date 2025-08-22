@@ -1,15 +1,23 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BlackBombItem.h"
+#include "BlackBombExplosion.h"
 
-#include "KotyMovementComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 
-ABlackBombItem::ABlackBombItem()
+
+// Sets default values
+ABlackBombExplosion::ABlackBombExplosion()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//적중을 감지하는 콜리전 컴포넌트를 루트로 설정
+	HitComp = CreateDefaultSubobject<USphereComponent>(TEXT("HitComp"));
+	HitComp->SetCollisionProfileName(FName("OverlapAll"), true);
+	HitComp->SetSphereRadius(80);
+	SetRootComponent(HitComp);
 
 	//메시 컴포넌트 부착
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
@@ -18,13 +26,13 @@ ABlackBombItem::ABlackBombItem()
 
 	//메시 컴포넌트의 메시와 머터리얼 설정
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(
-		TEXT("/Game/ItemResource/Bomb/ItemBomhei.ItemBomhei"));
-	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(TEXT(
-		"/Game/ItemResource/Bomb/MT_Bomb.MT_Bomb"));
+		TEXT("/Engine/BasicShapes/Sphere.Sphere"));
+	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(
+		TEXT("/Game/Item/BlackBomb/MT_Explosion.MT_Explosion"));
 	if (TempMesh.Succeeded() && TempMaterial.Succeeded())
 	{
 		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetMaterial(0, TempMaterial.Object);
+	 	MeshComp->SetMaterial(0, TempMaterial.Object);
 	}
 
 	//타임라인 컴포넌트
@@ -32,52 +40,46 @@ ABlackBombItem::ABlackBombItem()
 
 	//커브 플로트 로드
 	const ConstructorHelpers::FObjectFinder<UCurveFloat> Temp(
-		TEXT("/Game/Item/BlackBomb/WarningEmissionCurve.WarningEmissionCurve"));
+		TEXT("/Game/Item/BlackBomb/ExplosionAlphaCurve.ExplosionAlphaCurve"));
 	if (Temp.Succeeded())
 	{
 		CurveFloat = Temp.Object;
 	}
 }
 
-void ABlackBombItem::BeginPlay()
+void ABlackBombExplosion::BeginPlay()
 {
 	Super::BeginPlay();
 
 	//머터리얼 인스턴스
 	MaterialInst = MeshComp->CreateDynamicMaterialInstance(0);
-	MaterialInst->SetScalarParameterValue(FName("WarningDelay"), WarningDelay);
 
 	//타임라인
 	FOnTimelineFloat Callback;
-	Callback.BindUFunction(this, FName("SetElapsedTime"));
+	Callback.BindUFunction(this, FName("UpdateExplosion"));
 	TimelineComp->AddInterpFloat(CurveFloat, Callback);
-	TimelineComp->SetPlayRate(1/ExplosionDelay);
+	TimelineComp->SetTimelineLength(1.5);
 	TimelineComp->SetLooping(false);
 	TimelineComp->PlayFromStart();
 
+	//타이머
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombExplosion::EndExplosion, 2.0, false);
 }
 
-void ABlackBombItem::Explode()
+void ABlackBombExplosion::UpdateExplosion(float Value)
 {
-	GetWorld()->SpawnActor<AActor>(ExplosionActor, GetActorTransform());
+	MaterialInst->SetScalarParameterValue(FName("Opacity"), Value * 0.75);
+	SetActorScale3D(FVector::Zero() + Value * 14);
+}
+
+void ABlackBombExplosion::EndExplosion()
+{
 	this->Destroy();
 }
 
-void ABlackBombItem::SetElapsedTime(const float TwistedTime) const
-{
-	//업데이트
-	MaterialInst->SetScalarParameterValue("ElapsedTime", TwistedTime);
-}
-
-void ABlackBombItem::Tick(float DeltaTime)
+void ABlackBombExplosion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	MeshComp->AddRelativeRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
-	
-
-	
 }
 

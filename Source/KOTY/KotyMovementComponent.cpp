@@ -13,8 +13,6 @@ void UKotyMovementComponent::InitializeComponent()
 	{
 		UE_LOG(LogTemp, Log, TEXT("KotyComponent Successfully Initialized!"));	
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("%f"), FMath::Acos(0.0));
 }
 
 void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -95,7 +93,7 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 		//회전축
 		const FVector RotationAxis = FVector::CrossProduct(LastGravityDir, -GravityDir);
 
-		UE_LOG(LogTemp, Log, TEXT("%f : %f %f %f"), RotationDegree, RotationAxis.X, RotationAxis.Y, RotationAxis.Z);
+		//UE_LOG(LogTemp, Log, TEXT("%f : %f %f %f"), RotationDegree, RotationAxis.X, RotationAxis.Y, RotationAxis.Z);
 				
 		//안전하게 이동 방향을 회전
 		if (RotationAxis.IsNearlyZero() == false)
@@ -125,6 +123,8 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 	
 	//이번 틱에 이동할 변화량
 	const FVector Delta = Velocity * DeltaTime;
+
+	//UE_LOG(LogTemp, Log, TEXT("%f %f %f"), Delta.X, Delta.Y, Delta.Z);
 	
 	//충돌 감지 이동
 	FHitResult Hit;
@@ -198,7 +198,9 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 				if (HitHeight < StepUpLimit)
 				{
 					//스텝 위치로 이동
-					GetOwner()->SetActorLocation(Hit.ImpactPoint + FVector(0, 0, HitHeight + 0.5));
+					FVector Step = - GravityDir * (HitHeight + 5);
+					MoveUpdatedComponent(Step, UpdatedComponent->GetComponentQuat(), true);
+					UE_LOG(LogTemp, Log, TEXT("StepUp has been executed!"));
 					return;
 				}
 			}
@@ -275,4 +277,9 @@ FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start)
 void UKotyMovementComponent::SLerpVelocity(const FVector TargetDir)
 {
 	Velocity = FVector::SlerpVectorToDirection(Velocity, TargetDir, 0.5);
+}
+
+FVector UKotyMovementComponent::GetGravityDir() const
+{
+	return GravityDir;
 }

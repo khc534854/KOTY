@@ -40,6 +40,8 @@ void AGreenTurtleItem::BeginPlay()
 void AGreenTurtleItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	MeshComp->AddRelativeRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
 }
 
 
