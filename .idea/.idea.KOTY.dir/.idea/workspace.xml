@@ -8,17 +8,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/dictionaries/project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_BlackBombItemFinal.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_GreenTurtleItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_GreenTurtleItemFinal.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_RedTurtleItemFinal.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_TrackingGuideOnGround.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/ExplosionAlphaCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/ExplosionAlphaCurve.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Default/AC_ItemHitComponent.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTestGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTestGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ItemResource/Bomb/MT_Bomb.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ItemResource/Bomb/MT_Bomb.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +51,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Delegates/Delegate.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Templates/PointerIsConvertibleFromTo.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SceneComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/KOTY.uproject" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -69,7 +89,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.6\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\user\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\prays\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -81,7 +101,7 @@
         <option name="CONFIGURATION" value="DebugGame" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\user\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-DebugGame.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-DebugGame.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -95,7 +115,7 @@
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
         <option name="EXECUTABLE_PATH" value="C:\Program Files\Epic Games\UE_5.6\Engine\Binaries\Win64\UnrealEditor.exe" />
-        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\user\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
+        <option name="MANDATORY_PROGRAM_PARAMETERS" value=" &quot;C:\Users\prays\Documents\Unreal Projects\KOTY\KOTY.uproject&quot;" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
         <option name="PASS_PARENT_ENVS" value="1" />
@@ -107,7 +127,7 @@
         <option name="CONFIGURATION" value="Development" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\user\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -120,7 +140,7 @@
         <option name="CONFIGURATION" value="Shipping" />
         <option name="PLATFORM" value="Win64" />
         <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
-        <option name="EXECUTABLE_PATH" value="C:\Users\user\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-Shipping.exe" />
+        <option name="EXECUTABLE_PATH" value="C:\Users\prays\Documents\Unreal Projects\KOTY\Binaries\Win64\KOTY-Win64-Shipping.exe" />
         <option name="MANDATORY_PROGRAM_PARAMETERS" value="" />
         <option name="CUSTOM_PROGRAM_PARAMETERS" value="" />
         <option name="WORKING_DIRECTORY" value="C:\Program Files\Epic Games\UE_5.6" />
@@ -238,6 +258,8 @@
       <workItem from="1755837582121" duration="33000" />
       <workItem from="1755840356378" duration="10526000" />
       <workItem from="1755856835100" duration="4774000" />
+      <workItem from="1755938426804" duration="12254000" />
+      <workItem from="1755958735067" duration="5411000" />
     </task>
     <servers />
   </component>

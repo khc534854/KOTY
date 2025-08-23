@@ -17,6 +17,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
+	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USphereComponent> HitComp;
 
@@ -30,14 +34,14 @@ protected:
 	TObjectPtr<class UTimelineComponent> TimelineComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ExplosionDuration = 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UCurveFloat> CurveFloat;
 	
 	UFUNCTION()
-	void UpdateExplosion(float Value);
+	void UpdateExplosionAlpha(float Value);
 
 	UFUNCTION()
 	void EndExplosion();
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };

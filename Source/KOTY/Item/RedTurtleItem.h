@@ -17,6 +17,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	virtual void ApplyItemEffect(AActor* OtherActor) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 RotationDir;
+
 public:
 	virtual void Tick(float DeltaTime) override;
 };

@@ -23,8 +23,6 @@ public:
 	APhysicTrackingItemBase();
 
 protected:
-	virtual void BeginPlay() override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USplineComponent> SplineComp;
 
@@ -37,6 +35,4 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ETrackingMode TrackingMode;
 	
-public:
-	virtual void Tick(float DeltaTime) override;
 };

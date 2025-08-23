@@ -27,13 +27,3 @@ APhysicItemBase::APhysicItemBase()
 	//아이템 무브먼트 컴포넌트 부착
 	MoveComp = CreateDefaultSubobject<UKotyMovementComponent>(TEXT("KotyMovement"));
 }
-
-void APhysicItemBase::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void APhysicItemBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}

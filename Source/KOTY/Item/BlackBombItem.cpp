@@ -3,6 +3,8 @@
 
 #include "BlackBombItem.h"
 
+#include "BlackBombExplosion.h"
+#include "KotyItemHitComponent.h"
 #include "KotyMovementComponent.h"
 #include "Components/TimelineComponent.h"
 
@@ -55,14 +57,51 @@ void ABlackBombItem::BeginPlay()
 	TimelineComp->SetLooping(false);
 	TimelineComp->PlayFromStart();
 
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
+	//폭발 타이머 설정
+	GetWorldTimerManager().SetTimer(ExplosionTimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
+}
+
+void ABlackBombItem::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	//이미 폭발한 상태로 유효하지 않음
+	if (ExplosionTimerHandle.IsValid() == false)
+	{
+		return;
+	}
+	
+	//충돌 상대가 다른 아이템이었다
+	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+	{
+		//폭탄병 아이템은 폭발 액터를 소환
+		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+		Explode();
+	}
+
+	//충돌 상대가 아이템 충돌체였다
+	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//폭탄병 아이템은 폭발 액터를 소환
+		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+		Explode();
+	}
+}
+
+void ABlackBombItem::ApplyItemEffect(AActor* TargetActor)
+{
+	Super::ApplyItemEffect(TargetActor);
 }
 
 void ABlackBombItem::Explode()
 {
-	GetWorld()->SpawnActor<AActor>(ExplosionActor, GetActorTransform());
-	this->Destroy();
+	if (ExplosionTimerHandle.IsValid())
+	{
+		//폭발 액터를 소환하고 자기 자신은 파괴
+		GetWorldTimerManager().ClearTimer(ExplosionTimerHandle);
+		GetWorld()->SpawnActor<AActor>(ExplosionActor, GetActorTransform());
+		this->Destroy();	
+	}
 }
 
 void ABlackBombItem::SetElapsedTime(const float TwistedTime) const
@@ -76,8 +115,6 @@ void ABlackBombItem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	MeshComp->AddRelativeRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
-	
-
 	
 }
 

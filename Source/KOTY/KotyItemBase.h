@@ -14,10 +14,6 @@ class KOTY_API AKotyItemBase : public AActor
 public:
 	AKotyItemBase();
 
+	UFUNCTION()
 	virtual void ApplyItemEffect(AActor* TargetActor);
-protected:
-	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };

@@ -1,13 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BlackBombExplosion.h"
-
+#include "KotyItemHitComponent.h"
+#include "KotyMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 
+class UKotyMovementComponent;
 
-// Sets default values
 ABlackBombExplosion::ABlackBombExplosion()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -56,30 +56,50 @@ void ABlackBombExplosion::BeginPlay()
 
 	//타임라인
 	FOnTimelineFloat Callback;
-	Callback.BindUFunction(this, FName("UpdateExplosion"));
+	Callback.BindUFunction(this, FName("UpdateExplosionAlpha"));
 	TimelineComp->AddInterpFloat(CurveFloat, Callback);
-	TimelineComp->SetTimelineLength(1.5);
+	TimelineComp->SetTimelineLength(1/ExplosionDuration);
 	TimelineComp->SetLooping(false);
 	TimelineComp->PlayFromStart();
 
 	//타이머
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombExplosion::EndExplosion, 2.0, false);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombExplosion::EndExplosion, ExplosionDuration, false);
 }
 
-void ABlackBombExplosion::UpdateExplosion(float Value)
+void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	MaterialInst->SetScalarParameterValue(FName("Opacity"), Value * 0.75);
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	//충돌 상대가 아이템 충돌체였다
+	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//오너를 대상으로 아이템 효과 적용
+		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
+
+		//델리게이트 전달
+		FItemEffect ItemEffectDelegate;
+		ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
+		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+	}
+}
+
+void ABlackBombExplosion::ApplyItemEffect(AActor* TargetActor)
+{
+	Super::ApplyItemEffect(TargetActor);
+
+	UE_LOG(LogTemp, Display, TEXT("BlackBombExplosion Applyed to %s!"), *TargetActor->GetName());
+}
+
+void ABlackBombExplosion::UpdateExplosionAlpha(float Value)
+{
+	//머터리얼의 투명도와 메시 컴포넌트의 스케일을 동시에 조정
+	MaterialInst->SetScalarParameterValue(FName("Opacity"), Value * 0.85);
 	SetActorScale3D(FVector::Zero() + Value * 14);
 }
 
 void ABlackBombExplosion::EndExplosion()
 {
+	//폭발이 종료되었으므로 파괴
 	this->Destroy();
 }
-
-void ABlackBombExplosion::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-

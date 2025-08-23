@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Item/GreenTurtleItem.h"
 #include "KotyItemHitComponent.generated.h"
 
+//델리게이트 선언
+DECLARE_DYNAMIC_DELEGATE_OneParam(FItemEffect, AActor*, TargetActor); 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KOTY_API UKotyItemHitComponent : public USceneComponent
@@ -13,24 +16,17 @@ class KOTY_API UKotyItemHitComponent : public USceneComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UKotyItemHitComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-	virtual void OnRegister() override;
-
+	virtual void BeginPlay() override;		                                         
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UBoxComponent> BoxComp;
 
-	UFUNCTION()
-	void Hit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	UFUNCTION(BlueprintCallable)
+	void OnRequestApplyEffectFromItem(FItemEffect ItemEffectDelegate, AActor* OtherItem) const;
 };

@@ -6,8 +6,6 @@
 #include "KotyItemBase.h"
 #include "Components/BoxComponent.h"
 
-
-// Sets default values for this component's properties
 UKotyItemHitComponent::UKotyItemHitComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -17,40 +15,26 @@ UKotyItemHitComponent::UKotyItemHitComponent()
 	//오너의 루트 컴포넌트에 부착
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	BoxComp->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-	//충돌 이벤트 바인드
-	BoxComp->OnComponentBeginOverlap.AddDynamic(this, &UKotyItemHitComponent::Hit);
 }
 
-
-// Called when the game starts
 void UKotyItemHitComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//액터에 태그를 추가
+	GetOwner()->Tags.Add(FName("HasHitComp"));
 }
 
-void UKotyItemHitComponent::OnRegister()
-{
-	Super::OnRegister();
-}
-
-void UKotyItemHitComponent::Hit(
-	UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//충돌 상대를 캐스팅
-	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
-	{
-		UE_LOG(LogTemp, Log, TEXT("Item Hit!"));
-	}
-}
-
-// Called every frame
-void UKotyItemHitComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                          FActorComponentTickFunction* ThisTickFunction)
+void UKotyItemHitComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UKotyItemHitComponent::OnRequestApplyEffectFromItem(const FItemEffect ItemEffectDelegate, AActor* OtherItem) const
+{
+	//조건을 만족하는 경우 전달받은 아이템 효과 델리게이트 실행
+	ItemEffectDelegate.Execute(GetOwner());
 }
 

@@ -276,7 +276,7 @@ FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start)
 
 void UKotyMovementComponent::SLerpVelocity(const FVector TargetDir)
 {
-	Velocity = FVector::SlerpVectorToDirection(Velocity, TargetDir, 0.5);
+	Velocity = FVector::SlerpVectorToDirection(Velocity, TargetDir, 0.25);
 }
 
 FVector UKotyMovementComponent::GetGravityDir() const

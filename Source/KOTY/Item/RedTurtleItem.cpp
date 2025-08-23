@@ -3,9 +3,13 @@
 
 #include "RedTurtleItem.h"
 
+#include "KotyItemHitComponent.h"
 #include "KotyMovementComponent.h"
-#include "Components/SphereComponent.h"
 #include "Components/SplineComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "PlayerKart/C_PlayerKart.h"
+
+class UKotyItemHitComponent;
 
 ARedTurtleItem::ARedTurtleItem()
 {
@@ -33,6 +37,52 @@ ARedTurtleItem::ARedTurtleItem()
 void ARedTurtleItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//스플라인 컴포넌트 중 랜덤으로 하나
+	TArray<AActor*> GroundTrackingSpline;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("GroundTrackingSpline"), GroundTrackingSpline);
+	if (GroundTrackingSpline.IsEmpty() == false)
+		SplineComp = GroundTrackingSpline[FMath::RandRange(0, GroundTrackingSpline.Num() - 1)]->GetComponentByClass<USplineComponent>();
+
+	//충돌체를 가진 액터 중 랜덤으로 하나
+	TArray<AActor*> HasHitComps;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), HasHitComps);
+	if (HasHitComps.IsEmpty() == false)
+		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
+}
+
+void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	//충돌 상대가 다른 아이템이었다
+	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+		this->Destroy();
+	}
+
+	//충돌 상대가 아이템 충돌체였다
+	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//오너를 대상으로 아이템 효과 적용
+		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
+
+		//델리게이트 전달
+		FItemEffect ItemEffectDelegate;
+		ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
+		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+
+		//파괴
+		this->Destroy();
+	}
+}
+
+void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
+{
+	Super::ApplyItemEffect(OtherActor);
+
+	UE_LOG(LogTemp, Display, TEXT("RedTurtle Applyed to %s!"), *OtherActor->GetName());
 }
 
 // Called every frame
@@ -40,6 +90,21 @@ void ARedTurtleItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+#pragma region 메시 회전
+
+	//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
+	MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
+
+	//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
+	const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
+	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.05);
+	const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
+	MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
+
+#pragma endregion
+
+#pragma region 스플라인 및 타깃 추적
+	
 	//타깃 액터 유효
 	if (TargetActor)
 	{
@@ -76,5 +141,8 @@ void ARedTurtleItem::Tick(float DeltaTime)
 		//거리가 아직 있으므로 스플라인을 향해 속도 보간
 		MoveComp->SLerpVelocity(Diff.GetSafeNormal());
 	}
+
+#pragma endregion 
+	
 }
 

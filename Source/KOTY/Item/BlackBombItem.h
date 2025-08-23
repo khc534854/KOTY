@@ -20,6 +20,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
+	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMaterialInstanceDynamic> MaterialInst;
 
@@ -37,13 +41,16 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WarningDelay = 1.5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTimerHandle ExplosionTimerHandle;
 	
 	UFUNCTION()
 	void Explode();
 	
 	UFUNCTION()
 	void SetElapsedTime(float TwistedTime) const;
-
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
