@@ -50,6 +50,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Map;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UImage* IMG_SpeedEffect;
+
 	float CurTime = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -67,4 +70,5 @@ public:
 	FString IMG_Go = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/StartGo.StartGo'");
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString IMG_Finish = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Finish.Finish'");
+
 };

@@ -89,7 +89,9 @@ protected:
 	TArray<UNiagaraComponent*> ActiveBoostEffects;
 	TArray<UNiagaraComponent*> ActiveDriftEffects;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	bool bIsBoosting = false;
+	
 	float BoostTimer = 0;
 	float BoostDuration = 1.5f;
 	

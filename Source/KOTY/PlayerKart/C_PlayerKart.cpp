@@ -137,7 +137,7 @@ void AC_PlayerKart::CheckIsGround()
 void AC_PlayerKart::CameraMove()
 {
 	float MinSpringArmLength = 300.f; // 정지 시 길이
-	float MaxSpringArmLength = 500.f; // 최대 속도 시 길이
+	float MaxSpringArmLength = 600.f; // 최대 속도 시 길이
 	float TargetArmLength = FMath::Lerp(MinSpringArmLength, MaxSpringArmLength, SpeedRatio);
 
 	// 보간
