@@ -6,7 +6,9 @@
 #include "BlackBombExplosion.h"
 #include "KotyItemHitComponent.h"
 #include "KotyMovementComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ABlackBombItem::ABlackBombItem()
 {
@@ -18,27 +20,47 @@ ABlackBombItem::ABlackBombItem()
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
 
-	//메시 컴포넌트의 메시와 머터리얼 설정
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(
-		TEXT("/Game/ItemResource/Bomb/ItemBomhei.ItemBomhei"));
-	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(TEXT(
-		"/Game/ItemResource/Bomb/MT_Bomb.MT_Bomb"));
-	if (TempMesh.Succeeded() && TempMaterial.Succeeded())
-	{
-		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetMaterial(0, TempMaterial.Object);
-	}
-
 	//타임라인 컴포넌트
 	TimelineComp = CreateDefaultSubobject<UTimelineComponent>(TEXT("TimelineComp"));
 
-	//커브 플로트 로드
-	const ConstructorHelpers::FObjectFinder<UCurveFloat> Temp(
-		TEXT("/Game/Item/BlackBomb/WarningEmissionCurve.WarningEmissionCurve"));
-	if (Temp.Succeeded())
+	//스태틱 메시 로드
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/BlackBomb/Model/SM_BlackBomb.SM_BlackBomb"));
+		Finder.Succeeded())
 	{
-		CurveFloat = Temp.Object;
+		MeshComp->SetStaticMesh(Finder.Object);
 	}
+
+	//머터리얼 로드
+	if (ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/BlackBomb/Model/MT_BlackBomb.MT_BlackBomb"));
+		Finder.Succeeded())
+	{
+		MeshComp->SetMaterial(0, Finder.Object);		
+	}
+
+	//사용 사운드 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Swoosh.SW_Swoosh"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
+	}
+
+	//폭탄 경고 사운드 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_BombWarning.SW_BombWarning"));
+		Finder.Succeeded())
+	{
+		BombWarningSound = Finder.Object;
+	}
+
+	//커브 플로트 로드
+	if (const ConstructorHelpers::FObjectFinder<UCurveFloat> Finder(TEXT("/Game/Item/BlackBomb/WarningEmissionCurve.WarningEmissionCurve"));
+		Finder.Succeeded())
+	{
+		CurveFloat = Finder.Object;
+	}
+
+	//오디오 컴포넌트 초기화
+	AudioComp->SetSound(BombWarningSound);
+	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
 void ABlackBombItem::BeginPlay()
@@ -59,6 +81,9 @@ void ABlackBombItem::BeginPlay()
 
 	//폭발 타이머 설정
 	GetWorldTimerManager().SetTimer(ExplosionTimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
+	
+	//폭탄 경고 사운드 재생
+	AudioComp->Play();
 }
 
 void ABlackBombItem::NotifyActorBeginOverlap(AActor* OtherActor)

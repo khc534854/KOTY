@@ -16,4 +16,18 @@ public:
 
 	UFUNCTION()
 	virtual void ApplyItemEffect(AActor* TargetActor);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> UseSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> DestroySound;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundAttenuation> SoundAttenuation;
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Destroyed() override;
 };

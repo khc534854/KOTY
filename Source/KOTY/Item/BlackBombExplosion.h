@@ -25,7 +25,7 @@ protected:
 	TObjectPtr<class USphereComponent> HitComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<class UStaticMeshComponent> MeshComp;
+	TObjectPtr<UStaticMeshComponent> MeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMaterialInstanceDynamic> MaterialInst;
@@ -37,7 +37,10 @@ protected:
 	float ExplosionDuration = 1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<class UCurveFloat> CurveFloat;
+	TObjectPtr<UCurveFloat> CurveFloat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> ExplosionSound;
 	
 	UFUNCTION()
 	void UpdateExplosionAlpha(float Value);

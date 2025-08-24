@@ -24,6 +24,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> MovingSound;
+
 public:
 	virtual void Tick(float DeltaTime) override;
 	

@@ -3,6 +3,9 @@
 #include "PhysicItemBase.h"
 #include <Components/SphereComponent.h>
 #include "KotyMovementComponent.h"
+#include "AssetTypeActions/AssetDefinition_SoundBase.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APhysicItemBase::APhysicItemBase()
@@ -26,4 +29,24 @@ APhysicItemBase::APhysicItemBase()
 
 	//아이템 무브먼트 컴포넌트 부착
 	MoveComp = CreateDefaultSubobject<UKotyMovementComponent>(TEXT("KotyMovement"));
+
+	//오디오 컴포넌트 부착
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+	AudioComp->SetupAttachment(RootComponent);
+
+	//지면 충돌 사운드 큐 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SC_Bounce.SC_Bounce"));
+		Finder.Succeeded())
+	{
+		GroundHitSoundCue = Finder.Object;
+	}
+
+	//지면 충돌 사운드를 재생하는 람다식을 무브먼트 컴포넌트에 바인드
+	MoveComp->OnBounceEventDispatcher.AddLambda([this]()
+	{
+		if (GroundHitSoundCue)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), GroundHitSoundCue, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+		}
+	});
 }

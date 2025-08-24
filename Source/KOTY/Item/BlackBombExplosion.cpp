@@ -2,9 +2,9 @@
 
 #include "BlackBombExplosion.h"
 #include "KotyItemHitComponent.h"
-#include "KotyMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 class UKotyMovementComponent;
 
@@ -24,26 +24,35 @@ ABlackBombExplosion::ABlackBombExplosion()
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
 
-	//메시 컴포넌트의 메시와 머터리얼 설정
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(
-		TEXT("/Engine/BasicShapes/Sphere.Sphere"));
-	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(
-		TEXT("/Game/Item/BlackBomb/MT_Explosion.MT_Explosion"));
-	if (TempMesh.Succeeded() && TempMaterial.Succeeded())
-	{
-		MeshComp->SetStaticMesh(TempMesh.Object);
-	 	MeshComp->SetMaterial(0, TempMaterial.Object);
-	}
-
 	//타임라인 컴포넌트
 	TimelineComp = CreateDefaultSubobject<UTimelineComponent>(TEXT("TimelineComp"));
+	
+	//스태틱 메시 로드
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
+		Finder.Succeeded())
+	{
+		MeshComp->SetStaticMesh(Finder.Object);
+	}
+
+	//머터리얼 로드
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/BlackBomb/MT_Explosion.MT_Explosion"));
+		Finder.Succeeded())
+	{
+		MeshComp->SetMaterial(0, Finder.Object);
+	}
 
 	//커브 플로트 로드
-	const ConstructorHelpers::FObjectFinder<UCurveFloat> Temp(
-		TEXT("/Game/Item/BlackBomb/ExplosionAlphaCurve.ExplosionAlphaCurve"));
-	if (Temp.Succeeded())
+	if (const ConstructorHelpers::FObjectFinder<UCurveFloat> Finder(TEXT("/Game/Item/BlackBomb/ExplosionAlphaCurve.ExplosionAlphaCurve"));
+		Finder.Succeeded())
 	{
-		CurveFloat = Temp.Object;
+		CurveFloat = Finder.Object;
+	}
+
+	//폭발 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Explosion.SW_Explosion"));
+		Finder.Succeeded())
+	{
+		ExplosionSound = Finder.Object;
 	}
 }
 
@@ -58,13 +67,16 @@ void ABlackBombExplosion::BeginPlay()
 	FOnTimelineFloat Callback;
 	Callback.BindUFunction(this, FName("UpdateExplosionAlpha"));
 	TimelineComp->AddInterpFloat(CurveFloat, Callback);
-	TimelineComp->SetTimelineLength(1/ExplosionDuration);
+	TimelineComp->SetPlayRate(1/ExplosionDuration);
 	TimelineComp->SetLooping(false);
 	TimelineComp->PlayFromStart();
 
 	//타이머
 	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABlackBombExplosion::EndExplosion, ExplosionDuration, false);
+
+	//폭발 사운드 재생
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
 }
 
 void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -86,8 +98,6 @@ void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ABlackBombExplosion::ApplyItemEffect(AActor* TargetActor)
 {
-	Super::ApplyItemEffect(TargetActor);
-
 	UE_LOG(LogTemp, Display, TEXT("BlackBombExplosion Applyed to %s!"), *TargetActor->GetName());
 }
 

@@ -5,6 +5,7 @@
 
 #include "KotyItemHitComponent.h"
 #include "KotyMovementComponent.h"
+#include "Components/AudioComponent.h"
 
 class UKotyItemHitComponent;
 
@@ -18,16 +19,44 @@ AGreenTurtleItem::AGreenTurtleItem()
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
 
-	//메시 컴포넌트의 메시와 머터리얼 설정
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(
-		TEXT("/Game/ItemResource/GreenTurtle/Item_GreenTurtle.Item_GreenTurtle"));
-	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(TEXT(
-		"/Game/ItemResource/GreenTurtle/MT_GreenTurtle.MT_GreenTurtle"));
-	if (TempMesh.Succeeded() && TempMaterial.Succeeded())
+	//스태틱 메시 로드
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/GreenTurtle/Model/SM_GreenTurtle.SM_GreenTurtle"));
+		Finder.Succeeded())
 	{
-		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetMaterial(0, TempMaterial.Object);
+		MeshComp->SetStaticMesh(Finder.Object);
 	}
+
+	//머터리얼 로드
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/GreenTurtle/Model/MT_GreenTurtle.MT_GreenTurtle"));
+		Finder.Succeeded())
+	{
+		MeshComp->SetMaterial(0, Finder.Object);
+	}
+
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Swoosh.SW_Swoosh"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
+	}
+
+	//이동 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_GreenTurtle.SW_GreenTurtle"));
+		Finder.Succeeded())
+	{
+		MovingSound = Finder.Object;
+	}
+
+	//파괴 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Destroyed.SW_Destroyed"));
+		Finder.Succeeded())
+	{
+		DestroySound = Finder.Object;
+	}
+
+	//오디오 컴포넌트 초기화
+	AudioComp->SetSound(MovingSound);
+	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
 void AGreenTurtleItem::BeginPlay()
@@ -36,6 +65,9 @@ void AGreenTurtleItem::BeginPlay()
 
 	//회전 방향 결정
 	RotationDir = FMath::RandRange(0, 1);
+
+	//오디오 재생
+	AudioComp->Play();
 }
 
 void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -74,15 +106,13 @@ void AGreenTurtleItem::Tick(float DeltaTime)
 
 	//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
 	const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
-	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.05);
+	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
 	const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
 	MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
 }
 
 void AGreenTurtleItem::ApplyItemEffect(AActor* TargetActor)
 {
-	Super::ApplyItemEffect(TargetActor);
-
 	UE_LOG(LogTemp, Display, TEXT("GreenTurtle Applyed to %s!"), *TargetActor->GetName());
 }
 

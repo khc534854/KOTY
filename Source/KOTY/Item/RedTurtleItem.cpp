@@ -5,6 +5,7 @@
 
 #include "KotyItemHitComponent.h"
 #include "KotyMovementComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/SplineComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerKart/C_PlayerKart.h"
@@ -21,19 +22,46 @@ ARedTurtleItem::ARedTurtleItem()
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
 
-	//메시 컴포넌트의 메시와 머터리얼 설정
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(
-		TEXT("/Game/ItemResource/RedTurtle/Item_RedTurtle.Item_RedTurtle"));
-	ConstructorHelpers::FObjectFinder<UMaterial> TempMaterial(TEXT(
-		"/Game/ItemResource/RedTurtle/MT_RedTurtle.MT_RedTurtle"));
-	if (TempMesh.Succeeded() && TempMaterial.Succeeded())
+	//스태틱 메시 로드
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/RedTurtle/Model/SM_RedTurtle.SM_RedTurtle"));
+		Finder.Succeeded())
 	{
-		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetMaterial(0, TempMaterial.Object);
+		MeshComp->SetStaticMesh(Finder.Object);
 	}
+
+	//머터리얼 로드
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/RedTurtle/Model/MT_RedTurtle.MT_RedTurtle"));
+		Finder.Succeeded())
+	{
+		MeshComp->SetMaterial(0, Finder.Object);
+	}
+
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Swoosh.SW_Swoosh"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
+	}
+
+	//이동 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_RedTurtle.SW_RedTurtle"));
+		Finder.Succeeded())
+	{
+		MovingSound = Finder.Object;
+	}
+
+	//명중 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Destroyed.SW_Destroyed"));
+		Finder.Succeeded())
+	{
+		DestroySound = Finder.Object;
+	}
+
+	//오디오 컴포넌트 초기화
+	AudioComp->SetSound(MovingSound);
+	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
-// Called when the game starts or when spawned
 void ARedTurtleItem::BeginPlay()
 {
 	Super::BeginPlay();
@@ -49,6 +77,9 @@ void ARedTurtleItem::BeginPlay()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), HasHitComps);
 	if (HasHitComps.IsEmpty() == false)
 		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
+
+	//오디오 재생
+	AudioComp->Play();
 }
 
 void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -80,12 +111,9 @@ void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
 {
-	Super::ApplyItemEffect(OtherActor);
-
 	UE_LOG(LogTemp, Display, TEXT("RedTurtle Applyed to %s!"), *OtherActor->GetName());
 }
 
-// Called every frame
 void ARedTurtleItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -97,7 +125,7 @@ void ARedTurtleItem::Tick(float DeltaTime)
 
 	//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
 	const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
-	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.05);
+	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
 	const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
 	MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
 

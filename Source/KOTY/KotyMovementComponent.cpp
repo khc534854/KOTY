@@ -104,6 +104,8 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 
 #pragma endregion 
 
+#pragma region 속도 연산
+	
 	//옵션이 활성화되어 있다면 충돌 등으로 인해 손실된 수평 속도를 복귀시킨다
 	if (bConstantHorizonSpeed)
 	{
@@ -115,11 +117,15 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 	//중력 가속도 적용
 	Velocity += GravityDir * GravityForce * DeltaTime;
 
+#pragma endregion
+	
 	//유의미한 이동 속도인지 확인
 	if (Velocity.IsNearlyZero())
 	{
 		return;
-	}
+	}	
+
+#pragma region 이동 적용
 	
 	//이번 틱에 이동할 변화량
 	const FVector Delta = Velocity * DeltaTime;
@@ -129,6 +135,8 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 	//충돌 감지 이동
 	FHitResult Hit;
 	SafeMoveUpdatedComponent(Delta, UpdatedComponent->GetComponentRotation(), true, Hit);
+
+#pragma endregion
 
 #pragma region 충돌 처리
 
@@ -163,10 +171,10 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 			const FVector Impact = CollisionDot * SurfaceNormal;
 
 			//충분한 충격량을 가질 때에만 반사 연산
-			if (CollisionDot > 10)
+			if (CollisionDot > 50)
 			{
 				//지면에 대한 반사 처리
-				Velocity = Velocity + Impact + Impact * ElasticityAgainstGravity;	
+				Velocity = Velocity + Impact + Impact * ElasticityAgainstGravity;
 			}
 			else
 			{
@@ -174,10 +182,14 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 				Velocity = Velocity + Impact;
 			}
 
-			//UE_LOG(LogTemp, Log, TEXT("Surface"));
+			//충분한 충격량을 가질 때에만 호출
+			if (CollisionDot > 500)
+			{
+				//지면 충돌 델리게이트 브로드캐스트
+				OnBounceEventDispatcher.Broadcast();
+			}
 
-			//충돌 최종 처리
-			MoveUpdatedComponent(Velocity * DeltaTime, UpdatedComponent->GetComponentQuat(), false);	
+			//UE_LOG(LogTemp, Log, TEXT("Surface"));
 		}
 		else if(FVector::DotProduct(Hit.ImpactNormal, Velocity.GetSafeNormal()) < -0.1)
 		{
@@ -192,10 +204,10 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 				//내적을 통해 부딪힌 지점의 높이를 구할 수 있다
 				const FVector Location = GetOwner()->GetActorLocation();
 				const FVector HitVector = Hit.ImpactPoint - Location;
-				const float HitHeight = SphereCollisionRadius - FVector::DotProduct(HitVector, GravityDir);
 
 				//스텝 가능한 높이
-				if (HitHeight < StepUpLimit)
+				if (const float HitHeight = SphereCollisionRadius - FVector::DotProduct(HitVector, GravityDir);
+					HitHeight < StepUpLimit)
 				{
 					//스텝 위치로 이동
 					FVector Step = - GravityDir * (HitHeight + 5);
@@ -211,10 +223,10 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 			Velocity = Velocity + 2 * Impact;
 
 			//UE_LOG(LogTemp, Log, TEXT("Wall"));
-
-			//충돌 최종 처리
-			MoveUpdatedComponent(Velocity * DeltaTime, UpdatedComponent->GetComponentQuat(), false);	
 		}
+
+		//최종 처리 속도를 근거로 이동
+		MoveUpdatedComponent(Velocity * DeltaTime, UpdatedComponent->GetComponentQuat(), true);	
 	}
 	
 #pragma endregion

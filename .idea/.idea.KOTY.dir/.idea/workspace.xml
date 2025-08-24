@@ -8,18 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/dictionaries/project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_GreenTurtleItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_GreenTurtleItemFinal.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_GreenTurtleItemFinal.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_RedTurtleItemFinal.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_TrackingGuideOnGround.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/ExplosionAlphaCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/ExplosionAlphaCurve.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Default/AC_ItemHitComponent.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTestGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTestGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/BP_ItemTester.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_BlackBombItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_BlackBombItemFinal.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_Explosion.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_Explosion.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/WarningEmissionCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/WarningEmissionCurve.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ItemResource/GreenTurtle/GC_Item_GreenTurtle.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ItemResource/RedTurtle/ItemKoura.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ItemResource/RedTurtle/ItemKoura_Nrm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ItemResource/RedTurtle/ItemKoura_Spm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombExplosion.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/BlackBombItem.cpp" afterDir="false" />
@@ -28,15 +29,12 @@
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/GreenTurtleItem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicItemBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/PhysicTrackingItemBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/RedTurtleItem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyItemHitComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +51,8 @@
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Delegates/Delegate.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Templates/PointerIsConvertibleFromTo.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Sound/SoundBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SceneComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/KOTY.uproject" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -259,7 +259,11 @@
       <workItem from="1755840356378" duration="10526000" />
       <workItem from="1755856835100" duration="4774000" />
       <workItem from="1755938426804" duration="12254000" />
-      <workItem from="1755958735067" duration="5411000" />
+      <workItem from="1755958735067" duration="5543000" />
+      <workItem from="1755996757669" duration="5237000" />
+      <workItem from="1756002531204" duration="1411000" />
+      <workItem from="1756003972914" duration="22253000" />
+      <workItem from="1756036167129" duration="3857000" />
     </task>
     <servers />
   </component>

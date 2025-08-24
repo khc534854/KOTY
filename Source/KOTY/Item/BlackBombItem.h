@@ -44,6 +44,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle ExplosionTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> BombWarningSound;
 	
 	UFUNCTION()
 	void Explode();
