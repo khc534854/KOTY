@@ -49,6 +49,9 @@ public:
 	void PlayDriftEffect(int EffectType, float DriftStartDirEffect);
 	void UpdateStunEffect(float DeltaTime);
 
+	//UFUNCTION(BlueprintCallable)
+	//int32 FindClosestSplinePointIndex(const FVector& WorldLocation);
+
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
@@ -211,4 +214,14 @@ protected:
 	float SuspensionDamping = 5.f; // 서스펜션의 댐핑 (출렁거림을 줄여줌)
 
 	float DriftTime = 0;
+
+public:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//AActor* WorldSplineActor;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//class USplineComponent* SplineComponent;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//int32 MaxProgressPointIndex = 0;
 };

@@ -58,6 +58,11 @@ void AC_PlayerKart::BeginPlay()
 void AC_PlayerKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (!(Tags.IsEmpty()))
+	{
+		this->Tags.Empty();
+		Tags.Add(FName("Player"));
+	}
 	
 	CameraMove();
 
@@ -69,7 +74,7 @@ void AC_PlayerKart::Tick(float DeltaTime)
 			if (ClosestIndex == 20 || ClosestIndex == 19)
 				return;
 		}
-
+	
 		// ✨ 핵심: 새로 찾은 포인트가 이전에 도달했던 최대 진행도보다 크거나 같을 때만 인정
 		if (ClosestIndex >= MaxProgressPointIndex)
 		{
@@ -82,7 +87,7 @@ void AC_PlayerKart::Tick(float DeltaTime)
 			// 이는 코너를 가로질렀거나, 후진 중이거나, U턴 구간에 있는 경우입니다.
 			// 이럴 때는 진행도를 갱신하지 않고 무시합니다.
 		}
-
+	
 		// 랩 완료 체크
 		if (MaxProgressPointIndex >= SplineComponent->GetNumberOfSplinePoints() - 1)
 		{
@@ -157,48 +162,7 @@ void AC_PlayerKart::CameraMove()
 
 void AC_PlayerKart::UpdateSuspension(float DeltaTime)
 {
-	// float TotalSuspensionForce = 0.f;
-	// int GroundedWheels = 0;
-	//
-	// // 4개의 바퀴에 대해 각각 라인 트레이스를 실행합니다.
-	// for (USceneComponent* Wheel : WheelsComponents)
-	// {
-	// 	FVector WheelLocation = Wheel->GetComponentLocation();
-	// 	FVector EndLocation = WheelLocation - (GetActorUpVector() * SuspensionLength);
-	// 	FHitResult HitResult;
-	// 	FCollisionQueryParams QueryParams;
-	// 	QueryParams.AddIgnoredActor(this);
-	//
-	// 	if (GetWorld()->LineTraceSingleByChannel(HitResult, WheelLocation, EndLocation, ECC_Visibility, QueryParams))
-	// 	{
-	// 		// 바퀴가 땅에 닿았을 때
-	// 		GroundedWheels++;
-	//
-	// 		// 1) 스프링 힘 계산
-	// 		float CompressionRatio = 1.f - (HitResult.Distance / SuspensionLength);
-	// 		float SpringForce = CompressionRatio * SuspensionStiffness;
-	//
-	// 		// 2) 댐핑 힘 계산
-	// 		float DampingForce = VerticalVelocity * SuspensionDamping;
-	//
-	// 		TotalSuspensionForce += SpringForce - DampingForce;
-	// 	}
-	// }
- //    
-	// float AverageSuspensionForce = 0.f;
-	// if (GroundedWheels > 0)
-	// {
-	// 	AverageSuspensionForce = TotalSuspensionForce / GroundedWheels;
-	// }
-	//
-	// // --- 중력 및 수직 속도 업데이트 ---
-	// float GravityForce = GetWorld()->GetGravityZ();
-	// VerticalVelocity += (GravityForce + AverageSuspensionForce) * DeltaTime;
-	//
-	// if (GroundedWheels > 0 && VerticalVelocity < 0)
-	// {
-	// 	VerticalVelocity = 0; 
-	// }
+
 }
 
 void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)
@@ -230,6 +194,11 @@ void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 {
+	// if (bIsDrift && (Value.Get<float> != HandlingDir))
+	// {
+	// 	
+	// }
+	//
 	if (bIsStunned)
 		return;
 	
@@ -241,6 +210,11 @@ void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
 {
+	
+	//if (bIsStunned || bIsDrift)
+	if (bIsStunned)
+		return;
+	
 	HandlingDir = 0;
 	bIsHandling = false;
 

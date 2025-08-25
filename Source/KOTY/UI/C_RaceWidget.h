@@ -70,5 +70,8 @@ public:
 	FString IMG_Go = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/StartGo.StartGo'");
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString IMG_Finish = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Finish.Finish'");
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_RaceFirst = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Racing1.Racing1'");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString IMG_RaceSecond = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Racing2.Racing2'");
 };

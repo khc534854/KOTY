@@ -16,4 +16,6 @@ class KOTY_API UC_MathUtility : public UBlueprintFunctionLibrary
 
 public:
 	static float EaseOutElastic(float x);
+
+	static float EaseOutBounce(float x);
 };

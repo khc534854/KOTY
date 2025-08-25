@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
+#include "Components/SplineComponent.h"
 #include "Utility/C_MathUtility.h"
 
 
@@ -55,7 +56,7 @@ void AC_KartBase::BeginPlay()
 void AC_KartBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	CheckIsGround();
 	
 	if (bIsGround)
@@ -186,6 +187,35 @@ void AC_KartBase::Tick(float DeltaTime)
 		if (MeshMoveDirection.Z < KINDA_SMALL_NUMBER)
 			MeshMoveDirection.Z = 0;
 	}
+
+	// if (SplineComponent)
+	// {
+	// 	int32 ClosestIndex = FindClosestSplinePointIndex(GetActorLocation());
+	// 	if (MaxProgressPointIndex == 0)
+	// 	{
+	// 		if (ClosestIndex == 20 || ClosestIndex == 19)
+	// 			return;
+	// 	}
+	//
+	// 	// ✨ 핵심: 새로 찾은 포인트가 이전에 도달했던 최대 진행도보다 크거나 같을 때만 인정
+	// 	if (ClosestIndex >= MaxProgressPointIndex)
+	// 	{
+	// 		// 정주행으로 인정하고, 최대 진행도를 갱신합니다.
+	// 		MaxProgressPointIndex = ClosestIndex;
+	// 	}
+	// 	else
+	// 	{
+	// 		// 새로 찾은 포인트가 이전 진행도보다 작다면?
+	// 		// 이는 코너를 가로질렀거나, 후진 중이거나, U턴 구간에 있는 경우입니다.
+	// 		// 이럴 때는 진행도를 갱신하지 않고 무시합니다.
+	// 	}
+	//
+	// 	// 랩 완료 체크
+	// 	if (MaxProgressPointIndex >= SplineComponent->GetNumberOfSplinePoints() - 1)
+	// 	{
+	// 		//
+	// 	}
+	// }
 }
 
 void AC_KartBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -437,7 +467,6 @@ void AC_KartBase::HandleCollision(const FHitResult& HitResult)
 
 	const float ImpactDot = FVector::DotProduct(GetActorForwardVector(), HitResult.ImpactNormal);
 
-	// 45도에 해당하는 Cosine 값 (약 0.707)
 	const float FortyFiveDegreesInDot = FMath::Cos(FMath::DegreesToRadians(45.f));
 
 	FVector TargetForwardDirection;
@@ -454,7 +483,7 @@ void AC_KartBase::HandleCollision(const FHitResult& HitResult)
 		TargetForwardDirection = FVector::VectorPlaneProject(GetActorForwardVector(), HitResult.ImpactNormal);
 	}
     
-	// 3. 계산된 목표 회전값을 변수에 저장하고, 충돌 후 상태를 활성화합니다.
+	// 3. 계산된 목표 회전값을 변수에 저장하고, 충돌 후 상태를 활성화
 	PostCollisionTargetRotation = FRotationMatrix::MakeFromX(TargetForwardDirection).Rotator();
 	PostCollisionTargetRotation.Roll = 0.f;
 	PostCollisionTargetRotation.Pitch = 0.f;
@@ -501,7 +530,7 @@ void AC_KartBase::PlayBoostEffect()
 				if (EffectComponent)
 				{
 					EffectComponent->SetRelativeScale3D(FVector(0.8f));
-					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+					// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 					ActiveBoostEffects.Add(EffectComponent);
 				}
 			}
@@ -545,7 +574,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (EffectComponent)
 						{
 							EffectComponent->SetRelativeScale3D(FVector(0.8f));
-							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 					}
@@ -564,7 +593,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (EffectComponent)
 						{						
 							EffectComponent->SetRelativeScale3D(FVector(0.8f));
-							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 					}
@@ -583,7 +612,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (EffectComponent)
 						{
 							EffectComponent->SetRelativeScale3D(FVector(0.8f));
-							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어할 수 있도록 합니다.
+							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 					}
@@ -604,14 +633,46 @@ void AC_KartBase::UpdateStunEffect(float DeltaTime)
 
 	float EasedAlpha = UC_MathUtility::EaseOutElastic(Alpha);
 	
-	float CurrentRoll = FMath::Lerp(0.f, 360.f, EasedAlpha);
+	float CurrentRoll = FMath::Lerp(0, 360.f, EasedAlpha);
 
-	StaticMeshComponent->SetRelativeRotation( StaticMeshComponent->GetRelativeRotation() + FRotator(0.f, 0.f, CurrentRoll));
+	StaticMeshComponent->SetRelativeRotation(FRotator(0.f, CurrentRoll -90.f,0.f ));
 
 	if (StunRotationTimer >= StunDuration)
 	{
 		bIsStunned = false;
-		StaticMeshComponent->SetRelativeRotation(FRotator::ZeroRotator); // 메시 회전을 원래대로 리셋
+		StaticMeshComponent->SetRelativeRotation(FRotator(0.f, -90.f, 0.f )); // 메시 회전을 원래대로 리셋
 	}
 }
+
+// int32 AC_KartBase::FindClosestSplinePointIndex(const FVector& WorldLocation)
+// {
+// 	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
+// 	{
+// 		// 스플라인이 없거나 포인트가 없으면 유효하지 않은 인덱스 반환
+// 		return -1;
+// 	}
+//
+// 	int32 ClosestPointIndex = -1;
+// 	float MinDistanceSquared = -1.f;
+//
+// 	const int32 PointCount = SplineComponent->GetNumberOfSplinePoints();
+// 	// 0번부터 마지막 포인트까지 순회
+// 	for (int32 i = 0; i < PointCount; ++i)
+// 	{
+// 		// i번째 스플라인 포인트의 월드 위치를 가져옴
+// 		const FVector PointLocation = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
+//         
+// 		// 입력된 월드 위치와의 거리 제곱을 계산
+// 		const float DistanceSquared = FVector::DistSquared(WorldLocation, PointLocation);
+//
+// 		// 첫 번째 포인트이거나, 이전에 찾은 최소 거리보다 현재 거리가 더 짧으면 정보 갱신
+// 		if (ClosestPointIndex == -1 || DistanceSquared < MinDistanceSquared)
+// 		{
+// 			MinDistanceSquared = DistanceSquared;
+// 			ClosestPointIndex = i;
+// 		}
+// 	}
+//
+// 	return ClosestPointIndex;
+// }
 
