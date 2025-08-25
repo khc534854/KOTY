@@ -13,8 +13,6 @@ void UKotyMovementComponent::InitializeComponent()
 	{
 		UE_LOG(LogTemp, Log, TEXT("KotyComponent Successfully Initialized!"));	
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("%f"), FMath::Acos(0.0));
 }
 
 void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -95,40 +93,50 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 		//회전축
 		const FVector RotationAxis = FVector::CrossProduct(LastGravityDir, -GravityDir);
 
-		UE_LOG(LogTemp, Log, TEXT("%f : %f %f %f"), RotationDegree, RotationAxis.X, RotationAxis.Y, RotationAxis.Z);
+		//UE_LOG(LogTemp, Log, TEXT("%f : %f %f %f"), RotationDegree, RotationAxis.X, RotationAxis.Y, RotationAxis.Z);
 				
 		//안전하게 이동 방향을 회전
 		if (RotationAxis.IsNearlyZero() == false)
 		{
-			MoveVelocity = MoveVelocity.RotateAngleAxis(RotationDegree, RotationAxis);	
+			Velocity = Velocity.RotateAngleAxis(RotationDegree, RotationAxis);	
 		}
 	}
 
 #pragma endregion 
 
+#pragma region 속도 연산
+	
 	//옵션이 활성화되어 있다면 충돌 등으로 인해 손실된 수평 속도를 복귀시킨다
 	if (bConstantHorizonSpeed)
 	{
-		const FVector VerticalValue = FVector::DotProduct(MoveVelocity, GravityDir) * GravityDir;
-		const FVector HorizonValue = MoveVelocity - VerticalValue;
-		MoveVelocity = HorizonValue.GetSafeNormal() * ConstantHorizonSpeed + VerticalValue;
+		const FVector VerticalValue = FVector::DotProduct(Velocity, GravityDir) * GravityDir;
+		const FVector HorizonValue = Velocity - VerticalValue;
+		Velocity = HorizonValue.GetSafeNormal() * ConstantHorizonSpeed + VerticalValue;
 	}
 	
 	//중력 가속도 적용
-	MoveVelocity += GravityDir * GravityForce * DeltaTime;
+	Velocity += GravityDir * GravityForce * DeltaTime;
 
+#pragma endregion
+	
 	//유의미한 이동 속도인지 확인
-	if (MoveVelocity.IsNearlyZero())
+	if (Velocity.IsNearlyZero())
 	{
 		return;
-	}
+	}	
+
+#pragma region 이동 적용
 	
 	//이번 틱에 이동할 변화량
-	const FVector Delta = MoveVelocity * DeltaTime;
+	const FVector Delta = Velocity * DeltaTime;
+
+	//UE_LOG(LogTemp, Log, TEXT("%f %f %f"), Delta.X, Delta.Y, Delta.Z);
 	
 	//충돌 감지 이동
 	FHitResult Hit;
 	SafeMoveUpdatedComponent(Delta, UpdatedComponent->GetComponentRotation(), true, Hit);
+
+#pragma endregion
 
 #pragma region 충돌 처리
 
@@ -150,36 +158,40 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 			{
 				//일치할 수록 중력 방향 마찰력
 				const float DragAgainstGravity = FMath::Lerp(0, LinearDrag, GravityTime);
-				MoveVelocity += -MoveVelocity * DragAgainstGravity * DeltaTime;	
+				Velocity += -Velocity * DragAgainstGravity * DeltaTime;	
 			}
 
 			//중력 방향 충격에 대한 탄성
 			const float ElasticityAgainstGravity = FMath::Lerp(1.0, SurfaceElasticity, GravityTime);
 
 			//중력과 일치하는 정도에 따라서 탄성력 적용
-			const float CollisionDot = FVector::DotProduct(-MoveVelocity, SurfaceNormal);
+			const float CollisionDot = FVector::DotProduct(-Velocity, SurfaceNormal);
 
 			//반사 충격 벡터
 			const FVector Impact = CollisionDot * SurfaceNormal;
 
 			//충분한 충격량을 가질 때에만 반사 연산
-			if (CollisionDot > 10)
+			if (CollisionDot > 50)
 			{
 				//지면에 대한 반사 처리
-				MoveVelocity = MoveVelocity + Impact + Impact * ElasticityAgainstGravity;	
+				Velocity = Velocity + Impact + Impact * ElasticityAgainstGravity;
 			}
 			else
 			{
 				//지면에 대한 정사영 처리
-				MoveVelocity = MoveVelocity + Impact;
+				Velocity = Velocity + Impact;
+			}
+
+			//충분한 충격량을 가질 때에만 호출
+			if (CollisionDot > 500)
+			{
+				//지면 충돌 델리게이트 브로드캐스트
+				OnBounceEventDispatcher.Broadcast();
 			}
 
 			//UE_LOG(LogTemp, Log, TEXT("Surface"));
-
-			//충돌 최종 처리
-			MoveUpdatedComponent(MoveVelocity * DeltaTime, UpdatedComponent->GetComponentQuat(), false);	
 		}
-		else if(FVector::DotProduct(Hit.ImpactNormal, MoveVelocity.GetSafeNormal()) < -0.1)
+		else if(FVector::DotProduct(Hit.ImpactNormal, Velocity.GetSafeNormal()) < -0.1)
 		{
 			FVector WallNormal = Hit.ImpactNormal;
 			
@@ -192,27 +204,29 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 				//내적을 통해 부딪힌 지점의 높이를 구할 수 있다
 				const FVector Location = GetOwner()->GetActorLocation();
 				const FVector HitVector = Hit.ImpactPoint - Location;
-				const float HitHeight = SphereCollisionRadius - FVector::DotProduct(HitVector, GravityDir);
 
 				//스텝 가능한 높이
-				if (HitHeight < StepUpLimit)
+				if (const float HitHeight = SphereCollisionRadius - FVector::DotProduct(HitVector, GravityDir);
+					HitHeight < StepUpLimit)
 				{
 					//스텝 위치로 이동
-					GetOwner()->SetActorLocation(Hit.ImpactPoint + FVector(0, 0, HitHeight + 0.5));
+					FVector Step = - GravityDir * (HitHeight + 5);
+					MoveUpdatedComponent(Step, UpdatedComponent->GetComponentQuat(), true);
+					UE_LOG(LogTemp, Log, TEXT("StepUp has been executed!"));
 					return;
 				}
 			}
 			
 			//반사 연산
-			const float CollisionDot = FVector::DotProduct(-MoveVelocity, WallNormal);
+			const float CollisionDot = FVector::DotProduct(-Velocity, WallNormal);
 			const FVector Impact = CollisionDot * WallNormal;
-			MoveVelocity = MoveVelocity + 2 * Impact;
+			Velocity = Velocity + 2 * Impact;
 
 			//UE_LOG(LogTemp, Log, TEXT("Wall"));
-
-			//충돌 최종 처리
-			MoveUpdatedComponent(MoveVelocity * DeltaTime, UpdatedComponent->GetComponentQuat(), false);	
 		}
+
+		//최종 처리 속도를 근거로 이동
+		MoveUpdatedComponent(Velocity * DeltaTime, UpdatedComponent->GetComponentQuat(), true);	
 	}
 	
 #pragma endregion
@@ -225,7 +239,7 @@ void UKotyMovementComponent::ThrowConstantHorizon(
 	const float InGravityForce,
 	const float InConstantHorizonSpeed,
 	const float InStepUpLimit,
-	const FVector InMoveVelocity,
+	const FVector InVelocity,
 	const float InSurfaceElasticity)
 {
 	this->bSimulate = InbSimulate;
@@ -235,7 +249,7 @@ void UKotyMovementComponent::ThrowConstantHorizon(
 	this->bConstantHorizonSpeed = true;
 	this->ConstantHorizonSpeed = InConstantHorizonSpeed;
 	this->StepUpLimit = InStepUpLimit;
-	this->MoveVelocity = InMoveVelocity;
+	this->Velocity = InVelocity;
 	this->SurfaceElasticity = InSurfaceElasticity;
 }
 
@@ -245,7 +259,7 @@ void UKotyMovementComponent::ThrowLinearDrag(
 	const float InGravityForce,
 	const float InLinearDrag,
 	const float InStepUpLimit,
-	const FVector InMoveVelocity,
+	const FVector InVelocity,
 	const float InSurfaceElasticity)
 {
 	this->bSimulate = InbSimulate;
@@ -255,7 +269,7 @@ void UKotyMovementComponent::ThrowLinearDrag(
 	this->bConstantHorizonSpeed = false;
 	this->ConstantHorizonSpeed = 0;
 	this->StepUpLimit = InStepUpLimit;
-	this->MoveVelocity = InMoveVelocity;
+	this->Velocity = InVelocity;
 	this->SurfaceElasticity = InSurfaceElasticity;
 }
 
@@ -274,5 +288,10 @@ FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start)
 
 void UKotyMovementComponent::SLerpVelocity(const FVector TargetDir)
 {
-	MoveVelocity = FVector::SlerpVectorToDirection(MoveVelocity, TargetDir, 0.5);
+	Velocity = FVector::SlerpVectorToDirection(Velocity, TargetDir, 0.25);
+}
+
+FVector UKotyMovementComponent::GetGravityDir() const
+{
+	return GravityDir;
 }
