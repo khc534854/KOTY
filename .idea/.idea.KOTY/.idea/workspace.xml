@@ -14,32 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Utility/C_MathUtility.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Utility/C_MathUtility.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/BPC_MenuController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BPC_MenuController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/BPC_RaceGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BPC_RaceGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart1.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MenuLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MenuLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro3.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/UIResource/intro4.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_PlayUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_PlayUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,6 +225,7 @@
       <workItem from="1755842375637" duration="112000" />
       <workItem from="1755862819381" duration="1105000" />
       <workItem from="1755868066309" duration="6000" />
+      <workItem from="1756079591838" duration="2682000" />
     </task>
     <servers />
   </component>
