@@ -3,6 +3,7 @@
 
 #include "KotyItemHitComponent.h"
 
+#include "C_KartBase.h"
 #include "KotyItemBase.h"
 #include "Components/BoxComponent.h"
 
@@ -34,6 +35,18 @@ void UKotyItemHitComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void UKotyItemHitComponent::OnRequestApplyEffectFromItem(const FItemEffect ItemEffectDelegate, AActor* OtherItem) const
 {
+	AActor* OwnerActor = GetOwner();
+
+	if (OwnerActor)
+	{
+		AC_KartBase* Kart = Cast<AC_KartBase>(OwnerActor);
+
+		if (Kart)
+		{
+			Kart->Stun();
+		}
+	}
+	
 	//조건을 만족하는 경우 전달받은 아이템 효과 델리게이트 실행
 	ItemEffectDelegate.Execute(GetOwner());
 }

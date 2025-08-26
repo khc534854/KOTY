@@ -116,6 +116,8 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 			{
 				UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
 			}
+
+			this->Destroy();
 		}
 	}
 }

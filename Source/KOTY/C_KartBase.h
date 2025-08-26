@@ -30,21 +30,32 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	virtual void Stun();
+
 	virtual void CheckIsGround();
 	virtual void UpdateBodyRotation(float DeltaTime);
 	virtual void SetVelocity();
 	virtual void SetFlyVelocity();
 	virtual void UpdateSuspension(float DeltaTime);
 
+	//void UpdateRotation();
+
+	void HandleCollision(const FHitResult& HitResult);
+	UFUNCTION(BlueprintCallable)
 	void StartAddSpeed(float Add);
 	void DriftUpAction();
 	void PlayBoostEffect();
-	void PlayDriftEffect(int EffectType, float DriftStartDir);
+	void PlayDriftEffect(int EffectType, float DriftStartDirEffect);
+	void UpdateStunEffect(float DeltaTime);
+
+	//UFUNCTION(BlueprintCallable)
+	//int32 FindClosestSplinePointIndex(const FVector& WorldLocation);
+
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
-	UBoxComponent* BoxComponent;
+	class USphereComponent* BoxComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body")
 	UStaticMeshComponent* StaticMeshComponent;
@@ -81,7 +92,9 @@ protected:
 	TArray<UNiagaraComponent*> ActiveBoostEffects;
 	TArray<UNiagaraComponent*> ActiveDriftEffects;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	bool bIsBoosting = false;
+	
 	float BoostTimer = 0;
 	float BoostDuration = 1.5f;
 	
@@ -160,7 +173,29 @@ public:
 	FVector GroundNormal = FVector::UpVector;
 
 	float AirTime = 0;
+	
+	float DriftStartDir;
+	
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
+	float CollisionDampingFactor = 0.4f;
 
+	bool bIsInPostCollisionState = false; // 현재 충돌 후 상태인지 여부
+	FRotator PostCollisionTargetRotation;   // 충돌 후 따라가야 할 목표 회전값
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
+	float CollisionRotationSpeed = 6.0f;
+
+	//Stun
+	bool bIsStunned = false;      // 현재 스턴 상태인지 여부
+	float StunRotationTimer = 0.f; // 스턴 애니메이션 경과 시간
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Stun")
+	float StunDuration = 0.8f;  // 스턴 메시가 한 바퀴 도는 데 걸리는 시간
+
+	UPROPERTY(EditAnywhere, Category = "Kart Settings|Stun")
+	float StunSpeedMultiplier = 0.2f;
+
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector GravityDirection = FVector(0.f, 0.f, -1.f);
@@ -179,4 +214,14 @@ protected:
 	float SuspensionDamping = 5.f; // 서스펜션의 댐핑 (출렁거림을 줄여줌)
 
 	float DriftTime = 0;
+
+public:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//AActor* WorldSplineActor;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//class USplineComponent* SplineComponent;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//int32 MaxProgressPointIndex = 0;
 };

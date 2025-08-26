@@ -1,5 +1,7 @@
 #include "PlayerKart/C_PlayerKart.h"
 #include "DrawDebugHelpers.h"
+#include "Components/SplineComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 
 // Sets default values
@@ -48,15 +50,50 @@ void AC_PlayerKart::BeginPlay()
 			}
 		}
 	}
+
+	// SplineComponent = WorldSplineActor->FindComponentByClass<USplineComponent>();
 }
 
 // Called every frame
 void AC_PlayerKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (!(Tags.IsEmpty()))
+	{
+		this->Tags.Empty();
+		Tags.Add(FName("Player"));
+	}
 	
 	CameraMove();
+
+	if (SplineComponent)
+	{
+		int32 ClosestIndex = FindClosestSplinePointIndex(GetActorLocation());
+		if (MaxProgressPointIndex == 0)
+		{
+			if (ClosestIndex == 20 || ClosestIndex == 19)
+				return;
+		}
 	
+		// ✨ 핵심: 새로 찾은 포인트가 이전에 도달했던 최대 진행도보다 크거나 같을 때만 인정
+		if (ClosestIndex >= MaxProgressPointIndex)
+		{
+			// 정주행으로 인정하고, 최대 진행도를 갱신합니다.
+			MaxProgressPointIndex = ClosestIndex;
+		}
+		else
+		{
+			// 새로 찾은 포인트가 이전 진행도보다 작다면?
+			// 이는 코너를 가로질렀거나, 후진 중이거나, U턴 구간에 있는 경우입니다.
+			// 이럴 때는 진행도를 갱신하지 않고 무시합니다.
+		}
+	
+		// 랩 완료 체크
+		if (MaxProgressPointIndex >= SplineComponent->GetNumberOfSplinePoints() - 1)
+		{
+			//
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -64,11 +101,9 @@ void AC_PlayerKart::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// Enhanced Input Component로 형변환합니다.
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (EnhancedInputComponent)
 	{
-		// 입력 액션을 함수에 바인딩합니다.
 		if (AccelerationAction)
 		{
 			EnhancedInputComponent->BindAction(AccelerationAction, ETriggerEvent::Triggered, this, &AC_PlayerKart::StartAccelerator);
@@ -107,11 +142,10 @@ void AC_PlayerKart::CheckIsGround()
 void AC_PlayerKart::CameraMove()
 {
 	float MinSpringArmLength = 300.f; // 정지 시 길이
-	float MaxSpringArmLength = 500.f; // 최대 속도 시 길이
+	float MaxSpringArmLength = 600.f; // 최대 속도 시 길이
 	float TargetArmLength = FMath::Lerp(MinSpringArmLength, MaxSpringArmLength, SpeedRatio);
 
-		// 보간
-
+	// 보간
 	float ArmLengthLerpSpeed;
 	if (bIsDrift)
 	{
@@ -128,48 +162,7 @@ void AC_PlayerKart::CameraMove()
 
 void AC_PlayerKart::UpdateSuspension(float DeltaTime)
 {
-	// float TotalSuspensionForce = 0.f;
-	// int GroundedWheels = 0;
-	//
-	// // 4개의 바퀴에 대해 각각 라인 트레이스를 실행합니다.
-	// for (USceneComponent* Wheel : WheelsComponents)
-	// {
-	// 	FVector WheelLocation = Wheel->GetComponentLocation();
-	// 	FVector EndLocation = WheelLocation - (GetActorUpVector() * SuspensionLength);
-	// 	FHitResult HitResult;
-	// 	FCollisionQueryParams QueryParams;
-	// 	QueryParams.AddIgnoredActor(this);
-	//
-	// 	if (GetWorld()->LineTraceSingleByChannel(HitResult, WheelLocation, EndLocation, ECC_Visibility, QueryParams))
-	// 	{
-	// 		// 바퀴가 땅에 닿았을 때
-	// 		GroundedWheels++;
-	//
-	// 		// 1) 스프링 힘 계산
-	// 		float CompressionRatio = 1.f - (HitResult.Distance / SuspensionLength);
-	// 		float SpringForce = CompressionRatio * SuspensionStiffness;
-	//
-	// 		// 2) 댐핑 힘 계산
-	// 		float DampingForce = VerticalVelocity * SuspensionDamping;
-	//
-	// 		TotalSuspensionForce += SpringForce - DampingForce;
-	// 	}
-	// }
- //    
-	// float AverageSuspensionForce = 0.f;
-	// if (GroundedWheels > 0)
-	// {
-	// 	AverageSuspensionForce = TotalSuspensionForce / GroundedWheels;
-	// }
-	//
-	// // --- 중력 및 수직 속도 업데이트 ---
-	// float GravityForce = GetWorld()->GetGravityZ();
-	// VerticalVelocity += (GravityForce + AverageSuspensionForce) * DeltaTime;
-	//
-	// if (GroundedWheels > 0 && VerticalVelocity < 0)
-	// {
-	// 	VerticalVelocity = 0; 
-	// }
+
 }
 
 void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)
@@ -186,6 +179,9 @@ void AC_PlayerKart::Stun()
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
 {
+	if (bIsStunned)
+		return;
+	
 	bIsAcceleration = true;
 	AccelerationDir = Value.Get<float>();
 }
@@ -198,6 +194,14 @@ void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 {
+	// if (bIsDrift && (Value.Get<float> != HandlingDir))
+	// {
+	// 	
+	// }
+	//
+	if (bIsStunned)
+		return;
+	
 	bIsHandling = true;
 	HandlingDir = Value.Get<float>();
 	WheelL->SetRelativeRotation(FRotator(180, 180 + 30 * HandlingDir, 0));
@@ -206,6 +210,11 @@ void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
 {
+	
+	//if (bIsStunned || bIsDrift)
+	if (bIsStunned)
+		return;
+	
 	HandlingDir = 0;
 	bIsHandling = false;
 
@@ -219,6 +228,19 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		bIsGround = false;
 		return;
 	}
+
+	if (HandlingDir == 0)
+	{
+		//DriftUpAction();
+		return;
+	}
+
+	const float ForwardDot = FVector::DotProduct(CurVelocity.GetSafeNormal(), GetActorForwardVector());
+	if (ForwardDot < 0.0f)
+	{
+		return;
+	}
+	
 	DriftTime += GetWorld()->GetDeltaSeconds();
 	
 	if (!bIsDrift)
@@ -276,6 +298,38 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 void AC_PlayerKart::Mushroom(const FInputActionValue& Value)
 {
 	StartAddSpeed(3000.f);
+}
+
+int32 AC_PlayerKart::FindClosestSplinePointIndex(const FVector& WorldLocation)
+{
+	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
+	{
+		// 스플라인이 없거나 포인트가 없으면 유효하지 않은 인덱스 반환
+		return -1;
+	}
+
+	int32 ClosestPointIndex = -1;
+	float MinDistanceSquared = -1.f;
+
+	const int32 PointCount = SplineComponent->GetNumberOfSplinePoints();
+	// 0번부터 마지막 포인트까지 순회
+	for (int32 i = 0; i < PointCount; ++i)
+	{
+		// i번째 스플라인 포인트의 월드 위치를 가져옴
+		const FVector PointLocation = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
+        
+		// 입력된 월드 위치와의 거리 제곱을 계산
+		const float DistanceSquared = FVector::DistSquared(WorldLocation, PointLocation);
+
+		// 첫 번째 포인트이거나, 이전에 찾은 최소 거리보다 현재 거리가 더 짧으면 정보 갱신
+		if (ClosestPointIndex == -1 || DistanceSquared < MinDistanceSquared)
+		{
+			MinDistanceSquared = DistanceSquared;
+			ClosestPointIndex = i;
+		}
+	}
+
+	return ClosestPointIndex;
 }
 
 
