@@ -6,9 +6,7 @@
 #include "WidgetBlueprint.h"
 #include "C_StartUI.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class KOTY_API UC_StartUI : public UWidgetBlueprint
 {

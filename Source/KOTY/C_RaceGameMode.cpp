@@ -3,14 +3,12 @@
 
 #include "C_RaceGameMode.h"
 
-#include "Blueprint/UserWidget.h"
 #include "PlayerKart/C_PlayerController.h"
 #include "PlayerKart/C_PlayerKart.h"
 
 AC_RaceGameMode::AC_RaceGameMode()
 {
 	static ConstructorHelpers::FClassFinder<AC_PlayerKart> PlayerPawnBPClass(TEXT("/Game/Koty/PlayerKart/BPC_PlayerKart_C"));
-
 	if (PlayerPawnBPClass.Succeeded())
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
@@ -27,9 +25,15 @@ AC_RaceGameMode::AC_RaceGameMode()
 void AC_RaceGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 void AC_RaceGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (CurrentState == RaceLevelState::End)
+	{
+		GetWorld()->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
+	}
 }

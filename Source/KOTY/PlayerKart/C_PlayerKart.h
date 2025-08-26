@@ -61,13 +61,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxProgressPointIndex = 0;
 	
-protected:
+public:
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UCameraComponent* EndCamera;
 	
 	// UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Status")
 	// TArray<USceneComponent*> WheelsComponents;
@@ -86,6 +89,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* AddSpeedAction;
+
+public:
 
 
 };

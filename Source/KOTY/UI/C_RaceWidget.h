@@ -16,12 +16,15 @@ class KOTY_API UC_RaceWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-
+	
+	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeImg(UImage* TargetImg, FString Resource);
-	
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeLaps();
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Ready;
@@ -74,4 +77,10 @@ public:
 	FString IMG_RaceFirst = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Racing1.Racing1'");
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString IMG_RaceSecond = TEXT("/Script/Engine.Texture2D'/Game/Koty/UI/UIResource/Racing2.Racing2'");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurLaps = 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxLaps = 2;
 };

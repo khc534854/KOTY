@@ -1,7 +1,6 @@
 #include "PlayerKart/C_PlayerKart.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SplineComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 
 // Sets default values
@@ -15,6 +14,11 @@ AC_PlayerKart::AC_PlayerKart()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	EndCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("EndCamera"));
+	EndCamera->SetupAttachment(RootComponent);
+
+
 	
 	SpringArm->TargetArmLength = 600.0f; 
 	
@@ -31,6 +35,10 @@ AC_PlayerKart::AC_PlayerKart()
 
 	// 충돌 방지
 	SpringArm->bDoCollisionTest = true;
+
+
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -162,7 +170,7 @@ void AC_PlayerKart::CameraMove()
 
 void AC_PlayerKart::UpdateSuspension(float DeltaTime)
 {
-
+	
 }
 
 void AC_PlayerKart::UpdateBodyRotation(float DeltaTime)

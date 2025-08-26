@@ -216,6 +216,7 @@ protected:
 	float DriftTime = 0;
 
 public:
+	// 스플라인 옮기기
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//AActor* WorldSplineActor;
 	//
@@ -224,4 +225,8 @@ public:
 	//
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//int32 MaxProgressPointIndex = 0;
+	
+	float suspensioningTime = 0.f;
+	bool bIsSuspending = false;
+	float SuspensionTime = 0.5f;
 };

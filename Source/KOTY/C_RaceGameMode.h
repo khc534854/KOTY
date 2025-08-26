@@ -9,6 +9,15 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class RaceLevelState : uint8
+{
+	Cinematic,
+	Ready,
+	Play,
+	End
+};
+
 UCLASS()
 class KOTY_API AC_RaceGameMode : public AGameModeBase
 {
@@ -23,4 +32,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class APawn> Player;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	RaceLevelState CurrentState = RaceLevelState::Cinematic;
 };

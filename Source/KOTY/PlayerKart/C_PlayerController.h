@@ -14,16 +14,53 @@ class KOTY_API AC_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-protected:
+public:
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
+	
 	UFUNCTION(BlueprintCallable)
 	void SetReady();
+
+	UFUNCTION(BlueprintCallable)
+	void SetFinished();
+
+	UFUNCTION(BlueprintCallable)
+	void CheckReadyState();
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeCamera();
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UUserWidget* CurrentHUD;
+	class UC_RaceWidget* CurrentHUD;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class AC_PlayerKart* PlayerKartRef;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class AC_RaceGameMode* RaceGameModeRef;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurLaps = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxLaps = 2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentRaceTime;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentReadyTime = -1.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float BestTime;
+
+	UPROPERTY()
+	class AC_StartLakitu* StartLakituRef;
+	
 };

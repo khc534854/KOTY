@@ -68,6 +68,11 @@ void AC_KartBase::Tick(float DeltaTime)
 		SetFlyVelocity();
 	}
 
+	if (bIsSuspending)
+	{
+		UpdateSuspension(DeltaTime);
+	}
+
 	FHitResult Hit;
 	FVector NewLocation;
 	NewLocation = GetActorLocation() + CurVelocity * DeltaTime;
@@ -284,6 +289,11 @@ void AC_KartBase::CheckIsGround()
 			bIsGround = false;
 			
 		GroundNormal = HitResult.ImpactNormal;
+		
+		if (!bIsSuspending)
+		{
+			bIsSuspending = true;
+		}
 		AirTime = 0;
 	}
 	else
@@ -424,7 +434,20 @@ void AC_KartBase::SetFlyVelocity()
 
 void AC_KartBase::UpdateSuspension(float DeltaTime)
 {
-	// 서스펜션 구현
+	suspensioningTime += DeltaTime;
+
+	float ratio = suspensioningTime / SuspensionTime;
+
+	if (suspensioningTime >= SuspensionTime)
+	{
+		bIsSuspending = false;
+		suspensioningTime = 0.f;
+		return;
+	}
+
+	float targetZLocation = (1 - UC_MathUtility::EaseOutBounce(ratio)) * 10.f;
+
+	StaticMeshComponent->SetRelativeLocation(FVector(0, 0, targetZLocation));
 }
 //
 // void AC_KartBase::UpdateRotation()
