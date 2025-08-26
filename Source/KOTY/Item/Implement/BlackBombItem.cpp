@@ -1,14 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BlackBombItem.h"
-
 #include "BlackBombExplosion.h"
-#include "KotyItemHitComponent.h"
-#include "KotyMovementComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 
 ABlackBombItem::ABlackBombItem()
 {
@@ -77,13 +74,6 @@ void ABlackBombItem::BeginPlay()
 	TimelineComp->AddInterpFloat(CurveFloat, Callback);
 	TimelineComp->SetPlayRate(1/ExplosionDelay);
 	TimelineComp->SetLooping(false);
-	TimelineComp->PlayFromStart();
-
-	//폭발 타이머 설정
-	GetWorldTimerManager().SetTimer(ExplosionTimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
-	
-	//폭탄 경고 사운드 재생
-	AudioComp->Play();
 }
 
 void ABlackBombItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -113,9 +103,18 @@ void ABlackBombItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 }
 
-void ABlackBombItem::ApplyItemEffect(AActor* TargetActor)
+void ABlackBombItem::OnSimulateBegin()
 {
-	Super::ApplyItemEffect(TargetActor);
+	Super::OnSimulateBegin();
+
+	//타임 컴포넌트 재생
+	TimelineComp->PlayFromStart();
+
+	//폭발 타이머 설정
+	GetWorldTimerManager().SetTimer(ExplosionTimerHandle, this, &ABlackBombItem::Explode, ExplosionDelay, false);
+	
+	//폭탄 경고 사운드 재생
+	AudioComp->Play();
 }
 
 void ABlackBombItem::Explode()
@@ -135,11 +134,10 @@ void ABlackBombItem::SetElapsedTime(const float TwistedTime) const
 	MaterialInst->SetScalarParameterValue("ElapsedTime", TwistedTime);
 }
 
-void ABlackBombItem::Tick(float DeltaTime)
+void ABlackBombItem::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//항상 바닥을 향하도록
 	MeshComp->AddRelativeRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
-	
 }
-

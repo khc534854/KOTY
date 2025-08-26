@@ -1,13 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
-#include "Item/BananaItem.h"
-
+#include "StarItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-ABananaItem::ABananaItem()
+AStarItem::AStarItem()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -16,35 +14,40 @@ ABananaItem::ABananaItem()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
-	
-	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/Banana/Model/SM_Banana.SM_Banana"));
+
+	//스태틱 메시 로드
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/Star/Model/SM_Star.SM_Star"));
 		Finder.Succeeded())
 	{
 		MeshComp->SetStaticMesh(Finder.Object);
 	}
-	
-	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/Banana/Model/MT_Banana.MT_Banana"));
+
+	//머터리얼 로드
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/Star/Model/MT_Star.MT_Star"));
 		Finder.Succeeded())
 	{
 		MeshComp->SetMaterial(0, Finder.Object);
 	}
 
 	//크기에 맞춰 변경
-	SphereComp->SetSphereRadius(30);
-	HitComp->SetSphereRadius(60);
+	SphereComp->SetSphereRadius(70);
+	HitComp->SetSphereRadius(100);
 }
 
-void ABananaItem::BeginPlay()
+void AStarItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-void ABananaItem::ApplyItemEffect(AActor* TargetActor)
+void AStarItem::OnSimulateBegin()
+{
+	Super::OnSimulateBegin();
+}
+
+void AStarItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
 
-	UE_LOG(LogTemp, Warning, TEXT("Banana Item Used by %s"), *TargetActor->GetName());
-
-	Destroy();
+	UE_LOG(LogTemp, Warning, TEXT("Star Item Used by %s"), *TargetActor->GetName());
 }
+

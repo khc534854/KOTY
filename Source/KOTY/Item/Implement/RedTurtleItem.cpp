@@ -2,13 +2,11 @@
 
 
 #include "RedTurtleItem.h"
-
-#include "KotyItemHitComponent.h"
-#include "KotyMovementComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/SplineComponent.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerKart/C_PlayerKart.h"
 
 class UKotyItemHitComponent;
 
@@ -62,26 +60,6 @@ ARedTurtleItem::ARedTurtleItem()
 	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
-void ARedTurtleItem::BeginPlay()
-{
-	Super::BeginPlay();
-
-	//스플라인 컴포넌트 중 랜덤으로 하나
-	TArray<AActor*> GroundTrackingSpline;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("GroundTrackingSpline"), GroundTrackingSpline);
-	if (GroundTrackingSpline.IsEmpty() == false)
-		SplineComp = GroundTrackingSpline[FMath::RandRange(0, GroundTrackingSpline.Num() - 1)]->GetComponentByClass<USplineComponent>();
-
-	//충돌체를 가진 액터 중 랜덤으로 하나
-	TArray<AActor*> HasHitComps;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), HasHitComps);
-	if (HasHitComps.IsEmpty() == false)
-		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
-
-	//델리게이트 등록
-	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
-}
-
 void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
@@ -117,6 +95,21 @@ void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
 void ARedTurtleItem::OnSimulateBegin()
 {
 	Super::OnSimulateBegin();
+
+	//스플라인 컴포넌트 중 랜덤으로 하나
+	TArray<AActor*> GroundTrackingSpline;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("GroundTrackingSpline"), GroundTrackingSpline);
+	if (GroundTrackingSpline.IsEmpty() == false)
+		SplineComp = GroundTrackingSpline[FMath::RandRange(0, GroundTrackingSpline.Num() - 1)]->GetComponentByClass<USplineComponent>();
+
+	//충돌체를 가진 액터 중 랜덤으로 하나
+	TArray<AActor*> HasHitComps;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), HasHitComps);
+	if (HasHitComps.IsEmpty() == false)
+		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
+
+	//델리게이트 등록
+	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
 
 	//회전 방향 결정
 	RotationDir = FMath::RandRange(0, 1);
@@ -184,4 +177,3 @@ void ARedTurtleItem::Tick(const float DeltaTime)
 #pragma endregion 
 	
 }
-

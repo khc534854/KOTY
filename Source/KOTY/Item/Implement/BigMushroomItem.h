@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PhysicItemBase.h"
+#include "Item/Base/PhysicItemBase.h"
 #include "BigMushroomItem.generated.h"
 
 UCLASS()

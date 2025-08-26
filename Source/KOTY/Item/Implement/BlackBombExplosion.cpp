@@ -1,9 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BlackBombExplosion.h"
-#include "KotyItemHitComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
+#include "Item/Component/KotyItemHitComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 class UKotyMovementComponent;

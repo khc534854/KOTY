@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ItemBox.h"
-#include "KotyItemHitComponent.h"
 #include "Components/SphereComponent.h"
+#include "Item/Component/KotyItemHitComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -122,7 +122,7 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 }
 
-void AItemBox::Tick(float DeltaTime)
+void AItemBox::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -141,4 +141,3 @@ void AItemBox::Tick(float DeltaTime)
 	const FQuat RotationQuat(RotateAxis, FMath::DegreesToRadians(60.0f) * DeltaTime);
 	BoxMeshComp->AddLocalRotation(RotationQuat, false);
 }
-

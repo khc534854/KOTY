@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PhysicTrackingItemBase.h"
+#include "Item/Base/PhysicTrackingItemBase.h"
 #include "RedTurtleItem.generated.h"
 
 UCLASS()
@@ -15,8 +15,6 @@ public:
 	ARedTurtleItem();
 
 protected:
-	virtual void BeginPlay() override;
-
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	virtual void ApplyItemEffect(AActor* OtherActor) override;

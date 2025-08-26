@@ -10,6 +10,7 @@ class USphereComponent;
 
 //델리게이트 선언
 DECLARE_MULTICAST_DELEGATE(FOnBounce);
+DECLARE_MULTICAST_DELEGATE(FOnReflect);
 DECLARE_MULTICAST_DELEGATE(FOnSimulateBegin)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -78,8 +79,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetGravityDir() const;
-	
+
+	//바운스 이벤트 디스패처
 	FOnBounce OnBounceEventDispatcher;
 
+	//리플렉트 이벤트 디스패처
+	FOnReflect OnReflectEventDispatcher;
+
+	//시뮬레이트 활성화 이벤트 디스패처
 	FOnSimulateBegin OnSimulateBeginEventDispatcher;
 };

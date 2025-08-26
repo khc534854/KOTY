@@ -3,19 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item/PhysicItemBase.h"
-#include "SmallMushroomItem.generated.h"
+#include "Item/Base/PhysicItemBase.h"
+#include "CoinItem.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class KOTY_API ASmallMushroomItem : public APhysicItemBase
+class KOTY_API ACoinItem : public APhysicItemBase
 {
 	GENERATED_BODY()
 
 public:
-	ASmallMushroomItem();
+	ACoinItem();
 
 protected:
 	virtual void BeginPlay() override;

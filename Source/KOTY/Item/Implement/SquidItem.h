@@ -3,12 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "KotyItemBase.h"
+#include "Item/Base/KotyItemBase.h"
 #include "SquidItem.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class KOTY_API ASquidItem : public AKotyItemBase
 {
@@ -23,7 +20,6 @@ protected:
 public:
 	virtual void ApplyItemEffect(AActor* Player) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> MeshComp;
-	
 };

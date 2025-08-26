@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "KotyItemBase.h"
+#include "Item/Base/KotyItemBase.h"
 #include "BlackBombExplosion.generated.h"
 
 UCLASS()

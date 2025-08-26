@@ -306,10 +306,12 @@ FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start)
 
 void UKotyMovementComponent::SLerpVelocity(const FVector TargetDir)
 {
+	//목표 방향으로 구면 보간 처리
 	Velocity = FVector::SlerpVectorToDirection(Velocity, TargetDir, 0.25);
 }
 
 FVector UKotyMovementComponent::GetGravityDir() const
 {
+	//중력 방향 반환
 	return GravityDir;
 }

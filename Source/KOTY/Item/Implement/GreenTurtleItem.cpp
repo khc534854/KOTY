@@ -1,11 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "GreenTurtleItem.h"
-
-#include "KotyItemHitComponent.h"
-#include "KotyMovementComponent.h"
 #include "Components/AudioComponent.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 
 class UKotyItemHitComponent;
 
@@ -94,7 +92,7 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 }
 
-void AGreenTurtleItem::Tick(float DeltaTime)
+void AGreenTurtleItem::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
@@ -123,6 +121,3 @@ void AGreenTurtleItem::OnSimulateBegin()
 	//오디오 재생
 	AudioComp->Play();
 }
-
-
-

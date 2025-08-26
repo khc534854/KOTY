@@ -3,19 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item/PhysicItemBase.h"
-#include "StarItem.generated.h"
+#include "Item/Base/PhysicItemBase.h"
+#include "BananaItem.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class KOTY_API AStarItem : public APhysicItemBase
+class KOTY_API ABananaItem : public APhysicItemBase
 {
 	GENERATED_BODY()
 
 public:
-	AStarItem();
+	ABananaItem();
 
 protected:
 	virtual void BeginPlay() override;

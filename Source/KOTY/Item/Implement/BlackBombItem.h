@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PhysicItemBase.h"
 #include "Components/TimelineComponent.h"
+#include "Item/Base/PhysicItemBase.h"
 #include "BlackBombItem.generated.h"
 
 UCLASS()
@@ -13,16 +13,14 @@ class KOTY_API ABlackBombItem : public APhysicItemBase
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ABlackBombItem();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	
-	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
+	virtual void OnSimulateBegin() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMaterialInstanceDynamic> MaterialInst;

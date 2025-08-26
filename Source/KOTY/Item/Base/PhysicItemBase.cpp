@@ -2,9 +2,8 @@
 
 #include "PhysicItemBase.h"
 #include <Components/SphereComponent.h>
-#include "KotyMovementComponent.h"
-#include "AssetTypeActions/AssetDefinition_SoundBase.h"
 #include "Components/AudioComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values

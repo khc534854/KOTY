@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Item/SmallMushroomItem.h"
-
+#include "SmallMushroomItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -40,6 +39,11 @@ void ASmallMushroomItem::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ASmallMushroomItem::OnSimulateBegin()
+{
+	Super::OnSimulateBegin();
 }
 
 void ASmallMushroomItem::ApplyItemEffect(AActor* TargetActor)
