@@ -78,8 +78,8 @@ void ARedTurtleItem::BeginPlay()
 	if (HasHitComps.IsEmpty() == false)
 		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
 
-	//오디오 재생
-	AudioComp->Play();
+	//델리게이트 등록
+	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
 }
 
 void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -114,7 +114,18 @@ void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
 	UE_LOG(LogTemp, Display, TEXT("RedTurtle Applyed to %s!"), *OtherActor->GetName());
 }
 
-void ARedTurtleItem::Tick(float DeltaTime)
+void ARedTurtleItem::OnSimulateBegin()
+{
+	Super::OnSimulateBegin();
+
+	//회전 방향 결정
+	RotationDir = FMath::RandRange(0, 1);
+
+	//오디오 재생
+	AudioComp->Play();
+}
+
+void ARedTurtleItem::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

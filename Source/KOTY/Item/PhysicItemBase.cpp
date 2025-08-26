@@ -50,3 +50,8 @@ APhysicItemBase::APhysicItemBase()
 		}
 	});
 }
+
+void APhysicItemBase::OnSimulateBegin()
+{
+	
+}

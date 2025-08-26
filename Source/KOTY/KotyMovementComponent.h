@@ -10,6 +10,7 @@ class USphereComponent;
 
 //델리게이트 선언
 DECLARE_MULTICAST_DELEGATE(FOnBounce);
+DECLARE_MULTICAST_DELEGATE(FOnSimulateBegin)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class KOTY_API UKotyMovementComponent : public UMovementComponent
@@ -79,4 +80,6 @@ public:
 	FVector GetGravityDir() const;
 	
 	FOnBounce OnBounceEventDispatcher;
+
+	FOnSimulateBegin OnSimulateBeginEventDispatcher;
 };

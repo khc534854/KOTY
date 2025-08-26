@@ -63,11 +63,8 @@ void AGreenTurtleItem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//회전 방향 결정
-	RotationDir = FMath::RandRange(0, 1);
-
-	//오디오 재생
-	AudioComp->Play();
+	//델리게이트 등록
+	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
 }
 
 void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -114,6 +111,17 @@ void AGreenTurtleItem::Tick(float DeltaTime)
 void AGreenTurtleItem::ApplyItemEffect(AActor* TargetActor)
 {
 	UE_LOG(LogTemp, Display, TEXT("GreenTurtle Applyed to %s!"), *TargetActor->GetName());
+}
+
+void AGreenTurtleItem::OnSimulateBegin()
+{
+	Super::OnSimulateBegin();
+
+	//회전 방향 결정
+	RotationDir = FMath::RandRange(0, 1);
+
+	//오디오 재생
+	AudioComp->Play();
 }
 
 

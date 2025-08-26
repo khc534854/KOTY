@@ -20,6 +20,8 @@ protected:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
 	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
+	virtual void OnSimulateBegin() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;

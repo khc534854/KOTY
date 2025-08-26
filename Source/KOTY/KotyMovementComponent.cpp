@@ -13,6 +13,12 @@ void UKotyMovementComponent::InitializeComponent()
 	{
 		UE_LOG(LogTemp, Log, TEXT("KotyComponent Successfully Initialized!"));	
 	}
+
+	//충돌체 비활성화
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//시뮬레이션 비활성화
+	bSimulate = false;
 }
 
 void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -251,6 +257,12 @@ void UKotyMovementComponent::ThrowConstantHorizon(
 	this->StepUpLimit = InStepUpLimit;
 	this->Velocity = InVelocity;
 	this->SurfaceElasticity = InSurfaceElasticity;
+
+	//충돌체 활성화
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	//이벤트 전파
+	OnSimulateBeginEventDispatcher.Broadcast();
 }
 
 void UKotyMovementComponent::ThrowLinearDrag(
@@ -271,6 +283,12 @@ void UKotyMovementComponent::ThrowLinearDrag(
 	this->StepUpLimit = InStepUpLimit;
 	this->Velocity = InVelocity;
 	this->SurfaceElasticity = InSurfaceElasticity;
+
+	//충돌체 활성화
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	//이벤트 전파
+	OnSimulateBeginEventDispatcher.Broadcast();
 }
 
 FHitResult UKotyMovementComponent::LineTraceGravityDirTrack(const FVector Start) const

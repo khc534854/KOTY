@@ -32,4 +32,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> GroundHitSoundCue;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void OnSimulateBegin();
 };
