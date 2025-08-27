@@ -34,10 +34,10 @@ void AC_PlayerController::BeginPlay()
 	RaceGameModeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
 	CurrentReadyTime = -4.0f;
 	CurrentRaceTime = 0;
+	CountdownState = 0;
+
 
 	StartLakituRef = Cast<AC_StartLakitu>(UGameplayStatics::GetActorOfClass(GetWorld(), AC_StartLakitu::StaticClass()));
-
-	int32 CountdownState = 0;
 }
 
 void AC_PlayerController::Tick(float DeltaTime)
@@ -72,13 +72,16 @@ void AC_PlayerController::Tick(float DeltaTime)
 
 	if (RaceGameModeRef->CurrentState == RaceLevelState::End)
 	{
-		SetInputMode(FInputModeUIOnly());
+		//SetInputMode(FInputModeUIOnly());
 	}
 }
 
 void AC_PlayerController::SetReady()
 {
-
+	CurrentReadyTime = -4.0f;
+	CurrentRaceTime = 0;
+	CountdownState = 0;
+	SetInputMode(FInputModeGameOnly());
 }
 
 void AC_PlayerController::SetFinished()
@@ -90,7 +93,6 @@ void AC_PlayerController::SetFinished()
 	UPlayerInput* PlayerInputObject = this->PlayerInput;
 	
 	UEnhancedInputLibrary::FlushPlayerInput(this);
-	SetInputMode(FInputModeUIOnly());
 	RaceGameModeRef->CurrentState = RaceLevelState::End;
 
 	FLatentActionInfo LatentInfo;
@@ -104,12 +106,10 @@ void AC_PlayerController::SetFinished()
 		2.0f,       // 지연시킬 시간 (초)
 		LatentInfo  // 지연된 액션 정보
 	);
-	
 }
 
 void AC_PlayerController::CheckReadyState()
 {
-	static int32 CountdownState = 0;
 	if (CurrentReadyTime < 1 &&  CurrentReadyTime >= 0 && CountdownState == 0)
 	{
 		CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Visible);
@@ -140,7 +140,7 @@ void AC_PlayerController::CheckReadyState()
 		StartLakituRef->StartLakitu->SetMaterial(4, StartLakituRef->StartLakituGreen);
 		StartLakituRef->StartLakitu->SetMaterial(5, StartLakituRef->StartLakituGreen);
 		RaceGameModeRef->CurrentState = RaceLevelState::Play;
-		PlayerKartRef->StartAddSpeed(500.f);
+		PlayerKartRef->StartAddSpeed(3000.f);
 		CountdownState = 4;
 	}
 }
@@ -168,11 +168,11 @@ void AC_PlayerController::ChangeCamera()
 			}
 		}, 1.5f, false);
 	}
-	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+
+	CurrentHUD->RemoveFromParent();
+
 	EndHUD->AddToViewport();
 	EndHUD->PlayAnimation(EndHUD->ANIM_Rank);
-	
-	//CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AC_PlayerController::CheckBoostState()

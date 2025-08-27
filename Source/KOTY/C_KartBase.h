@@ -229,4 +229,6 @@ public:
 	float suspensioningTime = 0.f;
 	bool bIsSuspending = false;
 	float SuspensionTime = 0.5f;
+
+	class AC_RaceGameMode* GamemodeRef;
 };

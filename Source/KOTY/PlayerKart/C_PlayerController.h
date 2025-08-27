@@ -71,5 +71,7 @@ public:
 
 	UPROPERTY()
 	class AC_StartLakitu* StartLakituRef;
+
+	int32 CountdownState = 0;
 	
 };

@@ -90,7 +90,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* AddSpeedAction;
 
-public:
-
 
 };

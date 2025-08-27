@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SplineComponent.h"
 #include "Utility/C_MathUtility.h"
+#include "C_RaceGameMode.h"
 
 
 // Sets default values
@@ -49,6 +50,7 @@ AC_KartBase::AC_KartBase()
 void AC_KartBase::BeginPlay()
 {
 	Super::BeginPlay();
+	GamemodeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
 	
 }
 
@@ -56,7 +58,7 @@ void AC_KartBase::BeginPlay()
 void AC_KartBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	CheckIsGround();
 	
 	if (bIsGround)

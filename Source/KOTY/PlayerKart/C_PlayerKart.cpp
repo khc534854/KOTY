@@ -2,6 +2,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/SplineComponent.h"
 #include "Math/UnrealMathUtility.h"
+#include "C_RaceGameMode.h"
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
@@ -59,13 +60,16 @@ void AC_PlayerKart::BeginPlay()
 		}
 	}
 
-	// SplineComponent = WorldSplineActor->FindComponentByClass<USplineComponent>();
+	//SplineComponent = WorldSplineActor->FindComponentByClass<USplineComponent>();
 }
 
 // Called every frame
 void AC_PlayerKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
+
 	if (!(Tags.IsEmpty()))
 	{
 		this->Tags.Empty();
@@ -187,8 +191,11 @@ void AC_PlayerKart::Stun()
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
 {
-	if (bIsStunned)
+	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
+	{
+		AccelerationDir = 0;
 		return;
+	}
 	
 	bIsAcceleration = true;
 	AccelerationDir = Value.Get<float>();
@@ -202,12 +209,7 @@ void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 {
-	// if (bIsDrift && (Value.Get<float> != HandlingDir))
-	// {
-	// 	
-	// }
-	//
-	if (bIsStunned)
+	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
 		return;
 	
 	bIsHandling = true;
@@ -231,6 +233,9 @@ void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
 }
 void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 {
+	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
+		return;
+
 	if (!bIsGround)
 	{
 		bIsGround = false;

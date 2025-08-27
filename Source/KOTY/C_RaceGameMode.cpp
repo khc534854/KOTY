@@ -32,8 +32,5 @@ void AC_RaceGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (CurrentState == RaceLevelState::End)
-	{
-		//GetWorld()->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
-	}
+
 }
