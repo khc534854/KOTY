@@ -2,6 +2,8 @@
 
 
 #include "KotyItemBase.h"
+
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 AKotyItemBase::AKotyItemBase()
@@ -14,6 +16,12 @@ AKotyItemBase::AKotyItemBase()
 	{
 		SoundAttenuation = Finder.Object;
 	}
+	
+	//오디오 컴포넌트 부착
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+	AudioComp->SetAutoActivate(false);
+	AudioComp->SetAttenuationSettings(SoundAttenuation);
+	AudioComp->SetupAttachment(RootComponent);
 }
 
 void AKotyItemBase::ApplyItemEffect(AActor* TargetActor)
@@ -22,15 +30,21 @@ void AKotyItemBase::ApplyItemEffect(AActor* TargetActor)
 	UE_LOG(LogTemp, Warning, TEXT("You are Trying to Call ItemBase Effect! There is No Effect on ItemBase!"));
 }
 
+void AKotyItemBase::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	//일반 아이템의 경우 자신에게 바로 효과 적용
+	//물리 아이템의 경우 전방 혹은 후방을 향해 사출
+}
+
+void AKotyItemBase::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	//일반 아이템의 경우 바로 잃어버림
+	//물리 아이템의 경우 랜덤 방향으로 사출
+}
+
 void AKotyItemBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//사용 사운드 재생
-	if (UseSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
-	}
 }
 
 void AKotyItemBase::Destroyed()

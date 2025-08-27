@@ -15,11 +15,17 @@ public:
 	ARedTurtleItem();
 
 protected:
+	virtual void BeginPlay() override;
+	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	virtual void ApplyItemEffect(AActor* OtherActor) override;
 
 	virtual void OnSimulateBegin() override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;

@@ -55,6 +55,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
+	bool IsOnSimulate() const;
+	
+	UFUNCTION(BlueprintCallable)
 	void ThrowConstantHorizon(
 		const bool InbSimulate,
 		const FVector InGravityDir,

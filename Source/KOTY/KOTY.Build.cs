@@ -12,7 +12,7 @@ public class KOTY : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "UMG", "Slate", "SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {"Niagara"});
-
+		
 		PublicIncludePaths.AddRange(new string[] {
 			"KOTY" // "Source/KOTY" 폴더를 포함 경로로 추가
 		});

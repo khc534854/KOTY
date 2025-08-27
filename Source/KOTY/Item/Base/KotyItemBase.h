@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "KotyItemBase.generated.h"
 
+//전방 선언
+class UKotyItemHoldComponent;
+
 UCLASS()
 class KOTY_API AKotyItemBase : public AActor
 {
@@ -18,6 +21,9 @@ public:
 	virtual void ApplyItemEffect(AActor* TargetActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAudioComponent> AudioComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> UseSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -25,6 +31,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundAttenuation> SoundAttenuation;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp);
 
 protected:
 	virtual void BeginPlay() override;

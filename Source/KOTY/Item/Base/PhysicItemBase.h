@@ -28,11 +28,8 @@ protected:
 	TObjectPtr<class UKotyMovementComponent> MoveComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UAudioComponent> AudioComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> GroundHitSoundCue;
-
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void OnSimulateBegin();
 };

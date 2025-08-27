@@ -6,7 +6,6 @@
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values
 APhysicItemBase::APhysicItemBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -28,10 +27,6 @@ APhysicItemBase::APhysicItemBase()
 
 	//아이템 무브먼트 컴포넌트 부착
 	MoveComp = CreateDefaultSubobject<UKotyMovementComponent>(TEXT("KotyMovement"));
-
-	//오디오 컴포넌트 부착
-	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
-	AudioComp->SetupAttachment(RootComponent);
 
 	//지면 충돌 사운드 큐 로드
 	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SC_Bounce.SC_Bounce"));

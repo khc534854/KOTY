@@ -239,6 +239,11 @@ void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTi
 	
 }
 
+bool UKotyMovementComponent::IsOnSimulate() const
+{
+	return bSimulate;
+}
+
 void UKotyMovementComponent::ThrowConstantHorizon(
 	const bool InbSimulate,
 	const FVector InGravityDir,

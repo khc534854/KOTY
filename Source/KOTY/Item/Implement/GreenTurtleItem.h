@@ -22,6 +22,10 @@ protected:
 	virtual void ApplyItemEffect(AActor* TargetActor) override;
 
 	virtual void OnSimulateBegin() override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;

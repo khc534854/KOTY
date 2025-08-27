@@ -5,6 +5,7 @@
 #include "Components/AudioComponent.h"
 #include "Components/SplineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -60,6 +61,14 @@ ARedTurtleItem::ARedTurtleItem()
 	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
+void ARedTurtleItem::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//델리게이트 등록
+	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
+}
+
 void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
@@ -108,14 +117,50 @@ void ARedTurtleItem::OnSimulateBegin()
 	if (HasHitComps.IsEmpty() == false)
 		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
 
-	//델리게이트 등록
-	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
+	//사용 사운드 재생
+	if (UseSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
 
 	//회전 방향 결정
 	RotationDir = FMath::RandRange(0, 1);
 
 	//오디오 재생
 	AudioComp->Play();
+}
+
+void ARedTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+	
+	//사출 속도
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
+	const FVector Velocity = Shoot * 3000;
+	
+	//사출
+	MoveComp->ThrowConstantHorizon(
+		true,
+		FVector::DownVector,
+		6000,
+		3000,
+		4.0,
+		Velocity,
+		0.25);
+}
+
+void ARedTurtleItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	//파괴
+	this->Destroy();
 }
 
 void ARedTurtleItem::Tick(const float DeltaTime)

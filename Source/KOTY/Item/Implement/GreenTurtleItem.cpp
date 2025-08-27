@@ -3,7 +3,9 @@
 #include "GreenTurtleItem.h"
 #include "Components/AudioComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 class UKotyItemHitComponent;
 
@@ -54,7 +56,6 @@ AGreenTurtleItem::AGreenTurtleItem()
 
 	//오디오 컴포넌트 초기화
 	AudioComp->SetSound(MovingSound);
-	AudioComp->SetAttenuationSettings(SoundAttenuation);
 }
 
 void AGreenTurtleItem::BeginPlay()
@@ -95,15 +96,18 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 void AGreenTurtleItem::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
-	MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
 
-	//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
-	const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
-	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
-	const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
-	MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
+	if (MoveComp->IsOnSimulate())
+	{
+		//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
+		MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
+
+		//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
+		const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
+		const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
+		const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
+		MeshComp->AddWorldRotation(RotationQuat * DeltaTime);	
+	}
 }
 
 void AGreenTurtleItem::ApplyItemEffect(AActor* TargetActor)
@@ -115,9 +119,50 @@ void AGreenTurtleItem::OnSimulateBegin()
 {
 	Super::OnSimulateBegin();
 
+	UE_LOG(LogTemp, Log, TEXT("OnSimulateBegin!"));
+
+	//사용 사운드 재생
+	if (UseSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+	
 	//회전 방향 결정
 	RotationDir = FMath::RandRange(0, 1);
 
 	//오디오 재생
 	AudioComp->Play();
+}
+
+void AGreenTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+	
+	//사출 속도
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
+	const FVector Velocity = Shoot * 3000;
+	
+	//사출
+	MoveComp->ThrowConstantHorizon(
+		true,
+		FVector::DownVector,
+		6000,
+		3000,
+		4.0,
+		Velocity,
+		0.25);
+}
+
+void AGreenTurtleItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	//파괴
+	this->Destroy();
 }

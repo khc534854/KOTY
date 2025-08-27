@@ -2,9 +2,11 @@
 
 #include "BlackBombItem.h"
 #include "BlackBombExplosion.h"
+#include "Components/ArrowComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
 
 ABlackBombItem::ABlackBombItem()
@@ -115,6 +117,59 @@ void ABlackBombItem::OnSimulateBegin()
 	
 	//폭탄 경고 사운드 재생
 	AudioComp->Play();
+}
+
+void ABlackBombItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+
+	//사출 속도
+	const FVector Forward = GetOwner()->GetActorForwardVector();
+	const FVector Right = GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(45, Right);
+	const FVector Velocity = Shoot * 4500;
+
+	//사출
+	MoveComp->ThrowLinearDrag(
+		true,
+		FVector::DownVector,
+		6000,
+		5.0,
+		4.0,
+		Velocity,
+		0.25);
+}
+
+void ABlackBombItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	// //떼어내기
+	// this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//
+	// //사출 속도
+	// const float Degree = FMath::RandRange(180, -180);
+	// const FVector Forward = GetOwner()->GetActorForwardVector();
+	// const FVector Right = GetOwner()->GetActorRightVector();
+	// const FVector Up = GetOwner()->GetActorUpVector();
+	// const FVector Shoot = Forward.RotateAngleAxis(45, Right).RotateAngleAxis(Degree, Up);
+	// const FVector Velocity = Shoot * 1500;
+	//
+	// //사출
+	// MoveComp->ThrowLinearDrag(
+	// 	true,
+	// 	FVector::DownVector,
+	// 	6000,
+	// 	5.0,
+	// 	4.0,
+	// 	Velocity,
+	// 	0.25);
+
+	this->Destroy();
 }
 
 void ABlackBombItem::Explode()
