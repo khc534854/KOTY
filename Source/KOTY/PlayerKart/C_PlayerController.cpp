@@ -8,9 +8,11 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/C_RaceWidget.h"
 #include "EnhancedInputLibrary.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Camera/CameraActor.h"
 #include "Gimmick/C_StartLakitu.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/C_EndWidget.h"
 
 void AC_PlayerController::BeginPlay()
 {
@@ -22,12 +24,20 @@ void AC_PlayerController::BeginPlay()
 		CurrentHUD->ChangeLaps();
 	}
 
+	if (EndWidgetClass)
+	{
+		EndHUD = CreateWidget<UC_EndWidget>(this, EndWidgetClass);
+	}
+
+	
 	PlayerKartRef = Cast<AC_PlayerKart>(GetPawn());
 	RaceGameModeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
-	CurrentReadyTime = -1.5f;
+	CurrentReadyTime = -4.0f;
 	CurrentRaceTime = 0;
 
 	StartLakituRef = Cast<AC_StartLakitu>(UGameplayStatics::GetActorOfClass(GetWorld(), AC_StartLakitu::StaticClass()));
+
+	int32 CountdownState = 0;
 }
 
 void AC_PlayerController::Tick(float DeltaTime)
@@ -40,6 +50,11 @@ void AC_PlayerController::Tick(float DeltaTime)
 		CurrentReadyTime += DeltaTime;
 		CheckReadyState();
 		SetInputMode(FInputModeUIOnly());
+		if (CurrentReadyTime > -1.f && !CurrentHUD->IsInViewport())
+		{
+			UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+			CurrentHUD->AddToViewport();
+		}
 	}
 	
 	if (RaceGameModeRef->CurrentState == RaceLevelState::Play)
@@ -47,6 +62,7 @@ void AC_PlayerController::Tick(float DeltaTime)
 		SetInputMode(FInputModeGameOnly());
 		CurrentRaceTime += DeltaTime;
 
+		CheckBoostState();
 		if (CurrentRaceTime > 2)
 		{
 			CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Hidden);
@@ -56,22 +72,20 @@ void AC_PlayerController::Tick(float DeltaTime)
 
 	if (RaceGameModeRef->CurrentState == RaceLevelState::End)
 	{
-
+		SetInputMode(FInputModeUIOnly());
 	}
 }
 
 void AC_PlayerController::SetReady()
 {
-	if (CurrentHUD)
-	{
-		CurrentHUD->AddToViewport();
-	}
+
 }
 
 void AC_PlayerController::SetFinished()
 {
 	CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Visible);
 	CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Finish);
+	CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Finish);
 
 	UPlayerInput* PlayerInputObject = this->PlayerInput;
 	
@@ -95,31 +109,39 @@ void AC_PlayerController::SetFinished()
 
 void AC_PlayerController::CheckReadyState()
 {
-	if (CurrentReadyTime < 1 &&  CurrentReadyTime >= 0)
+	static int32 CountdownState = 0;
+	if (CurrentReadyTime < 1 &&  CurrentReadyTime >= 0 && CountdownState == 0)
 	{
 		CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Visible);
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Three);
+		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(1, StartLakituRef->StartLakituRed);
+		CountdownState = 1;
 	}
-	else if (CurrentReadyTime < 2 &&  CurrentReadyTime >= 1)
+	else if (CurrentReadyTime < 2 &&  CurrentReadyTime >= 1 && CountdownState == 1)
 	{
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Two);
+		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(4, StartLakituRef->StartLakituRed);
+		CountdownState = 2;
 	}
-	else if (CurrentReadyTime < 3 &&  CurrentReadyTime >= 2)
+	else if (CurrentReadyTime < 3 &&  CurrentReadyTime >= 2 && CountdownState == 2)
 	{
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_One);
+		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(5, StartLakituRef->StartLakituRed);
-			
+		CountdownState = 3;
 	}
-	else if (CurrentReadyTime < 4 &&  CurrentReadyTime >= 3)
+	else if (CurrentReadyTime < 4 &&  CurrentReadyTime >= 3 && CountdownState == 3)
 	{
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Go);
+		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(1, StartLakituRef->StartLakituGreen);
 		StartLakituRef->StartLakitu->SetMaterial(4, StartLakituRef->StartLakituGreen);
 		StartLakituRef->StartLakitu->SetMaterial(5, StartLakituRef->StartLakituGreen);
 		RaceGameModeRef->CurrentState = RaceLevelState::Play;
 		PlayerKartRef->StartAddSpeed(500.f);
+		CountdownState = 4;
 	}
 }
 
@@ -146,6 +168,18 @@ void AC_PlayerController::ChangeCamera()
 			}
 		}, 1.5f, false);
 	}
+	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+	EndHUD->AddToViewport();
+	EndHUD->PlayAnimation(EndHUD->ANIM_Rank);
+	
+	//CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Hidden);
+}
 
-	CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Hidden);
+void AC_PlayerController::CheckBoostState()
+{
+	if (PlayerKartRef->bIsBoosting)
+		CurrentHUD->IMG_SpeedEffect->SetVisibility(ESlateVisibility::Visible);
+	else
+		CurrentHUD->IMG_SpeedEffect->SetVisibility(ESlateVisibility::Hidden);
+		
 }

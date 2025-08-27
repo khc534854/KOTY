@@ -32,12 +32,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeCamera();
 
+	UFUNCTION(BlueprintCallable)
+	void CheckBoostState();
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UC_RaceWidget* CurrentHUD;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UUserWidget> EndWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UC_EndWidget* EndHUD;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class AC_PlayerKart* PlayerKartRef;

@@ -55,7 +55,13 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_SpeedEffect;
+	
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* ANIM_Ready;
 
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* ANIM_Finish;
+	
 	float CurTime = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -8,45 +8,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_BoostZone.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_BoostZone.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_EndZone.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_EndZone.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_StartLakitu.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/KOTY/Gimmick/C_StartLakitu.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_EndWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_EndWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_SequenceWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_SequenceWidget.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ItemBox/BP_ItemBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemBox/BP_ItemBox.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ItemBox/Model/SM_ItemBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemBox/Model/SM_ItemBox.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/BPC_RaceGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BPC_RaceGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/BP_KartGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Gimmik/BP_BoostZone.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Gimmik/BP_BoostZone.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Gimmik/BP_EndZone.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Gimmik/BP_EndZone.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium1.umap" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Sequence/Intro1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_PlayUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_PlayUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_RaceUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_RaceUI.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KOTY.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.uproject" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/C_RaceGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_RaceGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_RaceGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_RaceGameMode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKartMovementComponent.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKartMovementComponent.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseButtonWidget.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseButtonWidget.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseWidget.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_BaseWidget.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_StartUI.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_StartUI.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,27 +38,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Private/EnhancedInputLibrary.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/LatentActionManager.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/PlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/PlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/UMG/Public/Animation/WidgetAnimation.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/KOTY.uproject" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -93,23 +57,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Uproject.KOTY.executor": "Run",
-    "git-widget-placeholder": "KHC",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Uproject.KOTY.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;KHC&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="KOTY" type="Uproject" factoryName="rider.uproject">
       <configuration_1 setup="1">
@@ -292,7 +256,9 @@
       <workItem from="1756002531204" duration="1411000" />
       <workItem from="1756003972914" duration="22253000" />
       <workItem from="1756036167129" duration="3857000" />
-      <workItem from="1756191392673" duration="19375000" />
+      <workItem from="1756191392673" duration="21484000" />
+      <workItem from="1756272547091" duration="638000" />
+      <workItem from="1756282705459" duration="12706000" />
     </task>
     <servers />
   </component>
@@ -301,6 +267,10 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnrealLogPanelSettings">
+    <option name="showMessages" value="false" />
+    <option name="showWarnings" value="false" />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

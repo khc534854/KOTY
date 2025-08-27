@@ -92,6 +92,7 @@ protected:
 	TArray<UNiagaraComponent*> ActiveBoostEffects;
 	TArray<UNiagaraComponent*> ActiveDriftEffects;
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	bool bIsBoosting = false;
 	
@@ -99,7 +100,6 @@ protected:
 	float BoostDuration = 1.5f;
 	
 	//Acceleration
-public:
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Physics")
 	float AccelerationForce = 3500.f; // 가속 힘
 

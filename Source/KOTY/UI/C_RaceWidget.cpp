@@ -16,8 +16,6 @@ void UC_RaceWidget::NativeConstruct()
 void UC_RaceWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	
 }
 
 void UC_RaceWidget::ChangeImg(UImage* TargetImg, FString Resource)
