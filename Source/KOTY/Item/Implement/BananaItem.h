@@ -17,7 +17,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
 public:
 	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
 };

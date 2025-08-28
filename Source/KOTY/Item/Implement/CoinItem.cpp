@@ -4,6 +4,9 @@
 #include "CoinItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACoinItem::ACoinItem()
@@ -41,11 +44,61 @@ void ACoinItem::BeginPlay()
 	
 }
 
+void ACoinItem::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	//최고속도 상승 효과 발생
+	if (const auto* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//요청
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+	}
+}
+
 void ACoinItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Coin Item Used by %s"), *TargetActor->GetName());
+	UE_LOG(LogTemp, Log, TEXT("Coin Item Used by %s"), *TargetActor->GetName());
 
 	this->Destroy();
+}
+
+void ACoinItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//무적 효과 발생
+	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		FItemEffect ItemEffectDelegate;
+		ItemEffectDelegate.BindDynamic(this, &ACoinItem::ApplyItemEffect);
+		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+	}
+}
+
+void ACoinItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+
+	//사출 속도
+	const FVector Forward = GetOwner()->GetActorForwardVector();
+	const FVector Right = GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(45, Right);
+	const FVector Velocity = Shoot * 1500;
+
+	//사출
+	MoveComp->ThrowLinearDrag(
+		true,
+		FVector::DownVector,
+		6000,
+		5.0,
+		4.0,
+		Velocity,
+		0.25);
 }

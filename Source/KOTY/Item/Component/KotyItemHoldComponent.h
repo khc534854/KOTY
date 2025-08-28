@@ -6,22 +6,26 @@
 #include "Components/SceneComponent.h"
 #include "KotyItemHoldComponent.generated.h"
 
+//아이템 리스트 열거형
 UENUM()
 enum class EItemList : uint8
 {
 	Start,
 	Banana,
-	BigMushroom,
 	BlackBomb,
 	Coin,
 	GreenTurtle,
 	RedTurtle,
-	SmallMushroom,
+	MushroomBig,
+	MushroomSmall,
 	Squid,
 	Star,
 	End,
 	None,
 };
+
+//아이템 획득 델리게이트
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGetItem, EItemList)
 
 //전방 선언
 class UArrowComponent;
@@ -66,39 +70,20 @@ protected:
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ABananaItem> BananaItemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ABigMushroomItem> BigMushroomClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ABlackBombItem> BlackBombClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ACoinItem> CoinItemClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class AGreenTurtleItem> GreenTurtleItemClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ARedTurtleItem> RedTurtleItemClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ASmallMushroomItem> SmallMushroomItemClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ASquidItem> SquidItemClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class AStarItem> StarItemClass;
+	TArray<TSubclassOf<AKotyItemBase>> ItemClassArray;
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetShootLocation() const;
+
+	FOnGetItem OnGetItemEventDispatcher;
 	
 	UFUNCTION(BlueprintCallable)
 	void GetRandomItem();
+
+	UFUNCTION(BlueprintCallable)
+	void GetSpecifiedItem(EItemList ItemCode);
 
 	UFUNCTION(BlueprintCallable)
 	void UseCurrentItem();

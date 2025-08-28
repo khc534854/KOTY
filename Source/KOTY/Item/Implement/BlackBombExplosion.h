@@ -18,8 +18,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	
-	virtual void ApplyItemEffect(AActor* TargetActor) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USphereComponent> HitComp;
@@ -47,4 +45,8 @@ protected:
 
 	UFUNCTION()
 	void EndExplosion();
+
+public:
+	virtual void ApplyItemEffect(AActor* TargetActor) override;
+	
 };

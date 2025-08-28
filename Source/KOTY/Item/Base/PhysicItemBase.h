@@ -15,6 +15,8 @@ public:
 	APhysicItemBase();
 
 protected:
+	virtual void Tick(float DeltaTime) override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USphereComponent> SphereComp;
 

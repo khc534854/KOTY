@@ -19,6 +19,9 @@ void UKotyMovementComponent::InitializeComponent()
 
 	//시뮬레이션 비활성화
 	bSimulate = false;
+
+	//액터에 태그를 추가
+	GetOwner()->Tags.Add(FName("HasMoveComp"));
 }
 
 void UKotyMovementComponent::TickComponent(const float DeltaTime, const ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

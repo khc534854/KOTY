@@ -20,5 +20,9 @@ protected:
 	virtual void OnSimulateBegin() override;
 	
 	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
 };

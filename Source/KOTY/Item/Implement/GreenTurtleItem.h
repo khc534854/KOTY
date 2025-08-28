@@ -19,13 +19,7 @@ protected:
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
-	virtual void ApplyItemEffect(AActor* TargetActor) override;
-
-	virtual void OnSimulateBegin() override;
-
-	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
-
-	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
+	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;
@@ -33,7 +27,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> MovingSound;
 
+	virtual void OnSimulateBegin() override;
+	
 public:
-	virtual void Tick(float DeltaTime) override;
+	virtual void ApplyItemEffect(AActor* TargetActor) override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
 };

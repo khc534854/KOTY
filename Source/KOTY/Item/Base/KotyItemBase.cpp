@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "KotyItemBase.h"
-
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -28,6 +26,14 @@ void AKotyItemBase::ApplyItemEffect(AActor* TargetActor)
 {
 	//하위 아이템에서 오버라이드하여 구체적인 기능 구현
 	UE_LOG(LogTemp, Warning, TEXT("You are Trying to Call ItemBase Effect! There is No Effect on ItemBase!"));
+}
+
+void AKotyItemBase::RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp)
+{
+	//델리게이트 전달
+	FItemEffect ItemEffectDelegate;
+	ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
+	TargetHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
 }
 
 void AKotyItemBase::OnUseItem(UKotyItemHoldComponent* HoldComp)

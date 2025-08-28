@@ -2,6 +2,7 @@
 
 #include "SquidItem.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASquidItem::ASquidItem()
@@ -9,6 +10,9 @@ ASquidItem::ASquidItem()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	const auto SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(SceneComp);
+	
 	//메시 컴포넌트 부착
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
@@ -36,4 +40,34 @@ void ASquidItem::ApplyItemEffect(AActor* TargetActor)
 	Super::ApplyItemEffect(TargetActor);
 
 	UE_LOG(LogTemp, Warning, TEXT("Star Item Used by %s"), *TargetActor->GetName());
+
+	this->Destroy();
+}
+
+void ASquidItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//모든 카트 검색
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), OutActors);
+	for (const auto Actor : OutActors)
+	{
+		//자신 이외의 모든 카트에 대해
+		if (Actor != GetOwner())
+		{
+			if (const auto OtherHitComp = Actor->FindComponentByClass<UKotyItemHitComponent>())
+			{
+				RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+			}
+		}
+	}
+}
+
+void ASquidItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	//파괴
+	this->Destroy();
 }

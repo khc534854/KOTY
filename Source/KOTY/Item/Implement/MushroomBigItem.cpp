@@ -1,14 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "StarItem.h"
+
+#include "MushroomBigItem.h"
+
 #include "Components/SphereComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
-#include "UObject/ConstructorHelpers.h"
 
-AStarItem::AStarItem()
+class UKotyItemHitComponent;
+
+AMushroomBigItem::AMushroomBigItem()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,57 +21,65 @@ AStarItem::AStarItem()
 	MeshComp->SetupAttachment(GetRootComponent());
 
 	//스태틱 메시 로드
-	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/Star/Model/SM_Star.SM_Star"));
+	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/Mushroom/Model/SM_Mushroom.SM_Mushroom"));
 		Finder.Succeeded())
 	{
 		MeshComp->SetStaticMesh(Finder.Object);
 	}
 
 	//머터리얼 로드
-	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/Star/Model/MT_Star.MT_Star"));
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/Mushroom/Model/MT_Mushroom.MT_Mushroom"));
 		Finder.Succeeded())
 	{
 		MeshComp->SetMaterial(0, Finder.Object);
 	}
 
 	//크기에 맞춰 변경
-	SphereComp->SetSphereRadius(70);
-	HitComp->SetSphereRadius(100);
+	MeshComp->SetWorldScale3D(FVector(2, 2, 2));
+	SphereComp->SetSphereRadius(60);
+	HitComp->SetSphereRadius(80);
 }
 
-void AStarItem::BeginPlay()
+void AMushroomBigItem::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
-void AStarItem::OnSimulateBegin()
+void AMushroomBigItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	Super::OnSimulateBegin();
-}
+	Super::NotifyActorBeginOverlap(OtherActor);
 
-void AStarItem::ApplyItemEffect(AActor* TargetActor)
-{
-	Super::ApplyItemEffect(TargetActor);
-
-	UE_LOG(LogTemp, Warning, TEXT("Star Item Used by %s"), *TargetActor->GetName());
-
-	this->Destroy();
-}
-
-void AStarItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
-{
-	Super::OnUseItem(HoldComp);
-
-	//무적 효과 발생
-	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	//미끄러짐 효과 발생
+	if (const auto* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 	{
-		FItemEffect ItemEffectDelegate;
-		ItemEffectDelegate.BindDynamic(this, &AStarItem::ApplyItemEffect);
-		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+		//요청
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
 	}
 }
 
-void AStarItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+void AMushroomBigItem::ApplyItemEffect(AActor* TargetActor)
+{
+	Super::ApplyItemEffect(TargetActor);
+
+	UE_LOG(LogTemp, Warning, TEXT("BigMushroom Item Used by %s"), *TargetActor->GetName());
+	
+	this->Destroy();
+}
+
+void AMushroomBigItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//부스터 효과 발생
+	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//요청
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+	}
+}
+
+void AMushroomBigItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 {
 	Super::OnLoseItem(HoldComp);
 
@@ -81,7 +91,7 @@ void AStarItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 	const FVector Forward = GetOwner()->GetActorForwardVector();
 	const FVector Right = GetOwner()->GetActorRightVector();
 	const FVector Shoot = Forward.RotateAngleAxis(45, Right);
-	const FVector Velocity = Shoot * 4500;
+	const FVector Velocity = Shoot * 1500;
 
 	//사출
 	MoveComp->ThrowLinearDrag(

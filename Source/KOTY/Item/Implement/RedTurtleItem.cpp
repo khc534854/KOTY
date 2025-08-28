@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "RedTurtleItem.h"
 #include "Components/AudioComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/SplineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
@@ -59,6 +59,11 @@ ARedTurtleItem::ARedTurtleItem()
 	//오디오 컴포넌트 초기화
 	AudioComp->SetSound(MovingSound);
 	AudioComp->SetAttenuationSettings(SoundAttenuation);
+
+	//센서로 사용하는 스피어 컴포넌트 부착
+	SensorComp = CreateDefaultSubobject<USphereComponent>(TEXT("SensorComp"));
+	SensorComp->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	SensorComp->SetupAttachment(GetRootComponent());
 }
 
 void ARedTurtleItem::BeginPlay()
@@ -67,32 +72,37 @@ void ARedTurtleItem::BeginPlay()
 
 	//델리게이트 등록
 	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
+
+	SensorComp->OnComponentBeginOverlap.AddDynamic(this, &ARedTurtleItem::OnSensorOverlap);
 }
 
 void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	//충돌 상대가 다른 아이템이었다
-	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+	if (MoveComp->IsOnSimulate())
 	{
-		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
-		this->Destroy();
-	}
+		//충돌 상대가 다른 아이템이었다
+		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+			this->Destroy();
+		}
 
-	//충돌 상대가 아이템 충돌체였다
-	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
-	{
-		//오너를 대상으로 아이템 효과 적용
-		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//오너를 대상으로 아이템 효과 적용
+			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
 
-		//델리게이트 전달
-		FItemEffect ItemEffectDelegate;
-		ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
-		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+			//델리게이트 전달
+			FItemEffect ItemEffectDelegate;
+			ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
+			OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
 
-		//파괴
-		this->Destroy();
+			//파괴
+			this->Destroy();
+		}	
 	}
 }
 
@@ -111,12 +121,29 @@ void ARedTurtleItem::OnSimulateBegin()
 	if (GroundTrackingSpline.IsEmpty() == false)
 		SplineComp = GroundTrackingSpline[FMath::RandRange(0, GroundTrackingSpline.Num() - 1)]->GetComponentByClass<USplineComponent>();
 
-	//충돌체를 가진 액터 중 랜덤으로 하나
-	TArray<AActor*> HasHitComps;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), HasHitComps);
-	if (HasHitComps.IsEmpty() == false)
-		TargetActor = HasHitComps[FMath::RandRange(0, HasHitComps.Num() - 1)];
+	//1초마다 목표를 탐색
+	GetWorldTimerManager().SetTimer(FindTargetHandle, [this]()
+	{
+		//충돌체를 가진 액터 중 랜덤으로 하나
+		TArray<AActor*> OverlappingActors;
+		SensorComp->GetOverlappingActors(OverlappingActors);
+		for (auto Actor : OverlappingActors)
+		{
+			//자신은 제외
+			if (Actor == GetOwner())
+			{
+				continue;
+			}
 
+			//목표를 찾았으므로
+			if (Actor->ActorHasTag(FName("HasHitComp")))
+			{
+				TargetActor = Actor;
+				GetWorldTimerManager().ClearTimer(FindTargetHandle);
+			}
+		}
+	}, 1.0, true);
+	
 	//사용 사운드 재생
 	if (UseSound)
 	{
@@ -128,6 +155,14 @@ void ARedTurtleItem::OnSimulateBegin()
 
 	//오디오 재생
 	AudioComp->Play();
+}
+
+void ARedTurtleItem::OnSensorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+
+
+	
 }
 
 void ARedTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
@@ -169,14 +204,17 @@ void ARedTurtleItem::Tick(const float DeltaTime)
 
 #pragma region 메시 회전
 
-	//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
-	MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
+	if (MoveComp->IsOnSimulate())
+	{
+		//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
+		MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
 
-	//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
-	const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
-	const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
-	const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
-	MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
+		//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
+		const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
+		const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);
+		const FQuat RotationQuat = FQuat::FindBetweenVectors(MeshComp->GetForwardVector(), SlerpDir);
+		MeshComp->AddWorldRotation(RotationQuat * DeltaTime);
+	}
 
 #pragma endregion
 

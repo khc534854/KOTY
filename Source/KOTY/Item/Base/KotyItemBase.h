@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "KotyItemBase.generated.h"
-
-//전방 선언
-class UKotyItemHoldComponent;
 
 UCLASS()
 class KOTY_API AKotyItemBase : public AActor
@@ -16,9 +15,6 @@ class KOTY_API AKotyItemBase : public AActor
 
 public:
 	AKotyItemBase();
-
-	UFUNCTION()
-	virtual void ApplyItemEffect(AActor* TargetActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAudioComponent> AudioComp;
@@ -31,6 +27,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundAttenuation> SoundAttenuation;
+
+	UFUNCTION()
+	virtual void ApplyItemEffect(AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable)
+	void RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp);

@@ -20,6 +20,10 @@ protected:
 public:
 	virtual void ApplyItemEffect(AActor* Player) override;
 
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> MeshComp;
 };

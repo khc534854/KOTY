@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item/Base/KotyItemBase.h"
 #include "ItemBox.generated.h"
 
 UCLASS()
-class KOTY_API AItemBox : public AActor
+class KOTY_API AItemBox : public AKotyItemBase
 {
 	GENERATED_BODY()
 
@@ -17,6 +18,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USphereComponent> SphereComp;
@@ -34,14 +37,6 @@ protected:
 	FVector RotateAxis;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<USoundBase> SelectSound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<USoundBase> DestroySound;
+	EItemList ItemCode;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<USoundAttenuation> SoundAttenuation;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };

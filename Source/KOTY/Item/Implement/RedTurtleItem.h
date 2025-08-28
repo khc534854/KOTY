@@ -19,13 +19,12 @@ protected:
 	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	virtual void ApplyItemEffect(AActor* OtherActor) override;
+	virtual void Tick(float DeltaTime) override;
 
-	virtual void OnSimulateBegin() override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USphereComponent> SensorComp;
 
-	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
-
-	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
+	FTimerHandle FindTargetHandle;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 RotationDir;
@@ -33,6 +32,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> MovingSound;
 
+	virtual void OnSimulateBegin() override;
+
+	UFUNCTION()
+	void OnSensorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
 public:
-	virtual void Tick(float DeltaTime) override;
+	virtual void ApplyItemEffect(AActor* OtherActor) override;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
+	
 };

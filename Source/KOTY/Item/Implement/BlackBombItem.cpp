@@ -2,7 +2,6 @@
 
 #include "BlackBombItem.h"
 #include "BlackBombExplosion.h"
-#include "Components/ArrowComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
@@ -76,6 +75,8 @@ void ABlackBombItem::BeginPlay()
 	TimelineComp->AddInterpFloat(CurveFloat, Callback);
 	TimelineComp->SetPlayRate(1/ExplosionDelay);
 	TimelineComp->SetLooping(false);
+
+	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
 }
 
 void ABlackBombItem::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -128,9 +129,9 @@ void ABlackBombItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	this->SetActorLocation(HoldComp->GetShootLocation());
 
 	//사출 속도
-	const FVector Forward = GetOwner()->GetActorForwardVector();
-	const FVector Right = GetOwner()->GetActorRightVector();
-	const FVector Shoot = Forward.RotateAngleAxis(45, Right);
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
 	const FVector Velocity = Shoot * 4500;
 
 	//사출
@@ -148,28 +149,25 @@ void ABlackBombItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 {
 	Super::OnLoseItem(HoldComp);
 
-	// //떼어내기
-	// this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	//
-	// //사출 속도
-	// const float Degree = FMath::RandRange(180, -180);
-	// const FVector Forward = GetOwner()->GetActorForwardVector();
-	// const FVector Right = GetOwner()->GetActorRightVector();
-	// const FVector Up = GetOwner()->GetActorUpVector();
-	// const FVector Shoot = Forward.RotateAngleAxis(45, Right).RotateAngleAxis(Degree, Up);
-	// const FVector Velocity = Shoot * 1500;
-	//
-	// //사출
-	// MoveComp->ThrowLinearDrag(
-	// 	true,
-	// 	FVector::DownVector,
-	// 	6000,
-	// 	5.0,
-	// 	4.0,
-	// 	Velocity,
-	// 	0.25);
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
 
-	this->Destroy();
+	//사출 속도
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
+	const FVector Velocity = Shoot * 1500;
+
+	//사출
+	MoveComp->ThrowLinearDrag(
+		true,
+		FVector::DownVector,
+		6000,
+		5.0,
+		4.0,
+		Velocity,
+		0.25);
 }
 
 void ABlackBombItem::Explode()
@@ -187,12 +185,4 @@ void ABlackBombItem::SetElapsedTime(const float TwistedTime) const
 {
 	//업데이트
 	MaterialInst->SetScalarParameterValue("ElapsedTime", TwistedTime);
-}
-
-void ABlackBombItem::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	//항상 바닥을 향하도록
-	MeshComp->AddRelativeRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
 }

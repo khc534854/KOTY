@@ -3,6 +3,7 @@
 #include "ItemBox.h"
 #include "Components/SphereComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -68,7 +69,7 @@ AItemBox::AItemBox()
 	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_ItemSelect.SW_ItemSelect"));
 		Finder.Succeeded())
 	{
-		SelectSound = Finder.Object;
+		UseSound = Finder.Object;
 	}
 
 	//아이템 사운드 감쇠 로드
@@ -103,22 +104,42 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 		UE_LOG(LogTemp, Log, TEXT("ItemBox Hit with Kart!"));
 
 		//플레이어의 경우
-		if (OtherHitComp->GetOwner() == PlayerPawn)
+		if (UKotyItemHoldComponent* OtherHoldComp = OtherActor->GetComponentByClass<UKotyItemHoldComponent>())
 		{
 			//아이템 선택 사운드 재생
-			if (SelectSound)
+			if (UseSound)
 			{
-				UGameplayStatics::PlaySound2D(GetWorld(), SelectSound, 1, 1, 0);	
+				UGameplayStatics::PlaySound2D(GetWorld(), UseSound, 1, 1, 0);	
 			}
 
-			//아이템 박스 파괴 사운드 재생
-			if (DestroySound)
+			//아이템 코드
+			switch (ItemCode)
 			{
-				UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+			case EItemList::Start:
+			case EItemList::End:
+			case EItemList::None:
+				{
+					//랜덤 아이템 부여
+					OtherHoldComp->GetRandomItem();
+					break;
+				}
+			default:
+				{
+					//특정 아이템 부여
+					OtherHoldComp->GetSpecifiedItem(ItemCode);
+					break;
+				};
 			}
-
-			this->Destroy();
 		}
+
+		//아이템 박스 파괴 사운드 재생
+		if (DestroySound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+		}
+
+		//이 아이템 박스 파괴
+		this->Destroy();
 	}
 }
 

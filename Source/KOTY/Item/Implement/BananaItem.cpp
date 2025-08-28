@@ -3,6 +3,8 @@
 #include "BananaItem.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
+#include "Item/Component/KotyMovementComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 ABananaItem::ABananaItem()
@@ -38,11 +40,71 @@ void ABananaItem::BeginPlay()
 	
 }
 
+void ABananaItem::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	//미끄러짐 효과 발생
+	if (const auto* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	{
+		//요청
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+	}
+}
+
 void ABananaItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
 
 	UE_LOG(LogTemp, Warning, TEXT("Banana Item Used by %s"), *TargetActor->GetName());
+}
 
-	Destroy();
+void ABananaItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnUseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+
+	//사출 속도
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
+	const FVector Velocity = Shoot * 4500;
+
+	//사출
+	MoveComp->ThrowLinearDrag(
+		true,
+		FVector::DownVector,
+		6000,
+		5.0,
+		4.0,
+		Velocity,
+		0.25);
+}
+
+void ABananaItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
+{
+	Super::OnLoseItem(HoldComp);
+
+	//떼어내기
+	this->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	this->SetActorLocation(HoldComp->GetShootLocation());
+
+	//사출 속도
+	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
+	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
+	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
+	const FVector Velocity = Shoot * 1500;
+
+	//사출
+	MoveComp->ThrowLinearDrag(
+		true,
+		FVector::DownVector,
+		6000,
+		5.0,
+		4.0,
+		Velocity,
+		0.25);
 }

@@ -25,6 +25,9 @@ APhysicItemBase::APhysicItemBase()
 	SphereComp->ShapeColor = FColor::Red;
 	HitComp->SetupAttachment(RootComponent);
 
+	//오디오 컴포넌트의 위치 재조정
+	AudioComp->SetupAttachment(SphereComp);
+
 	//아이템 무브먼트 컴포넌트 부착
 	MoveComp = CreateDefaultSubobject<UKotyMovementComponent>(TEXT("KotyMovement"));
 
@@ -43,6 +46,17 @@ APhysicItemBase::APhysicItemBase()
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), GroundHitSoundCue, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
 		}
 	});
+}
+
+void APhysicItemBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (MoveComp->IsOnSimulate())
+	{
+		//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
+		MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
+	}
 }
 
 void APhysicItemBase::OnSimulateBegin()

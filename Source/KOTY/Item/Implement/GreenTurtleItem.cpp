@@ -83,10 +83,8 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 		//오너를 대상으로 아이템 효과 적용
 		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
 
-		//델리게이트 전달
-		FItemEffect ItemEffectDelegate;
-		ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
-		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+		//요청
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
 		
 		//파괴
 		this->Destroy();
@@ -99,9 +97,6 @@ void AGreenTurtleItem::Tick(const float DeltaTime)
 
 	if (MoveComp->IsOnSimulate())
 	{
-		//메시 컴포넌트의 머리가 중력의 반대 방향을 향하도록 업데이트
-		MeshComp->AddWorldRotation(FQuat::FindBetweenVectors(MeshComp->GetUpVector(), -MoveComp->GetGravityDir()) * DeltaTime);
-
 		//메시 컴포넌트가 머리 방향을 축으로 회전하도록 업데이트
 		const FVector Dir = RotationDir ? MeshComp->GetRightVector() : MeshComp->GetRightVector() * -1;
 		const FVector SlerpDir = FVector::SlerpVectorToDirection(MeshComp->GetForwardVector(), Dir, 0.1);

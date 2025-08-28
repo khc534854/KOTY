@@ -8,24 +8,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemSpawner.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/BP_ItemSpawnerWithHoldComp.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BP_ItemSpawnerWithHoldComp.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/GreenTurtle/BP_GreenTurtleItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/GreenTurtle/BP_GreenTurtleItemFinal.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Mushroom/BP_BigMushroomItemFinal.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Mushroom/BP_SmallMushroomItemFinal.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/RedTurtle/BP_RedTurtleItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/RedTurtle/BP_RedTurtleItemFinal.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyMovementComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyMovementComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyMovementComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BigMushroomItem.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BigMushroomItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/ItemBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/ItemBox.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/ItemBox.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/ItemBox.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SmallMushroomItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SmallMushroomItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -264,6 +284,9 @@
       <workItem from="1756219946195" duration="2229000" />
       <workItem from="1756271136468" duration="994000" />
       <workItem from="1756284413567" duration="17471000" />
+      <workItem from="1756339317781" duration="4021000" />
+      <workItem from="1756348733085" duration="6601000" />
+      <workItem from="1756358803072" duration="13399000" />
     </task>
     <servers />
   </component>
@@ -277,20 +300,9 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
-          <option name="timeStamp" value="2" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
-          <option name="timeStamp" value="3" />
-        </breakpoint>
-      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="DotNet_Exception_Breakpoints" />
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">

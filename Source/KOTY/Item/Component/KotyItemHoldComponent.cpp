@@ -1,17 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "KotyItemHoldComponent.h"
-
 #include "Components/ArrowComponent.h"
-#include "Item/Implement/BananaItem.h"
-#include "Item/Implement/BigMushroomItem.h"
-#include "Item/Implement/BlackBombItem.h"
-#include "Item/Implement/CoinItem.h"
-#include "Item/Implement/GreenTurtleItem.h"
-#include "Item/Implement/RedTurtleItem.h"
-#include "Item/Implement/SmallMushroomItem.h"
-#include "Item/Implement/SquidItem.h"
-#include "Item/Implement/StarItem.h"
+#include "Item/Base/KotyItemBase.h"
 
 UKotyItemHoldComponent::UKotyItemHoldComponent()
 {
@@ -22,13 +13,34 @@ UKotyItemHoldComponent::UKotyItemHoldComponent()
 	//부착
 	ShootArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
 	ShootArrowComp->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+
+	//아이템 열거형 획득
+	if (const UEnum* ItemEnum = StaticEnum<EItemList>())
+	{
+		constexpr int32 Start = static_cast<int32>(EItemList::Start);
+		constexpr int32 End = static_cast<int32>(EItemList::End);
+		for (int32 i = Start + 1; i < End; i++)
+		{
+			//열거형 오브젝트에서 추출
+			FString EnumString = ItemEnum->GetNameStringByIndex(i);
+
+			//에셋 경로
+			FString AssetPath = FString::Printf(TEXT("/Game/Item/%s/BP_%sItemFinal.BP_%sItemFinal_C"), *EnumString, *EnumString, *EnumString);
+
+			//에셋 로드
+			if (ConstructorHelpers::FClassFinder<AKotyItemBase> Finder(*AssetPath);
+				Finder.Succeeded())
+			{
+				//배열에 추가
+				ItemClassArray.Add(Finder.Class);
+			}		
+		}
+	}
 }
 
 void UKotyItemHoldComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	DrawDebugPoint(GetWorld(), this->GetComponentLocation(), 50, FColor::Red, true);
 	
 	if (CodeOfHoldingItems[0] != EItemList::None)
 	{
@@ -37,6 +49,9 @@ void UKotyItemHoldComponent::BeginPlay()
 			StartRotatingAround(SpawnItem);	
 		}
 	}
+
+	//액터에 태그를 추가
+	GetOwner()->Tags.Add(FName("HasHoldComp"));
 }
 
 void UKotyItemHoldComponent::UpdateHoldingItemLocation(const float DeltaTime)
@@ -61,75 +76,26 @@ void UKotyItemHoldComponent::UpdateHoldingItemLocation(const float DeltaTime)
 
 AKotyItemBase* UKotyItemHoldComponent::SpawnItemByCode(const EItemList ItemCode) const
 {
-	FTransform SpawnTransform = this->GetOwner()->GetActorTransform();
-	
-	AKotyItemBase* SpawnItem = nullptr;
-	
+	//Fall-Through 스타일
 	switch (ItemCode)
 	{
 	case EItemList::Start:
-		{
-			UE_LOG(LogTemp, Error, TEXT("ItemCode is Invalid!"));
-			break;
-		}
-	case EItemList::Banana:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ABananaItem>(BananaItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::BigMushroom:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ABigMushroomItem>(BigMushroomClass, SpawnTransform);
-			break;
-		}
-	case EItemList::BlackBomb:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ABlackBombItem>(BlackBombClass, SpawnTransform);
-			break;
-		}
-	case EItemList::Coin:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ACoinItem>(CoinItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::GreenTurtle:
-		{
-			SpawnItem = GetWorld()->SpawnActor<AGreenTurtleItem>(GreenTurtleItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::RedTurtle:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ARedTurtleItem>(RedTurtleItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::SmallMushroom:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ASmallMushroomItem>(SmallMushroomItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::Squid:
-		{
-			SpawnItem = GetWorld()->SpawnActor<ASquidItem>(SquidItemClass, SpawnTransform);
-			break;
-		}
-	case EItemList::Star:
-		{
-			SpawnItem = GetWorld()->SpawnActor<AStarItem>(StarItemClass, SpawnTransform);
-			break;
-		}
 	case EItemList::End:
-		{
-			UE_LOG(LogTemp, Error, TEXT("ItemCode is Invalid!"));
-			break;
-		}
 	case EItemList::None:
 		{
+			//예외 상황에 대한 처리
 			UE_LOG(LogTemp, Error, TEXT("ItemCode is Invalid!"));
-			break;
+			return nullptr;
 		}
-	default: UE_LOG(LogTemp, Error, TEXT("ItemCode is Invalid!"));
+	default:
+		{
+			//유효 상황에 대한 처리
+			UE_LOG(LogTemp, Log, TEXT("ItemCode is Valid!"));
+			TSubclassOf<AKotyItemBase> Target = ItemClassArray[static_cast<int32>(ItemCode) - 1];
+			const FTransform SpawnTransform = this->GetOwner()->GetActorTransform();
+			return GetWorld()->SpawnActor<AKotyItemBase>(Target, SpawnTransform);
+		}
 	}
-	return SpawnItem;
 }
 
 void UKotyItemHoldComponent::StartRotatingAround(AKotyItemBase* SpawnItem)
@@ -159,14 +125,39 @@ FVector UKotyItemHoldComponent::GetShootLocation() const
 
 void UKotyItemHoldComponent::GetRandomItem()
 {
+	//랜덤으로 뽑은 하나의 아이템
+	int Dice = FMath::RandRange(
+		static_cast<int32>(EItemList::Start) + 1,
+		static_cast<int32>(EItemList::End) - 1);
+	const EItemList ItemCode = static_cast<EItemList>(Dice);
+	UE_LOG(LogTemp, Log, TEXT("%d"), ItemCode);
+	
 	if (CodeOfHoldingItems[0] == EItemList::None)
 	{
-		//랜덤으로 뽑은 하나의 아이템
-		int Dice = FMath::RandRange(
-			static_cast<int32>(EItemList::End) + 1,
-			static_cast<int32>(EItemList::End) - 1);
-		const EItemList ItemCode = static_cast<EItemList>(Dice);
+		//아이템 생성 성공
+		if (AKotyItemBase* SpawnItem = SpawnItemByCode(ItemCode))
+		{
+			StartRotatingAround(SpawnItem);
+			CodeOfHoldingItems[0] = ItemCode;
+		}
 
+		//아이템 획득 사실 전파
+		OnGetItemEventDispatcher.Broadcast(ItemCode);
+	}
+	else if (CodeOfHoldingItems[1] == EItemList::None)
+	{
+		//아이템 코드만 저장
+		CodeOfHoldingItems[1] = ItemCode;
+
+		//아이템 획득 사실 전파
+		OnGetItemEventDispatcher.Broadcast(ItemCode);
+	}
+}
+
+void UKotyItemHoldComponent::GetSpecifiedItem(const EItemList ItemCode)
+{
+	if (CodeOfHoldingItems[0] == EItemList::None)
+	{
 		//아이템 생성 성공
 		if (AKotyItemBase* SpawnItem = SpawnItemByCode(ItemCode))
 		{
@@ -176,12 +167,6 @@ void UKotyItemHoldComponent::GetRandomItem()
 	}
 	else if (CodeOfHoldingItems[1] == EItemList::None)
 	{
-		//랜덤으로 뽑은 하나의 아이템
-		int Dice = FMath::RandRange(
-			static_cast<int32>(EItemList::End) + 1,
-			static_cast<int32>(EItemList::End) - 1);
-		const EItemList ItemCode = static_cast<EItemList>(Dice);
-
 		//아이템 코드만 저장
 		CodeOfHoldingItems[1] = ItemCode;
 	}

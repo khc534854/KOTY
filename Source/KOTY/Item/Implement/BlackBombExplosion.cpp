@@ -90,9 +90,7 @@ void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
 
 		//델리게이트 전달
-		FItemEffect ItemEffectDelegate;
-		ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
-		OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
 	}
 }
 

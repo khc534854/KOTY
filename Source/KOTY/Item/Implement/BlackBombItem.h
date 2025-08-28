@@ -22,10 +22,6 @@ protected:
 
 	virtual void OnSimulateBegin() override;
 
-	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
-
-	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMaterialInstanceDynamic> MaterialInst;
 
@@ -55,8 +51,9 @@ protected:
 	
 	UFUNCTION()
 	void SetElapsedTime(float TwistedTime) const;
+
+	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
+
+	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
 	
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };
