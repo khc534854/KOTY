@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "NiagaraComponent.h"
 #include "C_KartBase.generated.h"
@@ -216,16 +215,30 @@ protected:
 	float DriftTime = 0;
 
 public:
-	// 스플라인 옮기기
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//AActor* WorldSplineActor;
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//class USplineComponent* SplineComponent;
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//int32 MaxProgressPointIndex = 0;
+
+	// spline / Rank
+	UFUNCTION(BlueprintCallable)
+	int32 FindClosestSplinePointIndex(const FVector& WorldLocation);
+
+	UFUNCTION()
+	void CheckSpline();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USplineComponent* SplineComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxProgressPointIndex = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurrentLap = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurRank = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double LastProgressUpdateTime = 0.0f;
+	
+	// suspension	
 	float suspensioningTime = 0.f;
 	bool bIsSuspending = false;
 	float SuspensionTime = 0.5f;

@@ -15,12 +15,22 @@ class KOTY_API UC_EndWidget : public UUserWidget
 	GENERATED_BODY()
 
 	virtual void NativeConstruct() override;
+	
+public:
+	void SetCurrentTime(float CurTime);
+	void SetBestTime(float NewBestTime);
 
 	
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* VB_RankBox;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* CurrentTime;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* BestTime;
+	
 	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
 	class UWidgetAnimation* ANIM_Rank;
 

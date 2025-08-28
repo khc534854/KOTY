@@ -49,17 +49,19 @@ public:
 	void DriftEnd(const FInputActionValue& Value);
 	void Mushroom(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintCallable)
-	int32 FindClosestSplinePointIndex(const FVector& WorldLocation);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* WorldSplineActor;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USplineComponent* SplineComponent;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxProgressPointIndex = 0;
+	// // spline
+	// UFUNCTION(BlueprintCallable)
+	// int32 FindClosestSplinePointIndex(const FVector& WorldLocation);
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// AActor* WorldSplineActor;
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// class USplineComponent* SplineComponent;
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// int32 MaxProgressPointIndex = 0;
 	
 public:
 	// Camera
@@ -90,5 +92,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* AddSpeedAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	class UAnimMontage* WinMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	class UAnimMontage* LoseMontage;
 
 };

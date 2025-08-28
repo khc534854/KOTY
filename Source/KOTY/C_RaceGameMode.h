@@ -35,4 +35,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	RaceLevelState CurrentState = RaceLevelState::Cinematic;
+
+	void MySaveGame(); 
+	void MyLoadGame(int32 defaultHighScore = 5999.99f);
+
+	FString SaveSlotName = TEXT("BEST_TIME");
+	int32   SaveUserindex = 0;
+	
+	float CurrentTime = 0;
+	float BestTime    = 0;
 };

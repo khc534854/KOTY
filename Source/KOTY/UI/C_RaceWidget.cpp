@@ -27,7 +27,65 @@ void UC_RaceWidget::ChangeImg(UImage* TargetImg, FString Resource)
 	brush.SetImageSize(NewTexture->GetImportedSize());
 	brush.SetResourceObject(NewTexture);
 		
-	IMG_Ready->SetBrush(brush);
+	TargetImg->SetBrush(brush);
+}
+
+void UC_RaceWidget::ChangeItemImg(int32 SlotNum, int32 ItemNum)
+{
+	if (SlotNum == 0)
+	{
+		FSlateBrush brush = IMG_FirstItem->GetBrush();
+	
+		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[ItemNum]);
+	
+		brush.SetImageSize(NewTexture->GetImportedSize());
+		brush.SetResourceObject(NewTexture);
+		
+		IMG_FirstItem->SetBrush(brush);
+	}
+	else if (SlotNum == 1)
+	{
+		FSlateBrush brush = IMG_SecondItem->GetBrush();
+	
+		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[ItemNum]);
+	
+		brush.SetImageSize(NewTexture->GetImportedSize());
+		brush.SetResourceObject(NewTexture);
+		
+		IMG_SecondItem->SetBrush(brush);
+	}
+}
+
+void UC_RaceWidget::ChangeUsingItemImg()
+{
+	// 아이템 없을때
+	if (IMG_FirstItem->GetBrush().GetResourceName() == FName("M_Empty"))
+	{
+		return;
+	}
+	else if (IMG_SecondItem->GetBrush().GetResourceName() == FName("M_Empty"))//아이템 하나있을때
+	{
+		FSlateBrush brush = IMG_FirstItem->GetBrush();
+	
+		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[11]);
+	
+		brush.SetImageSize(NewTexture->GetImportedSize());
+		brush.SetResourceObject(NewTexture);
+		
+		IMG_FirstItem->SetBrush(brush);
+	}
+	else // 아이템 2개 있을때
+	{
+		// 2번 아이템 텍스처 1번으로
+		FSlateBrush brush = IMG_SecondItem->GetBrush();
+		IMG_FirstItem->SetBrush(brush);
+		
+		//2번 아이템 텍스처 none으로
+		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[11]);
+		brush.SetImageSize(NewTexture->GetImportedSize());
+		brush.SetResourceObject(NewTexture);
+		IMG_SecondItem->SetBrush(brush);
+	}
 }
 
 void UC_RaceWidget::ChangeLaps()
@@ -39,4 +97,16 @@ void UC_RaceWidget::ChangeLaps()
 	
 	FString t = FString::Printf(TEXT("%d/%d"), CurLaps, MaxLaps);
 	TXT_Laps->SetText(FText::FromString(t));
+}
+
+void UC_RaceWidget::ChangeRank(int32 CurRank)
+{
+	FSlateBrush brush = IMG_CurRank->GetBrush();
+	
+	NewTexture = LoadObject<UTexture2D>(nullptr, *RankResourceList[CurRank]);
+	
+	brush.SetImageSize(NewTexture->GetImportedSize());
+	brush.SetResourceObject(NewTexture);
+		
+	IMG_CurRank->SetBrush(brush);
 }

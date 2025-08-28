@@ -11,6 +11,7 @@
 /**
  * 
  */
+
 UCLASS()
 class KOTY_API UC_RaceWidget : public UUserWidget
 {
@@ -22,9 +23,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeImg(UImage* TargetImg, FString Resource);
+	
+	UFUNCTION(BlueprintCallable)
+	void ChangeItemImg(int32 SlotNum, int32 ItemNum);
 
 	UFUNCTION(BlueprintCallable)
+	void ChangeUsingItemImg();
+	
+	UFUNCTION(BlueprintCallable)
 	void ChangeLaps();
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeRank(int32 CurRank);
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Ready;
@@ -89,4 +99,10 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MaxLaps = 2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FString> ItemResourceList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FString> RankResourceList;
 };

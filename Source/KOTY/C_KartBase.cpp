@@ -8,6 +8,8 @@
 #include "Components/SplineComponent.h"
 #include "Utility/C_MathUtility.h"
 #include "C_RaceGameMode.h"
+#include "Gimmick/C_RaceManager.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -51,7 +53,12 @@ void AC_KartBase::BeginPlay()
 {
 	Super::BeginPlay();
 	GamemodeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
-	
+
+	AC_RaceManager* RaceManager = Cast<AC_RaceManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AC_RaceManager::StaticClass()));
+	if (RaceManager)
+	{
+		RaceManager->RegisterKart(this);
+	}
 }
 
 // Called every frame
@@ -60,6 +67,7 @@ void AC_KartBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckIsGround();
+	CheckSpline();
 	
 	if (bIsGround)
 	{
@@ -70,10 +78,10 @@ void AC_KartBase::Tick(float DeltaTime)
 		SetFlyVelocity();
 	}
 
-	if (bIsSuspending)
-	{
-		UpdateSuspension(DeltaTime);
-	}
+	// if (bIsSuspending)
+	// {
+	// 	UpdateSuspension(DeltaTime);
+	// }
 
 	FHitResult Hit;
 	FVector NewLocation;
@@ -669,35 +677,59 @@ void AC_KartBase::UpdateStunEffect(float DeltaTime)
 	}
 }
 
-// int32 AC_KartBase::FindClosestSplinePointIndex(const FVector& WorldLocation)
-// {
-// 	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
-// 	{
-// 		// 스플라인이 없거나 포인트가 없으면 유효하지 않은 인덱스 반환
-// 		return -1;
-// 	}
-//
-// 	int32 ClosestPointIndex = -1;
-// 	float MinDistanceSquared = -1.f;
-//
-// 	const int32 PointCount = SplineComponent->GetNumberOfSplinePoints();
-// 	// 0번부터 마지막 포인트까지 순회
-// 	for (int32 i = 0; i < PointCount; ++i)
-// 	{
-// 		// i번째 스플라인 포인트의 월드 위치를 가져옴
-// 		const FVector PointLocation = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
-//         
-// 		// 입력된 월드 위치와의 거리 제곱을 계산
-// 		const float DistanceSquared = FVector::DistSquared(WorldLocation, PointLocation);
-//
-// 		// 첫 번째 포인트이거나, 이전에 찾은 최소 거리보다 현재 거리가 더 짧으면 정보 갱신
-// 		if (ClosestPointIndex == -1 || DistanceSquared < MinDistanceSquared)
-// 		{
-// 			MinDistanceSquared = DistanceSquared;
-// 			ClosestPointIndex = i;
-// 		}
-// 	}
-//
-// 	return ClosestPointIndex;
-// }
+int32 AC_KartBase::FindClosestSplinePointIndex(const FVector& WorldLocation)
+{
+	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
+	{
+		// 스플라인이 없거나 포인트가 없으면 유효하지 않은 인덱스 반환
+		return -1;
+	}
+
+	int32 ClosestPointIndex = -1;
+	float MinDistanceSquared = -1.f;
+
+	const int32 PointCount = SplineComponent->GetNumberOfSplinePoints();
+	// 0번부터 마지막 포인트까지 순회
+	for (int32 i = 0; i < PointCount; ++i)
+	{
+		// i번째 스플라인 포인트의 월드 위치를 가져옴
+		const FVector PointLocation = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
+        
+		// 입력된 월드 위치와의 거리 제곱을 계산
+		const float DistanceSquared = FVector::DistSquared(WorldLocation, PointLocation);
+
+		// 첫 번째 포인트이거나, 이전에 찾은 최소 거리보다 현재 거리가 더 짧으면 정보 갱신
+		if (ClosestPointIndex == -1 || DistanceSquared < MinDistanceSquared)
+		{
+			MinDistanceSquared = DistanceSquared;
+			ClosestPointIndex = i;
+		}
+	}
+
+	return ClosestPointIndex;
+}
+
+void AC_KartBase::CheckSpline()
+{
+	if (SplineComponent)
+	{
+		int32 ClosestIndex = FindClosestSplinePointIndex(GetActorLocation());
+		if (MaxProgressPointIndex == 0)
+		{
+			if (ClosestIndex == 20 || ClosestIndex == 19)
+				return;
+		}
+	
+		// ✨ 핵심: 새로 찾은 포인트가 이전에 도달했던 최대 진행도보다 크거나 같을 때만 인정
+		if (ClosestIndex > MaxProgressPointIndex)
+		{
+			// 정주행으로 인정하고, 최대 진행도를 갱신합니다.
+			MaxProgressPointIndex = ClosestIndex;
+			LastProgressUpdateTime = GetWorld()->TimeSeconds;
+		}
+		else
+		{
+		}
+	}
+}
 

@@ -66,9 +66,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentReadyTime = -1.f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float BestTime;
-
 	UPROPERTY()
 	class AC_StartLakitu* StartLakituRef;
 

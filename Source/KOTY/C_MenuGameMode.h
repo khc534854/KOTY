@@ -42,4 +42,5 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	MenuType BeforeMenu;
+	
 };

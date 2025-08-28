@@ -13,6 +13,9 @@
 #include "Gimmick/C_StartLakitu.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/C_EndWidget.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/SkeletalMeshActor.h"
 
 void AC_PlayerController::BeginPlay()
 {
@@ -99,7 +102,7 @@ void AC_PlayerController::SetFinished()
 	LatentInfo.CallbackTarget = this;
 	LatentInfo.ExecutionFunction = FName("ChangeCamera");
 	LatentInfo.Linkage = 0; 
-	LatentInfo.UUID = GetUniqueID(); 
+	LatentInfo.UUID = GetUniqueID();
 	
 	UKismetSystemLibrary::Delay(
 		this,       // 월드 컨텍스트 오브젝트
@@ -168,11 +171,41 @@ void AC_PlayerController::ChangeCamera()
 			}
 		}, 1.5f, false);
 	}
-
+	
 	CurrentHUD->RemoveFromParent();
-
 	EndHUD->AddToViewport();
+
+	//save 처리
+	if (RaceGameModeRef->BestTime > CurrentRaceTime)
+	{
+		RaceGameModeRef->BestTime = CurrentRaceTime;
+		RaceGameModeRef->MySaveGame();
+	}
+	
+	EndHUD->SetCurrentTime(CurrentRaceTime);
+	EndHUD->SetBestTime(RaceGameModeRef->BestTime);
+	
+
+	
 	EndHUD->PlayAnimation(EndHUD->ANIM_Rank);
+	
+	if (IsValid(PlayerKartRef))
+	{
+		TArray<USkeletalMeshComponent*> SKMesh;
+		PlayerKartRef->GetComponents<USkeletalMeshComponent>(SKMesh);
+
+		for (USkeletalMeshComponent* Child : SKMesh)
+		{
+			if (IsValid(Child))
+			{
+				if (PlayerKartRef->CurRank == 0)
+					Child->PlayAnimation(PlayerKartRef->WinMontage, true);
+				else
+					Child->PlayAnimation(PlayerKartRef->LoseMontage, true);
+			}
+
+		}
+	}
 }
 
 void AC_PlayerController::CheckBoostState()
