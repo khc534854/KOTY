@@ -7,7 +7,7 @@
 #include "ItemBox.generated.h"
 
 UCLASS()
-class KOTY_API AItemBox : public AKotyItemBase
+class KOTY_API AItemBox : public AActor
 {
 	GENERATED_BODY()
 
@@ -29,6 +29,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> FontMeshComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAudioComponent> AudioComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> UseSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> DestroySound;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundAttenuation> SoundAttenuation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<APawn> PlayerPawn;

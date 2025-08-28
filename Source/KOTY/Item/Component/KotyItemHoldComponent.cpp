@@ -137,8 +137,14 @@ void UKotyItemHoldComponent::GetRandomItem()
 		//아이템 생성 성공
 		if (AKotyItemBase* SpawnItem = SpawnItemByCode(ItemCode))
 		{
+			//회전 시작
 			StartRotatingAround(SpawnItem);
+
+			//아이템 코드 저장
 			CodeOfHoldingItems[0] = ItemCode;
+
+			//소유자
+			SpawnItem->ItemOwningActor = GetOwner();
 		}
 
 		//아이템 획득 사실 전파
@@ -161,8 +167,14 @@ void UKotyItemHoldComponent::GetSpecifiedItem(const EItemList ItemCode)
 		//아이템 생성 성공
 		if (AKotyItemBase* SpawnItem = SpawnItemByCode(ItemCode))
 		{
+			//아이템 회전
 			StartRotatingAround(SpawnItem);
+
+			//아이템 코드 저장
 			CodeOfHoldingItems[0] = ItemCode;
+
+			//소유자
+			SpawnItem->ItemOwningActor = GetOwner();
 		}	
 	}
 	else if (CodeOfHoldingItems[1] == EItemList::None)
@@ -191,13 +203,17 @@ void UKotyItemHoldComponent::UseCurrentItem()
 		CodeOfHoldingItems[1] = EItemList::None;
 	}
 
-	//유효한 코드를 가졌다면
+	//유효한 코드를 가졌다면 2번째에 있던 아이템이 있었다는 의미
 	if (CodeOfHoldingItems[0] != EItemList::None)
 	{
 		//아이템 생성 성공
 		if (AKotyItemBase* SpawnItem = SpawnItemByCode(CodeOfHoldingItems[0]))
 		{
+			//아이템 회전
 			StartRotatingAround(SpawnItem);
+
+			//소유자
+			SpawnItem->ItemOwningActor = GetOwner();
 		}
 	}
 }

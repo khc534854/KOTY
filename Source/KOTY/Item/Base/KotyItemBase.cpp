@@ -44,6 +44,9 @@ void AKotyItemBase::OnUseItem(UKotyItemHoldComponent* HoldComp)
 
 void AKotyItemBase::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 {
+	//소유 액터가 없어진다
+	ItemOwningActor = nullptr;
+	
 	//일반 아이템의 경우 바로 잃어버림
 	//물리 아이템의 경우 랜덤 방향으로 사출
 }

@@ -47,6 +47,16 @@ void AMushroomSmallItem::BeginPlay()
 void AMushroomSmallItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+
+	if (MoveComp->IsOnSimulate())
+	{
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//요청
+			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+		}	
+	}
 }
 
 void AMushroomSmallItem::OnSimulateBegin()

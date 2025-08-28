@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ItemBox.h"
+
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
@@ -29,6 +31,19 @@ AItemBox::AItemBox()
 	FontMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FontMeshComp"));
 	FontMeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	FontMeshComp->SetupAttachment(GetRootComponent());
+
+	//아이템 사운드 감쇠 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundAttenuation> Finder(TEXT("/Game/Item/Sound/SA_Item.SA_Item"));
+		Finder.Succeeded())
+	{
+		SoundAttenuation = Finder.Object;
+	}
+	
+	//오디오 컴포넌트 부착
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+	AudioComp->SetAutoActivate(false);
+	AudioComp->SetAttenuationSettings(SoundAttenuation);
+	AudioComp->SetupAttachment(RootComponent);
 
 	//스태틱 메시 로드
 	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/ItemBox/Model/SM_ItemBox.SM_ItemBox"));

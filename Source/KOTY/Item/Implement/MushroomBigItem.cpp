@@ -50,11 +50,14 @@ void AMushroomBigItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	//미끄러짐 효과 발생
-	if (const auto* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	if (MoveComp->IsOnSimulate())
 	{
-		//요청
-		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//요청
+			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+		}	
 	}
 }
 

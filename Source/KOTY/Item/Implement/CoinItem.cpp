@@ -69,7 +69,7 @@ void ACoinItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 {
 	Super::OnUseItem(HoldComp);
 
-	//무적 효과 발생
+	//최고 속도 상승 효과 발생
 	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
 	{
 		FItemEffect ItemEffectDelegate;

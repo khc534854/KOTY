@@ -70,24 +70,27 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	//충돌 상대가 다른 아이템이었다
-	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+	if (MoveComp->IsOnSimulate())
 	{
-		this->Destroy();
-		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
-	}
+		//충돌 상대가 다른 아이템이었다
+		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+		{
+			this->Destroy();
+			UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+		}
 
-	//충돌 상대가 아이템 충돌체였다
-	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
-	{
-		//오너를 대상으로 아이템 효과 적용
-		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//오너를 대상으로 아이템 효과 적용
+			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
 
-		//요청
-		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+			//요청
+			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
 		
-		//파괴
-		this->Destroy();
+			//파괴
+			this->Destroy();
+		}	
 	}
 }
 

@@ -83,6 +83,13 @@ void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	//충돌 상대가 다른 아이템이었다
+	if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+	{
+		OtherItem->Destroy();
+		UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
+	}
+
 	//충돌 상대가 아이템 충돌체였다
 	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 	{

@@ -59,11 +59,6 @@ ARedTurtleItem::ARedTurtleItem()
 	//오디오 컴포넌트 초기화
 	AudioComp->SetSound(MovingSound);
 	AudioComp->SetAttenuationSettings(SoundAttenuation);
-
-	//센서로 사용하는 스피어 컴포넌트 부착
-	SensorComp = CreateDefaultSubobject<USphereComponent>(TEXT("SensorComp"));
-	SensorComp->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-	SensorComp->SetupAttachment(GetRootComponent());
 }
 
 void ARedTurtleItem::BeginPlay()
@@ -73,37 +68,11 @@ void ARedTurtleItem::BeginPlay()
 	//델리게이트 등록
 	MoveComp->OnSimulateBeginEventDispatcher.AddUFunction(this, FName("OnSimulateBegin"));
 
+	//센서 콜백 등록
 	SensorComp->OnComponentBeginOverlap.AddDynamic(this, &ARedTurtleItem::OnSensorOverlap);
-}
 
-void ARedTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
-{
-	Super::NotifyActorBeginOverlap(OtherActor);
-
-	if (MoveComp->IsOnSimulate())
-	{
-		//충돌 상대가 다른 아이템이었다
-		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
-		{
-			UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
-			this->Destroy();
-		}
-
-		//충돌 상대가 아이템 충돌체였다
-		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
-		{
-			//오너를 대상으로 아이템 효과 적용
-			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
-
-			//델리게이트 전달
-			FItemEffect ItemEffectDelegate;
-			ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
-			OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
-
-			//파괴
-			this->Destroy();
-		}	
-	}
+	//충돌 콜백 등록
+	HitComp->OnComponentBeginOverlap.AddDynamic(this, &ARedTurtleItem::OnHitOverlap);
 }
 
 void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
@@ -120,29 +89,6 @@ void ARedTurtleItem::OnSimulateBegin()
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("GroundTrackingSpline"), GroundTrackingSpline);
 	if (GroundTrackingSpline.IsEmpty() == false)
 		SplineComp = GroundTrackingSpline[FMath::RandRange(0, GroundTrackingSpline.Num() - 1)]->GetComponentByClass<USplineComponent>();
-
-	//1초마다 목표를 탐색
-	GetWorldTimerManager().SetTimer(FindTargetHandle, [this]()
-	{
-		//충돌체를 가진 액터 중 랜덤으로 하나
-		TArray<AActor*> OverlappingActors;
-		SensorComp->GetOverlappingActors(OverlappingActors);
-		for (auto Actor : OverlappingActors)
-		{
-			//자신은 제외
-			if (Actor == GetOwner())
-			{
-				continue;
-			}
-
-			//목표를 찾았으므로
-			if (Actor->ActorHasTag(FName("HasHitComp")))
-			{
-				TargetActor = Actor;
-				GetWorldTimerManager().ClearTimer(FindTargetHandle);
-			}
-		}
-	}, 1.0, true);
 	
 	//사용 사운드 재생
 	if (UseSound)
@@ -155,14 +101,6 @@ void ARedTurtleItem::OnSimulateBegin()
 
 	//오디오 재생
 	AudioComp->Play();
-}
-
-void ARedTurtleItem::OnSensorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-	bool bFromSweep, const FHitResult& SweepResult)
-{
-
-
-	
 }
 
 void ARedTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
@@ -259,4 +197,75 @@ void ARedTurtleItem::Tick(const float DeltaTime)
 
 #pragma endregion 
 	
+}
+
+void ARedTurtleItem::OnSensorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnSensorOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	//센서와 콜라이더의 오버랩
+	if (OtherActor == this)
+	{
+		return;
+	}
+	
+	if (MoveComp->IsOnSimulate())
+	{
+		//이미 목표가 있다
+		if (TargetActor)
+		{
+			return;
+		}
+
+		//오버랩 액터가 사실은 이 아이템을 소유 중인 액터다
+		if (TargetActor == ItemOwningActor)
+		{
+			return;
+		}
+
+		//아직 목표가 없는데 조건을 만족하는 액터를 발견했다면
+		if (OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//목표로 삼는다
+			TargetActor = OtherActor;
+		}
+	}
+}
+
+void ARedTurtleItem::OnHitOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnHitOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	//센서와 콜라이더의 오버랩
+	if (OtherActor == this)
+	{
+		return;
+	}
+	
+	if (MoveComp->IsOnSimulate())
+	{
+		//충돌 상대가 다른 아이템이었다
+		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+		{
+			UE_LOG(LogTemp, Log, TEXT("%s Item hit with %s!"), *this->GetName(), *OtherItem->GetName());
+			this->Destroy();
+		}
+
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//오너를 대상으로 아이템 효과 적용
+			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
+
+			//델리게이트 전달
+			FItemEffect ItemEffectDelegate;
+			ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
+			OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
+
+			//파괴
+			this->Destroy();
+		}	
+	}
 }

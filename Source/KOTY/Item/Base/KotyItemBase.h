@@ -28,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundAttenuation> SoundAttenuation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<AActor> ItemOwningActor;
+
 	UFUNCTION()
 	virtual void ApplyItemEffect(AActor* TargetActor);
 
