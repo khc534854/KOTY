@@ -70,5 +70,10 @@ public:
 	class AC_StartLakitu* StartLakituRef;
 
 	int32 CountdownState = 0;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, USoundWave*> SoundData;
+
+	UPROPERTY()
+	UAudioComponent* CurrentBGMComponent;
 };

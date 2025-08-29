@@ -16,6 +16,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/SkeletalMeshActor.h"
+#include "Components/AudioComponent.h"
 
 void AC_PlayerController::BeginPlay()
 {
@@ -92,6 +93,9 @@ void AC_PlayerController::SetFinished()
 	CurrentHUD->IMG_Ready->SetVisibility(ESlateVisibility::Visible);
 	CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Finish);
 	CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Finish);
+	UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("GoalIn")));
+	CurrentBGMComponent->FadeOut(0.5f, 0);
+	
 
 	UPlayerInput* PlayerInputObject = this->PlayerInput;
 	
@@ -103,6 +107,7 @@ void AC_PlayerController::SetFinished()
 	LatentInfo.ExecutionFunction = FName("ChangeCamera");
 	LatentInfo.Linkage = 0; 
 	LatentInfo.UUID = GetUniqueID();
+
 	
 	UKismetSystemLibrary::Delay(
 		this,       // 월드 컨텍스트 오브젝트
@@ -120,12 +125,14 @@ void AC_PlayerController::CheckReadyState()
 		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(1, StartLakituRef->StartLakituRed);
 		CountdownState = 1;
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("Ready321")));
 	}
 	else if (CurrentReadyTime < 2 &&  CurrentReadyTime >= 1 && CountdownState == 1)
 	{
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_Two);
 		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(4, StartLakituRef->StartLakituRed);
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("Ready321")));
 		CountdownState = 2;
 	}
 	else if (CurrentReadyTime < 3 &&  CurrentReadyTime >= 2 && CountdownState == 2)
@@ -133,6 +140,7 @@ void AC_PlayerController::CheckReadyState()
 		CurrentHUD->ChangeImg(CurrentHUD->IMG_Ready, CurrentHUD->IMG_One);
 		CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Ready);
 		StartLakituRef->StartLakitu->SetMaterial(5, StartLakituRef->StartLakituRed);
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("Ready321")));
 		CountdownState = 3;
 	}
 	else if (CurrentReadyTime < 4 &&  CurrentReadyTime >= 3 && CountdownState == 3)
@@ -143,7 +151,11 @@ void AC_PlayerController::CheckReadyState()
 		StartLakituRef->StartLakitu->SetMaterial(4, StartLakituRef->StartLakituGreen);
 		StartLakituRef->StartLakitu->SetMaterial(5, StartLakituRef->StartLakituGreen);
 		RaceGameModeRef->CurrentState = RaceLevelState::Play;
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("ReadyGo")));
 		PlayerKartRef->StartAddSpeed(3000.f);
+
+		CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("MapBGM")));
+		CurrentBGMComponent->FadeIn(0.5f);
 		CountdownState = 4;
 	}
 }
@@ -152,7 +164,9 @@ void AC_PlayerController::ChangeCamera()
 {
 	const FVector PrevCameraLocation = PlayerKartRef->Camera->GetComponentLocation();
 	const FRotator PrevCameraRotation = PlayerKartRef->Camera->GetComponentRotation();
-	
+	UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("GoalInFinish")));
+	CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("MenuBGM")));
+	CurrentBGMComponent->FadeIn(2.f);
 	ACameraActor* TempCamera = GetWorld()->SpawnActor<ACameraActor>(PrevCameraLocation, PrevCameraRotation);
 	if (TempCamera)
 	{
