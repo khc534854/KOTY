@@ -14,80 +14,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
+    <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="변경">
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/AI_Player/AiKartController.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/KOTY/AI_Player/AiKartController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/Body__m_Body.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/Body__m_Eye.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/M_Eye.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/Pupil__m_PupilL.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/Pupil__m_PupilR.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/SKM_ST_Mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/SK_ST_Mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/ST_Mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_mario_alb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_marioeye_alb_0.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_mariopupil_alb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/bake_mario_g00_b00_f00.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_alb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_nrm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_spm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_0.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_10.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_5.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_6.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_7.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_8.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_9.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_0.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_10.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_5.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_6.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_7.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_8.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_9.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_0.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_10.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_5.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_6.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_7.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_8.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_9.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_alb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_nrm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_spm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_Anim.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_PhysicsAsset.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_Skeleton.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Driving.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Throw.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Throw_Montage.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body01_col.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body01_spe.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_col.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_env.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_spe.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mat_mario.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mat_mario_button.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/textures/mario_body01_col.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/textures/mario_body02_col.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiKartNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiKartNew.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/Kart/Vehicles/BP_AiTestKart1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI_Player/TestLevel/TestTrack.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI_Player/TestLevel/TestTrack.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Yoshi_Kart/node_ID27_mesh0.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Yoshi_Kart/node_ID27_mesh0.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/AI_Player/AIKartNew.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/AI_Player/AIKartNew.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/AI_Player/AIKartNew.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/AI_Player/AIKartNew.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/AI_Player/MyC_AI_KartBase.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/AI_Player/MyC_AI_KartBase.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/KOTY.Build.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,29 +47,35 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Developer/AssetTools/Private/AssetHeaderPatcher.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Developer/AutomationWindow/Private/SAutomationTestItem.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Containers/Array.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Containers/UnrealString.h.inl" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/World.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/AutomationTool/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/AIModule/Classes/AIController.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/AIModule/Classes/AITypes.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Logging/LogVerbosity.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Core/Public/Math/UnrealMathUtility.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/AssetRegistry/AssetDataTagMap.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/Templates/Casts.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/Class.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Components/SceneComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/Pawn.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SceneComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/Components/SplineComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/PrimitiveComponentPhysics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/UnrealEditor.Target.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.6/Engine/Source/UnrealGame.Target.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -145,7 +94,7 @@
     &quot;Notification.DoNotAsk-Rider&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;BSJ&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -156,7 +105,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="C/C++ 프로젝트.KOTY">
+  <component name="RunManager" selected="C/C++ Project.KOTY">
     <configuration name="KOTY" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
         <option name="CONFIGURATION" value="Development_Editor" />
@@ -246,13 +195,6 @@
         <option name="Build" />
       </method>
     </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile (1)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -286,6 +228,13 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
@@ -315,17 +264,12 @@
       <workItem from="1755275282188" duration="1708000" />
       <workItem from="1755485138104" duration="12052000" />
       <workItem from="1755674459267" duration="12483000" />
-      <workItem from="1755839921247" duration="54025000" />
-      <workItem from="1756271509957" duration="2000" />
-      <workItem from="1756341389487" duration="1729000" />
-      <workItem from="1756348704382" duration="6801000" />
-      <workItem from="1756361161091" duration="16379000" />
-      <workItem from="1756387617708" duration="1000" />
-      <workItem from="1756426287173" duration="10769000" />
-      <workItem from="1756444484227" duration="4883000" />
-      <workItem from="1756457590453" duration="347000" />
-      <workItem from="1756460037066" duration="2339000" />
-      <workItem from="1756467235810" duration="1684000" />
+      <workItem from="1755839921247" duration="60266000" />
+      <workItem from="1756196754014" duration="16122000" />
+      <workItem from="1756282354871" duration="12242000" />
+      <workItem from="1756359817232" duration="3007000" />
+      <workItem from="1756364120540" duration="18411000" />
+      <workItem from="1756445517498" duration="18823000" />
     </task>
     <servers />
   </component>
