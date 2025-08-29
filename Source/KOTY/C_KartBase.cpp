@@ -7,6 +7,7 @@
 #include "Components/SplineComponent.h"
 #include "Utility/C_MathUtility.h"
 #include "C_RaceGameMode.h"
+#include "Components/AudioComponent.h"
 #include "Gimmick/C_RaceManager.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
@@ -537,7 +538,12 @@ void AC_KartBase::StartAddSpeed(float Add)
 	bIsBoosting = true;
 	PlayBoostEffect();
 
-	//UGameplayStatics::PlaySound2D(this, *VoiceData.Find(FName("ReadyGo"))
+	if (Add > 2000.f)
+		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("HighDash")), 5.f);
+	else
+	{
+		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("MiniDash")),5.f);
+	}
 	CurVelocity += GetActorForwardVector() * AddSpeed;
 }
 
@@ -618,6 +624,10 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
+						if (CurrentKartSoundComponent)
+							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftBlue")));
+						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
 					}
 					else if (EffectType == 2 && DriftEffect2)
 					{
@@ -637,6 +647,10 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
+						if (CurrentKartSoundComponent)
+							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftRed")));
+						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
 					}
 					else if (EffectType == 3 && DriftEffect3)
 					{					
@@ -656,6 +670,10 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							// 생성된 이펙트 컴포넌트를 배열에 추가하여 나중에 제어
 							ActiveDriftEffects.Add(EffectComponent);
 						}
+						if (CurrentKartSoundComponent)
+							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftPurple")));
+						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
 					}
 
 				}

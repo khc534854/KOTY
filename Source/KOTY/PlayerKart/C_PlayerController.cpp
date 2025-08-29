@@ -174,7 +174,9 @@ void AC_PlayerController::ChangeCamera()
 	const FVector PrevCameraLocation = PlayerKartRef->Camera->GetComponentLocation();
 	const FRotator PrevCameraRotation = PlayerKartRef->Camera->GetComponentRotation();
 	CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("GoalInFinish")));
-
+	CurrentBGMComponent->FadeIn(0.2f);
+	
+	
 	ACameraActor* TempCamera = GetWorld()->SpawnActor<ACameraActor>(PrevCameraLocation, PrevCameraRotation);
 	if (TempCamera)
 	{

@@ -5,7 +5,9 @@
 #include "Components/SplineComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "C_RaceGameMode.h"
+#include "Components/AudioComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "UI/C_RaceWidget.h"
 
 // Sets default values
@@ -182,6 +184,8 @@ void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
 		}
 	}
 	
+	//CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("AccelStart")));;
+
 	bIsAcceleration = true;
 	AccelerationDir = Value.Get<float>();
 
@@ -317,6 +321,7 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 		
 		DriftTime = 0;
 		CurrentDriftType = 0;
+		CurrentKartSoundComponent->FadeOut(0.1f, 5.f);
 	}
 }
 
