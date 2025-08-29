@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "StarItem.h"
+
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AStarItem::AStarItem()
@@ -32,6 +35,13 @@ AStarItem::AStarItem()
 		MeshComp->SetMaterial(0, Finder.Object);
 	}
 
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_StarRunning.SW_StarRunning"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
+	}
+
 	//크기에 맞춰 변경
 	SphereComp->SetSphereRadius(70);
 	HitComp->SetSphereRadius(100);
@@ -51,6 +61,22 @@ void AStarItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
 
+	if (UseSound)
+	{
+		UGameplayStatics::SpawnSoundAttached(
+			UseSound,
+			TargetActor->GetRootComponent(),
+			NAME_None,
+			FVector(ForceInit),
+			FRotator(ForceInit),
+			EAttachLocation::Type::KeepRelativeOffset,
+			false,
+			1,
+			1,
+			0,
+			SoundAttenuation);	
+	}
+	
 	UE_LOG(LogTemp, Warning, TEXT("Star Item Used by %s"), *TargetActor->GetName());
 
 	this->Destroy();

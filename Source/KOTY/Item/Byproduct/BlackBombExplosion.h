@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Item/Base/KotyItemBase.h"
+#include "Item/Base/KotyItemByproductBase.h"
 #include "BlackBombExplosion.generated.h"
 
 UCLASS()
-class KOTY_API ABlackBombExplosion : public AKotyItemBase
+class KOTY_API ABlackBombExplosion : public AKotyItemByproductBase
 {
 	GENERATED_BODY()
 

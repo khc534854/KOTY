@@ -7,6 +7,7 @@
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 class UKotyItemHitComponent;
 
@@ -32,6 +33,13 @@ AMushroomBigItem::AMushroomBigItem()
 		Finder.Succeeded())
 	{
 		MeshComp->SetMaterial(0, Finder.Object);
+	}
+
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_MushroomBigDash.SW_MushroomBigDash"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
 	}
 
 	//크기에 맞춰 변경
@@ -64,6 +72,11 @@ void AMushroomBigItem::NotifyActorBeginOverlap(AActor* OtherActor)
 void AMushroomBigItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
+	
+	if (UseSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation());
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("BigMushroom Item Used by %s"), *TargetActor->GetName());
 	

@@ -7,6 +7,7 @@
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACoinItem::ACoinItem()
@@ -33,6 +34,13 @@ ACoinItem::ACoinItem()
 		MeshComp->SetMaterial(0, Finder.Object);
 	}
 
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_UseCoin.SW_UseCoin"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
+	}
+
 	//크기에 맞춰 변경
 	SphereComp->SetSphereRadius(40);
 	HitComp->SetSphereRadius(50);
@@ -48,17 +56,22 @@ void ACoinItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	//최고속도 상승 효과 발생
-	if (const auto* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	if (MoveComp->IsOnSimulate())
 	{
-		//요청
-		RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//요청
+			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+		}	
 	}
 }
 
 void ACoinItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation());
 	
 	UE_LOG(LogTemp, Log, TEXT("Coin Item Used by %s"), *TargetActor->GetName());
 

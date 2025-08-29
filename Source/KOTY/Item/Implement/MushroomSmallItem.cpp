@@ -6,6 +6,7 @@
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 class UKotyItemHitComponent;
@@ -32,6 +33,13 @@ AMushroomSmallItem::AMushroomSmallItem()
 		Finder.Succeeded())
 	{
 		MeshComp->SetMaterial(0, Finder.Object);
+	}
+
+	//사용 사운드 베이스 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_MushroomSmallDash.SW_MushroomSmallDash"));
+		Finder.Succeeded())
+	{
+		UseSound = Finder.Object;
 	}
 
 	//크기에 맞춰 변경
@@ -67,6 +75,11 @@ void AMushroomSmallItem::OnSimulateBegin()
 void AMushroomSmallItem::ApplyItemEffect(AActor* TargetActor)
 {
 	Super::ApplyItemEffect(TargetActor);
+
+	if (UseSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation());
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("SmallMushroom Item Used by %s"), *TargetActor->GetName());
 	

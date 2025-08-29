@@ -54,7 +54,7 @@ void ASquidItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	for (const auto Actor : OutActors)
 	{
 		//자신 이외의 모든 카트에 대해
-		if (Actor != GetOwner())
+		if (Actor != ItemOwningActor)
 		{
 			if (const auto OtherHitComp = Actor->FindComponentByClass<UKotyItemHitComponent>())
 			{
