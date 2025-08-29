@@ -11,9 +11,9 @@ UKotyItemHoldComponent::UKotyItemHoldComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	//부착
-	ShootArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
-	ShootArrowComp->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-
+	ShootArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootArrowComp"));
+	ShootArrowComp->SetupAttachment(this);
+	
 	//아이템 열거형 획득
 	if (const UEnum* ItemEnum = StaticEnum<EItemList>())
 	{
@@ -120,6 +120,7 @@ void UKotyItemHoldComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 FVector UKotyItemHoldComponent::GetShootLocation() const
 {
+	UE_LOG(LogTemp, Log, TEXT("%s"), *ShootArrowComp->GetComponentLocation().ToString());
 	return ShootArrowComp->GetComponentLocation();
 }
 

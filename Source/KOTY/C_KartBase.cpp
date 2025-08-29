@@ -49,7 +49,10 @@ AC_KartBase::AC_KartBase()
 	}
 
 	HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
+	HitComp->SetupAttachment(GetRootComponent());
+	
 	HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
+	HoldComp->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
