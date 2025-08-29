@@ -536,7 +536,8 @@ void AC_KartBase::StartAddSpeed(float Add)
 
 	bIsBoosting = true;
 	PlayBoostEffect();
-	
+
+	//UGameplayStatics::PlaySound2D(this, *VoiceData.Find(FName("ReadyGo"))
 	CurVelocity += GetActorForwardVector() * AddSpeed;
 }
 

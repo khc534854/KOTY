@@ -134,7 +134,7 @@ public:
 	float SpeedRatio = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Kart Settings")
-	float BrakePower = 1.f;
+	float BrakePower = 0.f;
 
 	FVector MeshMoveDirection;
 	FRotator MeshRotationDirection = FRotator(0, -90.f, 0);
@@ -251,6 +251,11 @@ public://Koty Item
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UKotyItemHitComponent> HitComp;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, USoundBase*> KartSoundData;
+
+	UPROPERTY()
+	UAudioComponent* CurrentKartSoundComponent;
 
 };

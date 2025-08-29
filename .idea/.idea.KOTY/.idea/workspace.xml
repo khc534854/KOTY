@@ -16,18 +16,78 @@
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/UIResource/M_Empty.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/UIResource/M_Empty.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_RaceUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_RaceUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/KOTY.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/Body__m_Body.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/Body__m_Eye.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/M_Eye.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/Pupil__m_PupilL.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/Pupil__m_PupilR.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/SKM_ST_Mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/SK_ST_Mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/ST_Mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_mario_alb.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_marioeye_alb_0.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/TEX_mariopupil_alb.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/bake_mario_g00_b00_f00.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_alb.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_nrm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mario_spm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_0.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_10.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_4.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_5.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_6.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_7.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_8.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_alb_9.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_0.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_10.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_4.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_5.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_6.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_7.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_8.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_nrm_9.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_0.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_10.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_4.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_5.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_6.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_7.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_8.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/marioeye_spm_9.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_alb.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_nrm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Mario/mariopupil_spm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_Anim.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_PhysicsAsset.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Arcade_-_Mario_Kart_Arcade_GP_DX_-_Mario_Skeleton.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Driving.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Throw.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/Throw_Montage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body01_col.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body01_spe.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_col.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_env.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mario_body02_spe.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mat_mario.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/source/mat_mario_button.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/textures/mario_body01_col.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/NewFolder/mario-rig/textures/mario_body02_col.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,26 +136,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ Project.KOTY.executor": "Run",
-    "C/C++ 프로젝트.KOTY.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Notification.DisplayName-DoNotAsk-Rider": "Rider",
-    "Notification.DoNotAsk-Rider": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.completion",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ Project.KOTY.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ 프로젝트.KOTY.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-Rider&quot;: &quot;Rider&quot;,
+    &quot;Notification.DoNotAsk-Rider&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ 프로젝트.KOTY">
     <configuration name="KOTY" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -263,6 +323,9 @@
       <workItem from="1756387617708" duration="1000" />
       <workItem from="1756426287173" duration="10769000" />
       <workItem from="1756444484227" duration="4883000" />
+      <workItem from="1756457590453" duration="347000" />
+      <workItem from="1756460037066" duration="2339000" />
+      <workItem from="1756467235810" duration="1684000" />
     </task>
     <servers />
   </component>

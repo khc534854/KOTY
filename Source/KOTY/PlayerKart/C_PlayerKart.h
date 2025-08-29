@@ -50,6 +50,7 @@ public:
 	void Mushroom(const FInputActionValue& Value);
 	void UseItem(const FInputActionValue& Value);
 
+	UPROPERTY()
 	class AC_PlayerController* PCRef;
 
 	UFUNCTION()
@@ -110,5 +111,11 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	class UAnimMontage* LoseMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, USoundBase*> VoiceData;
+
+	UPROPERTY()
+	UAudioComponent* CurrentVoiceComponent;
 
 };
