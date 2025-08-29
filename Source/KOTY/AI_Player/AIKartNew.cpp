@@ -188,6 +188,11 @@ AAIKartNew::AAIKartNew()
 nullptr, 
 TEXT("/Script/Engine.CurveFloat'/Game/AI_Player/Kart/Vehicles/PowerCurve.PowerCurve'")
 );
+
+	SteeringCurve = LoadObject<UCurveFloat>(
+		nullptr,
+		TEXT("/Script/Engine.CurveFloat'/Game/AI_Player/Kart/Vehicles/SteeringCurve.SteeringCurve'")
+		);
 	
 }
 
@@ -222,13 +227,16 @@ void AAIKartNew::Tick(float DeltaTime)
 
 	SimulateSteering(FRWheel, FRWheelMesh);
 	SimulateSteering(FLWheel, FLWheelMesh);
+	SimulateFriction(BRWheel, BRWheelMesh);
+	SimulateFriction(BLWheel, BLWheelMesh);
+	// SimulateLSteering(FLWheel, FLWheelMesh);
 
 	SimulateAccelerate(FRWheel, FRWheelMesh);
 	SimulateAccelerate(FLWheel, FLWheelMesh);
 	SimulateAccelerate(BRWheel, BRWheelMesh);
 	SimulateAccelerate(BLWheel, BLWheelMesh);
-
-
+	
+	
 }
 
 // Called to bind functionality to input
@@ -257,7 +265,7 @@ void AAIKartNew::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AAIKartNew::OnAccelerate(const FInputActionValue& Value)
 {
 	AccelInput = Value.Get<float>();
-	// UE_LOG(LogTemp, Display, TEXT("%f"),AccelInput);
+	UE_LOG(LogTemp, Display, TEXT("%f"),AccelInput);
 
 }
 
@@ -339,6 +347,8 @@ void AAIKartNew::SimulateSuspension(USceneComponent* InSuspensionStartPos, UStat
 
 }
 
+
+
 void AAIKartNew::SimulateSteering(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh)
 {
 	FVector WheelStartPos = Wheel->GetComponentLocation();
@@ -346,14 +356,18 @@ void AAIKartNew::SimulateSteering(USceneComponent* Wheel, UStaticMeshComponent* 
 	// UE_LOG(LogTemp, Display, TEXT("%f,%f,%f"), WheelVelocity.X, WheelVelocity.Y, WheelVelocity.Z);
 	
 	float TireGripFactor = 1.0f;
-	float TireMass = 1.0f;
+	float TireMass = 2.0f;
+	
+	
+	float WheelTargetAngle = SteeringCurve->GetFloatValue(NormalizedCurrentSpeed) * SteeringInput * MaxSteeringAngle;
+	UE_LOG(LogTemp, Warning, TEXT("%f"), WheelTargetAngle);
 
-	float WheelTargetAngle = SteeringInput * MaxSteeringAngle; // -45 ~ 45
 
-	FRotator WheelRot = Wheel->GetRelativeRotation();
-	// FRotator WheelMeshRot = WheelMesh->GetRelativeRotation();
-	WheelRot.Yaw = WheelTargetAngle;
-	Wheel->SetRelativeRotation(WheelRot);
+	Wheel->SetRelativeRotation(FRotator(
+		Wheel->GetRelativeRotation().Pitch,   // 기존 Pitch 유지
+		WheelTargetAngle,                     // 원하는 Yaw 값
+		Wheel->GetRelativeRotation().Roll     // 기존 Roll 유지
+	));
 	
 	FHitResult OutHit;
 	FCollisionQueryParams TraceParams;
@@ -364,7 +378,10 @@ void AAIKartNew::SimulateSteering(USceneComponent* Wheel, UStaticMeshComponent* 
 	if (WheelTouchingGround)
 	{
 		FVector SteeringDir = Wheel->GetRightVector();
+		// UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), SteeringDir.X, SteeringDir.Y, SteeringDir.Z );
 		FVector WheelVelocity = BoxComp->GetPhysicsLinearVelocityAtPoint(WheelStartPos);
+		
+		// UE_LOG(LogTemp, Warning, TEXT("%s %f %f %f"),*Wheel->GetName(),  WheelVelocity.X, WheelVelocity.Y, WheelVelocity.Z );
 
 		float SteeringVel = FVector::DotProduct(SteeringDir, WheelVelocity);
 
@@ -374,13 +391,57 @@ void AAIKartNew::SimulateSteering(USceneComponent* Wheel, UStaticMeshComponent* 
 
 		if (DrawDebug)
 		{
-			DrawDebugDirectionalArrow(GetWorld(), WheelStartPos, WheelStartPos + SteeringDir * TireMass * DesiredAccel, 100, FColor::Red, false, 0.f, 0, 3.f);
+			DrawDebugDirectionalArrow(GetWorld(), WheelStartPos, WheelStartPos + SteeringDir * TireMass * DesiredAccel * 0.1, 100, FColor::Red, false, 0.f, 0, 3.f);
 		}
 		
 		BoxComp->AddForceAtLocation(SteeringDir * TireMass * DesiredAccel, WheelStartPos);
 
-		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), DesiredVelChange, TireMass, DesiredAccel );
+		// UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), DesiredVelChange, TireMass, DesiredAccel);
 	}
+	
+}
+
+void AAIKartNew::SimulateFriction(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh)
+{
+	FVector WheelStartPos = Wheel->GetComponentLocation();
+	FVector SpringDir = Wheel->GetUpVector();
+	// UE_LOG(LogTemp, Display, TEXT("%f,%f,%f"), WheelVelocity.X, WheelVelocity.Y, WheelVelocity.Z);
+	
+	float TireGripFactor = 1.0f;
+	float TireMass = 3.0f;
+	
+
+	FHitResult OutHit;
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this); // 자기 자신 무시
+	FVector End = WheelStartPos + (RestDistance * -1 * SpringDir);	
+	WheelTouchingGround = GetWorld()->LineTraceSingleByProfile(OutHit, WheelStartPos, End, "BlockAll", TraceParams);
+
+	if (WheelTouchingGround)
+	{
+		FVector SteeringDir = -Wheel->GetRightVector();
+		// UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), SteeringDir.X, SteeringDir.Y, SteeringDir.Z );
+		FVector WheelVelocity = BoxComp->GetPhysicsLinearVelocityAtPoint(WheelStartPos);
+		
+		// UE_LOG(LogTemp, Warning, TEXT("%s %f %f %f"),*Wheel->GetName(),  WheelVelocity.X, WheelVelocity.Y, WheelVelocity.Z );
+
+		float SteeringVel = FVector::DotProduct(SteeringDir, WheelVelocity);
+
+		float DesiredVelChange = -SteeringVel * TireGripFactor;
+
+		float DesiredAccel = DesiredVelChange / GetWorld()->GetDeltaSeconds();
+
+		
+		if (DrawDebug)
+		{
+			DrawDebugDirectionalArrow(GetWorld(), WheelStartPos, WheelStartPos + SteeringDir * TireMass * DesiredAccel * 0.1, 100, FColor::Red, false, 0.f, 0, 3.f);
+		}
+		
+		BoxComp->AddForceAtLocation(SteeringDir * TireMass * DesiredAccel, WheelStartPos);
+
+		//UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), DesiredVelChange, TireMass, DesiredAccel);
+	}
+	
 	
 }
 
@@ -395,21 +456,24 @@ void AAIKartNew::SimulateAccelerate(USceneComponent* Wheel, UStaticMeshComponent
 	FVector End = WheelStartPos + (RestDistance * -1 * SpringDir);	
 	WheelTouchingGround = GetWorld()->LineTraceSingleByProfile(OutHit, WheelStartPos, End, "BlockAll", TraceParams);
 
+
+	
 	if (WheelTouchingGround)
 	{
 		FVector AccelDir = Wheel->GetForwardVector();
 
 		
-		if (AccelInput > 0.0f)
+		if (AccelInput != 0)
 		{
 			float CarSpeed = FVector::DotProduct(BoxComp->GetForwardVector(), GetVelocity());
 
-			float NormalizedSpeed = FMath::Clamp(FMath::Abs(CarSpeed) / CarTopSpeed,0,1);
+			NormalizedCurrentSpeed = FMath::Clamp(FMath::Abs(CarSpeed) / CarTopSpeed,0,1);
 
-			float AvailableTorque = PowerCurve->GetFloatValue(NormalizedSpeed) * AccelInput;
-			float ForceScale = 10000.f; 
+			float AvailableTorque = PowerCurve->GetFloatValue(NormalizedCurrentSpeed) * AccelInput;
+			float ForceScale = 5000.f; 
 			BoxComp->AddForceAtLocation(AccelDir * AvailableTorque * ForceScale, WheelStartPos);
 
+	
 			
 			if (DrawDebug)
 			{
@@ -419,3 +483,6 @@ void AAIKartNew::SimulateAccelerate(USceneComponent* Wheel, UStaticMeshComponent
 	}
 	
 }
+
+
+

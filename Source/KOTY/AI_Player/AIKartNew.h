@@ -97,13 +97,16 @@ public:
 	float AccelInput = 0.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxSteeringAngle = 45.f;
+	float MaxSteeringAngle = 40.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CarTopSpeed = 1000.f;
+	float CarTopSpeed = 2000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Engine")
 	class UCurveFloat* PowerCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Engine")
+	class UCurveFloat* SteeringCurve;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess="true"))
 	class USpringArmComponent* CameraBoom;          // 스프링암
@@ -122,24 +125,39 @@ public:
 	UPROPERTY()
 	class UInputAction* IA_Steer;
 	
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WheelMeshRadius;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float NormalizedCurrentSpeed;
 	
 	UFUNCTION(BlueprintCallable)
-
 	virtual void OnAccelerate(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
 	virtual void OnAccelerateReleased(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
 	virtual void OnSteer(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable)
 	virtual void OnSteerReleased(const FInputActionValue& Value);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SimulateSuspension(USceneComponent* InSuspensionStartPos, UStaticMeshComponent* WheelMesh);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SimulateSteering(USceneComponent* InSuspensionStartPos, UStaticMeshComponent* WheelMesh);
+	virtual void SimulateSteering(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh);
 
+	// UFUNCTION(BlueprintCallable)
+	// virtual void SimulateReverse(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh);
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void SimulateFriction(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh);
+
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void SimulateAccelerate(USceneComponent* Wheel, UStaticMeshComponent* WheelMesh);
 };
