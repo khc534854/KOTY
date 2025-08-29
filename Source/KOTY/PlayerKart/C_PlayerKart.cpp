@@ -1,4 +1,6 @@
 #include "PlayerKart/C_PlayerKart.h"
+
+#include "C_PlayerController.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SplineComponent.h"
 #include "Math/UnrealMathUtility.h"
@@ -60,6 +62,7 @@ void AC_PlayerKart::BeginPlay()
 			}
 		}
 	}
+	PCRef = Cast<AC_PlayerController>(GetWorld()->GetFirstPlayerController());
 
 	//SplineComponent = WorldSplineActor->FindComponentByClass<USplineComponent>();
 }
@@ -170,14 +173,27 @@ void AC_PlayerKart::Stun()
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
 {
-	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
+	if (PCRef->bIsTestMap)
 	{
-		AccelerationDir = 0;
-		return;
+		if (bIsStunned)
+		{
+			AccelerationDir = 0;
+			return;
+		}
+
+	}
+	else 
+	{
+		if ((bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End))
+		{
+			AccelerationDir = 0;
+			return;
+		}
 	}
 	
 	bIsAcceleration = true;
 	AccelerationDir = Value.Get<float>();
+
 }
 
 void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
@@ -188,8 +204,21 @@ void AC_PlayerKart::EndAccelerator(const FInputActionValue& Value)
 
 void AC_PlayerKart::HandlingStart(const FInputActionValue& Value)
 {
-	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
-		return;
+	if (PCRef->bIsTestMap)
+	{
+		if (bIsStunned)
+		{
+			return;
+		}
+
+	}
+	else 
+	{
+		if ((bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End))
+		{
+			return;
+		}
+	}
 	
 	bIsHandling = true;
 	HandlingDir = Value.Get<float>();
@@ -212,8 +241,21 @@ void AC_PlayerKart::HandlingEnd(const FInputActionValue& Value)
 }
 void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 {
-	if (bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End)
-		return;
+	if (PCRef->bIsTestMap)
+	{
+		if (bIsStunned)
+		{
+			return;
+		}
+
+	}
+	else 
+	{
+		if ((bIsStunned || GamemodeRef->CurrentState == RaceLevelState::End))
+		{
+			return;
+		}
+	}
 
 	if (!bIsGround)
 	{
@@ -295,6 +337,35 @@ void AC_PlayerKart::Mushroom(const FInputActionValue& Value)
 void AC_PlayerKart::UseItem(const FInputActionValue& Value)
 {
 	HoldComp->UseCurrentItem();
+
+	TArray<USkeletalMeshComponent*> SKMesh;
+	GetComponents<USkeletalMeshComponent>(SKMesh);
+
+	for (USkeletalMeshComponent* Child : SKMesh)
+	{
+		if (IsValid(Child))
+		{
+			UAnimInstance* AnimInstance = Child->GetAnimInstance();
+			if (AnimInstance)
+			{
+				AnimInstance->OnMontageEnded.AddDynamic(this, &AC_PlayerKart::OnThrowMontageEnded);
+				AnimInstance->Montage_Play(ThrowMontage);
+			}
+		}
+	}
+}
+
+void AC_PlayerKart::OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (!bInterrupted)
+	{
+		USkeletalMeshComponent* KartMesh = FindComponentByClass<USkeletalMeshComponent>();
+		if (IsValid(KartMesh) && DriveMontage)
+		{
+			// ✨ 이제 다른 애니메이션(예: 기본 주행 애니메이션)으로 전환합니다.
+			KartMesh->PlayAnimation(DriveMontage, true);
+		}
+	}
 }
 
 

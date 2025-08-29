@@ -50,7 +50,10 @@ public:
 	void Mushroom(const FInputActionValue& Value);
 	void UseItem(const FInputActionValue& Value);
 
+	class AC_PlayerController* PCRef;
 
+	UFUNCTION()
+	void OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 	// // spline
 	// UFUNCTION(BlueprintCallable)
 	// int32 FindClosestSplinePointIndex(const FVector& WorldLocation);

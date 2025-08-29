@@ -16,6 +16,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/SkeletalMeshActor.h"
+#include "Item/Component/KotyItemHoldComponent.h" 
 #include "Components/AudioComponent.h"
 
 void AC_PlayerController::BeginPlay()
@@ -36,6 +37,10 @@ void AC_PlayerController::BeginPlay()
 	
 	PlayerKartRef = Cast<AC_PlayerKart>(GetPawn());
 	RaceGameModeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (!RaceGameModeRef)
+		bIsTestMap = true;
+	
 	CurrentReadyTime = -4.0f;
 	CurrentRaceTime = 0;
 	CountdownState = 0;
@@ -48,6 +53,8 @@ void AC_PlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsTestMap)
+		return;
 	
 	if (RaceGameModeRef->CurrentState == RaceLevelState::Ready)
 	{

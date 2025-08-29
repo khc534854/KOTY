@@ -76,4 +76,6 @@ public:
 
 	UPROPERTY()
 	UAudioComponent* CurrentBGMComponent;
+
+	bool bIsTestMap = false;
 };
