@@ -244,4 +244,13 @@ public:
 	float SuspensionTime = 0.5f;
 
 	class AC_RaceGameMode* GamemodeRef;
+
+public://Koty Item
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UKotyItemHoldComponent> HoldComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UKotyItemHitComponent> HitComp;
+	
+
 };

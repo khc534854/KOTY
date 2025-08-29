@@ -3,6 +3,7 @@
 #include "Components/SplineComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "C_RaceGameMode.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
@@ -110,6 +111,11 @@ void AC_PlayerKart::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		if (AddSpeedAction)
 		{
 			EnhancedInputComponent->BindAction(AddSpeedAction, ETriggerEvent::Started, this, &AC_PlayerKart::Mushroom);
+		}
+
+		if (UseItemAction)
+		{
+			EnhancedInputComponent->BindAction(UseItemAction, ETriggerEvent::Started, this, &AC_PlayerKart::UseItem);
 		}
 	}
 }
@@ -286,36 +292,9 @@ void AC_PlayerKart::Mushroom(const FInputActionValue& Value)
 	StartAddSpeed(3000.f);
 }
 
-// int32 AC_PlayerKart::FindClosestSplinePointIndex(const FVector& WorldLocation)
-// {
-// 	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
-// 	{
-// 		// 스플라인이 없거나 포인트가 없으면 유효하지 않은 인덱스 반환
-// 		return -1;
-// 	}
-//
-// 	int32 ClosestPointIndex = -1;
-// 	float MinDistanceSquared = -1.f;
-//
-// 	const int32 PointCount = SplineComponent->GetNumberOfSplinePoints();
-// 	// 0번부터 마지막 포인트까지 순회
-// 	for (int32 i = 0; i < PointCount; ++i)
-// 	{
-// 		// i번째 스플라인 포인트의 월드 위치를 가져옴
-// 		const FVector PointLocation = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
-//         
-// 		// 입력된 월드 위치와의 거리 제곱을 계산
-// 		const float DistanceSquared = FVector::DistSquared(WorldLocation, PointLocation);
-//
-// 		// 첫 번째 포인트이거나, 이전에 찾은 최소 거리보다 현재 거리가 더 짧으면 정보 갱신
-// 		if (ClosestPointIndex == -1 || DistanceSquared < MinDistanceSquared)
-// 		{
-// 			MinDistanceSquared = DistanceSquared;
-// 			ClosestPointIndex = i;
-// 		}
-// 	}
-//
-// 	return ClosestPointIndex;
-// }
+void AC_PlayerKart::UseItem(const FInputActionValue& Value)
+{
+	HoldComp->UseCurrentItem();
+}
 
 

@@ -48,6 +48,7 @@ public:
 	void DriftStart(const FInputActionValue& Value);
 	void DriftEnd(const FInputActionValue& Value);
 	void Mushroom(const FInputActionValue& Value);
+	void UseItem(const FInputActionValue& Value);
 
 
 	// // spline
@@ -91,7 +92,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* AddSpeedAction;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* UseItemAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	class UAnimMontage* DriveMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	class UAnimMontage* ThrowMontage;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	class UAnimMontage* WinMontage;
 	

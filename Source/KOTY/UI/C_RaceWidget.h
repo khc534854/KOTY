@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "C_RaceWidget.generated.h"
 
 /**

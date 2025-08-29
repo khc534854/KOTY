@@ -2,13 +2,14 @@
 
 
 #include "C_KartBase.h"
-#include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
 #include "Components/SplineComponent.h"
 #include "Utility/C_MathUtility.h"
 #include "C_RaceGameMode.h"
 #include "Gimmick/C_RaceManager.h"
+#include "Item/Component/KotyItemHitComponent.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -46,6 +47,9 @@ AC_KartBase::AC_KartBase()
 	{
 		i->SetupAttachment(StaticMeshComponent);
 	}
+
+	HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
+	HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
 }
 
 // Called when the game starts or when spawned

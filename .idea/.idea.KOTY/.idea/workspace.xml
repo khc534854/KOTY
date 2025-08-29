@@ -16,20 +16,13 @@
   <component name="ChangeListManager">
     <list default="true" id="6bd8c204-1eea-459b-bd89-c96bd42529e5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MarioKartStadium.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/MenuLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/MenuLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_RaceController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/Sequence/Intro.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Sequence/Intro.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_SequenceWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_SequenceWidget.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/UI/WBP_StartUI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/Mario_Kart_Stadium.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/Mario_Kart_Stadium.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/Mario_Kart_Stadium1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/ef_dashboard.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/ef_dashboard.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/ef_glideboard.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/ef_glideboard.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/fc_TV_MKTV.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/fc_TV_MKTV.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/fc_nuki_2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Wii_U_-_Mario_Kart_8_-_Courses_-_Mario_Kart_Stadium/fc_nuki_2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/PlayerKart/C_PlayerKart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/UI/C_RaceWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,13 +36,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Developer/AssetTools/Private/AssetHeaderPatcher.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Developer/AutomationWindow/Private/SAutomationTestItem.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/Engine/World.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_5.6/Engine/Source/Runtime/Engine/Private/GameplayStatics.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/KOTY/KotyMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -248,7 +240,8 @@
       <workItem from="1756348704382" duration="6801000" />
       <workItem from="1756361161091" duration="16379000" />
       <workItem from="1756387617708" duration="1000" />
-      <workItem from="1756426287173" duration="10653000" />
+      <workItem from="1756426287173" duration="10769000" />
+      <workItem from="1756444484227" duration="2783000" />
     </task>
     <servers />
   </component>

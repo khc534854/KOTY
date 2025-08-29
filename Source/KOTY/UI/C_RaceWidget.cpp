@@ -5,6 +5,7 @@
 #include "Components/Image.h"
 #include "Engine/Texture2D.h"
 #include "PlayerKart/C_PlayerController.h"
+#include "Item/Component/KotyItemHoldComponent.h"
 
 void UC_RaceWidget::NativeConstruct()
 {
