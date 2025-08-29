@@ -9,9 +9,12 @@
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Coin/BP_CoinItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Coin/BP_CoinItemFinal.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Coin/Model/SM_Coin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Coin/Model/SM_Coin.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,6 +263,7 @@
       <workItem from="1756393401103" duration="4221000" />
       <workItem from="1756425978135" duration="10530000" />
       <workItem from="1756442270202" duration="1490000" />
+      <workItem from="1756452783377" duration="3976000" />
     </task>
     <servers />
   </component>

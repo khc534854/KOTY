@@ -13,7 +13,7 @@ UKotyItemHitComponent::UKotyItemHitComponent()
 
 	//오너의 루트 컴포넌트에 부착
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	BoxComp->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	BoxComp->SetupAttachment(this);
 }
 
 void UKotyItemHitComponent::BeginPlay()
