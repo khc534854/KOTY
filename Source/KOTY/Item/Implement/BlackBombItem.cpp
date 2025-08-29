@@ -1,9 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BlackBombItem.h"
-#include "BlackBombExplosion.h"
 #include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
+#include "Item/Byproduct/BlackBombExplosion.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
