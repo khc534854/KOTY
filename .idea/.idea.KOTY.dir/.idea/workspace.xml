@@ -9,15 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Coin/BP_CoinItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Coin/BP_CoinItemFinal.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Coin/Model/SM_Coin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Coin/Model/SM_Coin.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Default/ItemTestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombExplosion.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -265,6 +259,7 @@
       <workItem from="1756393326368" duration="51000" />
       <workItem from="1756393401103" duration="4221000" />
       <workItem from="1756425978135" duration="10530000" />
+      <workItem from="1756442270202" duration="1490000" />
     </task>
     <servers />
   </component>
