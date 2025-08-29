@@ -35,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CheckBoostState();
 
+	UFUNCTION()
+	void OnItemAcquired(EItemList AcquiredItem);
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
@@ -72,7 +75,7 @@ public:
 	int32 CountdownState = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FName, USoundWave*> SoundData;
+	TMap<FName, USoundBase*> SoundData;
 
 	UPROPERTY()
 	UAudioComponent* CurrentBGMComponent;

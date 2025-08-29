@@ -49,19 +49,19 @@ void ASquidItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	Super::OnUseItem(HoldComp);
 
 	//모든 카트 검색
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), OutActors);
-	for (const auto Actor : OutActors)
-	{
-		//자신 이외의 모든 카트에 대해
-		if (Actor != ItemOwningActor)
-		{
-			if (const auto OtherHitComp = Actor->FindComponentByClass<UKotyItemHitComponent>())
-			{
-				RequestApplyItemEffectToOtherHitComp(OtherHitComp);
-			}
-		}
-	}
+	// TArray<AActor*> OutActors;
+	// UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("HasHitComp"), OutActors);
+	// for (const auto Actor : OutActors)
+	// {
+	// 	//자신 이외의 모든 카트에 대해
+	// 	if (Actor != ItemOwningActor)
+	// 	{
+	// 		if (const auto OtherHitComp = Actor->FindComponentByClass<UKotyItemHitComponent>())
+	// 		{
+	// 			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
+	// 		}
+	// 	}
+	// }
 }
 
 void ASquidItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)

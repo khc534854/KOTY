@@ -26,7 +26,7 @@ public:
 	void ChangeImg(UImage* TargetImg, FString Resource);
 	
 	UFUNCTION(BlueprintCallable)
-	void ChangeItemImg(int32 SlotNum, int32 ItemNum);
+	void ChangeItemImg(int32 ItemNum);
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeUsingItemImg();
@@ -77,6 +77,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTexture2D* NewTexture;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterial* NewMaterial;
 
 	float CurrentTime = -5.f;
 

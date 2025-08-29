@@ -36,6 +36,9 @@ void AC_PlayerController::BeginPlay()
 
 	
 	PlayerKartRef = Cast<AC_PlayerKart>(GetPawn());
+
+	PlayerKartRef->HoldComp->OnGetItemEventDispatcher.AddUObject(this, &AC_PlayerController::OnItemAcquired);
+
 	RaceGameModeRef = Cast<AC_RaceGameMode>(GetWorld()->GetAuthGameMode());
 
 	if (!RaceGameModeRef)
@@ -44,8 +47,7 @@ void AC_PlayerController::BeginPlay()
 	CurrentReadyTime = -4.0f;
 	CurrentRaceTime = 0;
 	CountdownState = 0;
-
-
+	
 	StartLakituRef = Cast<AC_StartLakitu>(UGameplayStatics::GetActorOfClass(GetWorld(), AC_StartLakitu::StaticClass()));
 }
 
@@ -171,9 +173,8 @@ void AC_PlayerController::ChangeCamera()
 {
 	const FVector PrevCameraLocation = PlayerKartRef->Camera->GetComponentLocation();
 	const FRotator PrevCameraRotation = PlayerKartRef->Camera->GetComponentRotation();
-	UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("GoalInFinish")));
-	CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("MenuBGM")));
-	CurrentBGMComponent->FadeIn(2.f);
+	CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("GoalInFinish")));
+
 	ACameraActor* TempCamera = GetWorld()->SpawnActor<ACameraActor>(PrevCameraLocation, PrevCameraRotation);
 	if (TempCamera)
 	{
@@ -236,4 +237,9 @@ void AC_PlayerController::CheckBoostState()
 	else
 		CurrentHUD->IMG_SpeedEffect->SetVisibility(ESlateVisibility::Hidden);
 		
+}
+
+void AC_PlayerController::OnItemAcquired(EItemList AcquiredItem)
+{
+	CurrentHUD->ChangeItemImg(int(AcquiredItem));
 }

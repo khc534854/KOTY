@@ -31,9 +31,9 @@ void UC_RaceWidget::ChangeImg(UImage* TargetImg, FString Resource)
 	TargetImg->SetBrush(brush);
 }
 
-void UC_RaceWidget::ChangeItemImg(int32 SlotNum, int32 ItemNum)
+void UC_RaceWidget::ChangeItemImg(int32 ItemNum)
 {
-	if (SlotNum == 0)
+	if (IMG_FirstItem->GetBrush().GetResourceName() == FName("M_Empty"))
 	{
 		FSlateBrush brush = IMG_FirstItem->GetBrush();
 	
@@ -44,7 +44,7 @@ void UC_RaceWidget::ChangeItemImg(int32 SlotNum, int32 ItemNum)
 		
 		IMG_FirstItem->SetBrush(brush);
 	}
-	else if (SlotNum == 1)
+	else
 	{
 		FSlateBrush brush = IMG_SecondItem->GetBrush();
 	
@@ -54,6 +54,7 @@ void UC_RaceWidget::ChangeItemImg(int32 SlotNum, int32 ItemNum)
 		brush.SetResourceObject(NewTexture);
 		
 		IMG_SecondItem->SetBrush(brush);
+		
 	}
 }
 
@@ -68,12 +69,13 @@ void UC_RaceWidget::ChangeUsingItemImg()
 	{
 		FSlateBrush brush = IMG_FirstItem->GetBrush();
 	
-		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[11]);
-	
-		brush.SetImageSize(NewTexture->GetImportedSize());
-		brush.SetResourceObject(NewTexture);
-		
-		IMG_FirstItem->SetBrush(brush);
+		NewMaterial = LoadObject<UMaterial>(nullptr, *ItemResourceList[11]);
+
+		if (NewMaterial)
+		{
+			brush.SetResourceObject(NewMaterial);
+			IMG_FirstItem->SetBrush(brush);
+		}
 	}
 	else // 아이템 2개 있을때
 	{
@@ -82,10 +84,12 @@ void UC_RaceWidget::ChangeUsingItemImg()
 		IMG_FirstItem->SetBrush(brush);
 		
 		//2번 아이템 텍스처 none으로
-		NewTexture = LoadObject<UTexture2D>(nullptr, *ItemResourceList[11]);
-		brush.SetImageSize(NewTexture->GetImportedSize());
-		brush.SetResourceObject(NewTexture);
-		IMG_SecondItem->SetBrush(brush);
+		NewMaterial = LoadObject<UMaterial>(nullptr, *ItemResourceList[11]);
+		if (NewTexture)
+		{
+			brush.SetResourceObject(NewMaterial);
+			IMG_SecondItem->SetBrush(brush);
+		}
 	}
 }
 

@@ -6,6 +6,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "C_RaceGameMode.h"
 #include "Item/Component/KotyItemHoldComponent.h"
+#include "UI/C_RaceWidget.h"
 
 // Sets default values
 AC_PlayerKart::AC_PlayerKart()
@@ -71,18 +72,8 @@ void AC_PlayerKart::BeginPlay()
 void AC_PlayerKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-
-	if (!(Tags.IsEmpty()))
-	{
-		this->Tags.Empty();
-		Tags.Add(FName("Player"));
-	}
 	
 	CameraMove();
-
-
 }
 
 // Called to bind functionality to input
@@ -336,6 +327,9 @@ void AC_PlayerKart::Mushroom(const FInputActionValue& Value)
 
 void AC_PlayerKart::UseItem(const FInputActionValue& Value)
 {
+	if (!HoldComp->isHasItem())
+		return;
+	
 	HoldComp->UseCurrentItem();
 
 	TArray<USkeletalMeshComponent*> SKMesh;
@@ -352,6 +346,7 @@ void AC_PlayerKart::UseItem(const FInputActionValue& Value)
 				AnimInstance->Montage_Play(ThrowMontage);
 			}
 		}
+		PCRef->CurrentHUD->ChangeUsingItemImg();
 	}
 }
 
@@ -362,7 +357,6 @@ void AC_PlayerKart::OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted
 		USkeletalMeshComponent* KartMesh = FindComponentByClass<USkeletalMeshComponent>();
 		if (IsValid(KartMesh) && DriveMontage)
 		{
-			// ✨ 이제 다른 애니메이션(예: 기본 주행 애니메이션)으로 전환합니다.
 			KartMesh->PlayAnimation(DriveMontage, true);
 		}
 	}

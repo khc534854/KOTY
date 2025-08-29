@@ -90,4 +90,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void LoseHoldingItems();
+
+	bool isHasItem() { return CodeOfHoldingItems[0] != EItemList::None; };
 };
