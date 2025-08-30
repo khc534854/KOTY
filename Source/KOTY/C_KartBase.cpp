@@ -539,10 +539,10 @@ void AC_KartBase::StartAddSpeed(float Add)
 	PlayBoostEffect();
 
 	if (Add > 2000.f)
-		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("HighDash")), 5.f);
+		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("HighDash")), 2.f);
 	else
 	{
-		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("MiniDash")),5.f);
+		UGameplayStatics::PlaySound2D(this, *KartSoundData.Find(FName("MiniDash")),2.f);
 	}
 	CurVelocity += GetActorForwardVector() * AddSpeed;
 }
@@ -627,7 +627,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.5f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftBlue")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
 					}
 					else if (EffectType == 2 && DriftEffect2)
 					{
@@ -650,7 +650,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.5f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftRed")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
 					}
 					else if (EffectType == 3 && DriftEffect3)
 					{					
@@ -673,7 +673,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.5f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftPurple")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 5.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
 					}
 
 				}

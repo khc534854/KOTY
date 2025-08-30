@@ -16,6 +16,14 @@
 
 using namespace std;
 
+UENUM(BlueprintType)
+enum class EEngineSoundState : uint8
+{
+	None,      // 아무 소리도 나지 않음
+	Starting,  // 가속 시작 소리 재생 중
+	Looping    // 가속 루프 소리 재생 중
+};
+
 UCLASS()
 class KOTY_API AC_PlayerKart : public AC_KartBase
 {
@@ -117,5 +125,12 @@ public:
 
 	UPROPERTY()
 	UAudioComponent* CurrentVoiceComponent;
+
+	UPROPERTY()
+	UAudioComponent* CurrentAccelSoundComponent;
+
+	EEngineSoundState CurrentEngineSoundState;
+
+	void UpdateEngineSound(float DeltaTime);
 
 };

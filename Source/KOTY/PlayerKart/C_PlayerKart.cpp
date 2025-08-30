@@ -43,7 +43,10 @@ AC_PlayerKart::AC_PlayerKart()
 	// 충돌 방지
 	SpringArm->bDoCollisionTest = true;
 
-
+	CurrentAccelSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineSoundComponent"));
+	CurrentAccelSoundComponent->SetupAttachment(RootComponent);
+	// ✨ 처음에는 소리가 자동으로 재생되지 않도록 설정합니다.
+	CurrentAccelSoundComponent->bAutoActivate = false;
 
 	
 }
@@ -76,6 +79,7 @@ void AC_PlayerKart::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	CameraMove();
+	//UpdateEngineSound(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -321,7 +325,8 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 		
 		DriftTime = 0;
 		CurrentDriftType = 0;
-		CurrentKartSoundComponent->FadeOut(0.1f, 5.f);
+		if(CurrentKartSoundComponent->IsPlaying())
+			CurrentKartSoundComponent->Stop();
 	}
 }
 
@@ -364,6 +369,60 @@ void AC_PlayerKart::OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted
 		{
 			KartMesh->PlayAnimation(DriveMontage, true);
 		}
+	}
+}
+
+void AC_PlayerKart::UpdateEngineSound(float DeltaTime)
+{
+	
+	const bool bIsAccelerating = AccelerationDir > 0;
+	// 차가 앞으로 움직이고 있는지 여부 (매우 낮은 속도는 0으로 간주)
+	const bool bIsMovingForward = FVector::DotProduct(CurVelocity, GetActorForwardVector()) > 10.f;
+
+	// --- 상태 전환 로직 ---
+
+	// 조건 1: 엑셀을 밟았고, 차가 거의 멈춰있으며, 현재 아무 소리도 나지 않을 때
+	if (bIsAccelerating && !bIsMovingForward && CurrentEngineSoundState == EEngineSoundState::None)
+	{
+		// '가속 시작' 소리를 재생하고 상태를 변경합니다.
+		CurrentEngineSoundState = EEngineSoundState::Starting;
+		CurrentAccelSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("AccelStart")), 2.f);
+		CurrentAccelSoundComponent->Play();
+		return; // 이번 프레임은 할 일을 마쳤으므로 종료
+	}
+
+	// 조건 2: '가속 시작' 소리가 재생 중인데, 그 소리가 끝났을 때
+	if (CurrentEngineSoundState == EEngineSoundState::Starting && !CurrentAccelSoundComponent->IsPlaying())
+	{
+		// '가속 루프' 소리로 전환하고 상태를 변경합니다.
+		CurrentEngineSoundState = EEngineSoundState::Looping;
+		CurrentAccelSoundComponent->FadeOut(0.1f, 0.f);
+		CurrentAccelSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("AccelLoop")), 2.f);
+		CurrentAccelSoundComponent->Play();
+		return;
+	}
+
+	// 조건 3: 엑셀을 밟고 있거나 앞으로 움직이고 있을 때, 현재 소리가 없거나 시작 소리만 재생된 경우
+	// (예: 내리막길에서 엑셀을 떼도 소리가 나야 할 때)
+	if ((bIsAccelerating || bIsMovingForward) && CurrentEngineSoundState != EEngineSoundState::Looping)
+	{
+		// 바로 '가속 루프' 소리를 재생합니다.
+		CurrentEngineSoundState = EEngineSoundState::Looping;
+		CurrentAccelSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("AccelLoop")), 2.f);
+		CurrentAccelSoundComponent->Play();
+		return;
+	}
+
+	// 조건 4: 엑셀을 떼고 있고, 차도 거의 멈췄을 때
+	if (!bIsAccelerating && !bIsMovingForward)
+	{
+		// 모든 소리를 끄고 상태를 초기화합니다.
+		if (CurrentAccelSoundComponent->IsPlaying())
+		{
+			CurrentAccelSoundComponent->Stop();
+		}
+		CurrentEngineSoundState = EEngineSoundState::None;
+		return;
 	}
 }
 
