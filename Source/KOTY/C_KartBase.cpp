@@ -265,62 +265,166 @@ void AC_KartBase::Stun()
 }
 
 void AC_KartBase::CheckIsGround()
-{	
-	FVector StartLocation = GetActorLocation();
-	FVector EndLocation = StartLocation - (GetActorUpVector() * 1000.f);
-	
-	// 충돌 결과를 담을 구조체
-	FHitResult HitResult;
-	
-	// 충돌 쿼리 매개변수
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this); // 충돌 체크에서 자기 자신을 무시하도록 설정
-	QueryParams.bTraceComplex = false; // 단순 충돌(Simple Collision)만 체크
-	
-	// Line Trace 실행
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		StartLocation,
-		EndLocation,
-		ECollisionChannel::ECC_Visibility, // 충돌 채널 (예: Visibility)
-		QueryParams
-	);
-	
-	// 디버그 라인
-	DrawDebugLine(
-		GetWorld(),
-		StartLocation,
-		EndLocation,
-		bHit ? FColor::Red : FColor::Green,
-		false, // 영구 표시 여부
-		-1.0f,
-		0,
-		1.0f // 선의 두께
-	);
-	
-	// 충돌이 발생했을 때의 로직
-	if (bHit)
-	{
-		if (HitResult.Distance < 65.f)
-			bIsGround = true;
-		else
-			bIsGround = false;
-			
-		GroundNormal = HitResult.ImpactNormal;
-		
-		if (!bIsSuspending)
-		{
-			bIsSuspending = true;
-		}
-		AirTime = 0;
-	}
-	else
-	{
-		bIsGround = false;
-		AirTime += GetWorld()->DeltaTimeSeconds;
-		GroundNormal = FVector::UpVector;
-	}
+{
+    // --- 변수 준비 ---
+    const float TraceLength = 1000.f; // 트레이스 길이 (기존보다 짧게 하여 더 정밀하게)
+    const float TraceRadius = 60.f;  // 차체 중심에서 4방향 트레이스를 쏠 거리 (구 충돌체 반지름과 유사하게)
+    const FVector ActorLocation = GetActorLocation();
+    const FVector ActorUpVector = GetActorUpVector();
+    const FVector ActorForwardVector = GetActorForwardVector();
+    const FVector ActorRightVector = GetActorRightVector();
+    
+    // 결과를 담을 배열
+    TArray<FHitResult> HitResults;
+    // 모든 유효한 법선 벡터를 저장할 배열
+    TArray<FVector> ImpactNormals;
+
+    FCollisionQueryParams QueryParams;
+    QueryParams.AddIgnoredActor(this);
+    QueryParams.bTraceComplex = false;
+
+    // --- 5방향 라인 트레이스 실행 ---
+    // 1. 중앙 트레이스 (기존과 동일)
+    FHitResult CenterHit;
+    FVector CenterStart = ActorLocation;
+    FVector CenterEnd = CenterStart - ActorUpVector * TraceLength;
+    if (GetWorld()->LineTraceSingleByChannel(CenterHit, CenterStart, CenterEnd, ECC_Visibility, QueryParams))
+    {
+        HitResults.Add(CenterHit);
+    }
+
+    // 2. 4방향 보조 트레이스 (앞, 뒤, 좌, 우)
+    TArray<FVector> TraceOffsets =
+    {
+        ActorForwardVector * TraceRadius, // 앞
+        -ActorForwardVector * TraceRadius, // 뒤
+        ActorRightVector * TraceRadius,  // 오른쪽
+        -ActorRightVector * TraceRadius  // 왼쪽
+    };
+
+    for (const FVector& Offset : TraceOffsets)
+    {
+        FHitResult SideHit;
+        FVector SideStart = ActorLocation + Offset;
+        FVector SideEnd = SideStart - ActorUpVector * TraceLength;
+        if (GetWorld()->LineTraceSingleByChannel(SideHit, SideStart, SideEnd, ECC_Visibility, QueryParams))
+        {
+            HitResults.Add(SideHit);
+        }
+    }
+
+    // --- 결과 종합 및 처리 ---
+    if (HitResults.Num() > 0)
+    {
+        // 1. 모든 충돌 지점의 법선 벡터를 수집
+        for (const FHitResult& Hit : HitResults)
+        {
+            ImpactNormals.Add(Hit.ImpactNormal);
+        }
+
+        // 2. ✨ 법선 벡터들의 평균을 계산
+        FVector AverageNormal = FVector::ZeroVector;
+        for (const FVector& Normal : ImpactNormals)
+        {
+            AverageNormal += Normal;
+        }
+        // GetSafeNormal()을 사용하여 정규화된 평균 벡터를 구합니다.
+        GroundNormal = AverageNormal.GetSafeNormal();
+
+        // 3. 가장 짧은 충돌 거리를 기준으로 땅과의 거리를 판단
+        float MinDistance = TraceLength;
+        for (const FHitResult& Hit : HitResults)
+        {
+            if (Hit.Distance < MinDistance)
+            {
+                MinDistance = Hit.Distance;
+            }
+        }
+        
+        // 4. 땅과의 거리가 일정 이하일 때만 지면에 있는 것으로 판단
+        if (MinDistance < 65.f)
+        {
+            bIsGround = true;
+            AirTime = 0.f;
+            if (!bIsSuspending)
+            {
+               bIsSuspending = true;
+            }
+        }
+        else
+        {
+            bIsGround = false;
+            AirTime += GetWorld()->GetDeltaSeconds();
+        }
+    }
+    else // 어떤 트레이스도 땅에 닿지 않았을 때
+    {
+        bIsGround = false;
+        AirTime += GetWorld()->GetDeltaSeconds();
+        GroundNormal = FVector::UpVector;
+    }
+
+    // (디버깅) 5개 라인을 모두 그려서 확인
+    // ... DrawDebugLine 코드 ...
 }
+
+// void AC_KartBase::CheckIsGround()
+// {	
+// 	FVector StartLocation = GetActorLocation();
+// 	FVector EndLocation = StartLocation - (GetActorUpVector() * 1000.f);
+// 	
+// 	// 충돌 결과를 담을 구조체
+// 	FHitResult HitResult;
+// 	
+// 	// 충돌 쿼리 매개변수
+// 	FCollisionQueryParams QueryParams;
+// 	QueryParams.AddIgnoredActor(this); // 충돌 체크에서 자기 자신을 무시하도록 설정
+// 	QueryParams.bTraceComplex = false; // 단순 충돌(Simple Collision)만 체크
+// 	
+// 	// Line Trace 실행
+// 	bool bHit = GetWorld()->LineTraceSingleByChannel(
+// 		HitResult,
+// 		StartLocation,
+// 		EndLocation,
+// 		ECollisionChannel::ECC_Visibility, // 충돌 채널 (예: Visibility)
+// 		QueryParams
+// 	);
+// 	
+// 	// 디버그 라인
+// 	DrawDebugLine(
+// 		GetWorld(),
+// 		StartLocation,
+// 		EndLocation,
+// 		bHit ? FColor::Red : FColor::Green,
+// 		false, // 영구 표시 여부
+// 		-1.0f,
+// 		0,
+// 		1.0f // 선의 두께
+// 	);
+// 	
+// 	// 충돌이 발생했을 때의 로직
+// 	if (bHit)
+// 	{
+// 		if (HitResult.Distance < 65.f)
+// 			bIsGround = true;
+// 		else
+// 			bIsGround = false;
+// 			
+// 		GroundNormal = HitResult.ImpactNormal;
+// 		
+// 		if (!bIsSuspending)
+// 		{
+// 			bIsSuspending = true;
+// 		}
+// 		AirTime = 0;
+// 	}
+// 	else
+// 	{
+// 		bIsGround = false;
+// 		AirTime += GetWorld()->DeltaTimeSeconds;
+// 		GroundNormal = FVector::UpVector;
+// 	}
+// }
 
 void AC_KartBase::UpdateBodyRotation(float DeltaTime)
 {
@@ -625,9 +729,9 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 						if (CurrentKartSoundComponent)
-							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftBlue")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
 					}
 					else if (EffectType == 2 && DriftEffect2)
 					{
@@ -648,9 +752,9 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 						if (CurrentKartSoundComponent)
-							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftRed")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
 					}
 					else if (EffectType == 3 && DriftEffect3)
 					{					
@@ -671,9 +775,9 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 							ActiveDriftEffects.Add(EffectComponent);
 						}
 						if (CurrentKartSoundComponent)
-							CurrentKartSoundComponent->FadeOut(0.5f, 0);
+							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftPurple")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 2.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
 					}
 
 				}

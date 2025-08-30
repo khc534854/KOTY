@@ -310,6 +310,10 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 		MeshMoveDirection.X = 70.f;
 		bIsDrift = false;
 		MeshRotationDirection.Yaw = -90.f;
+
+		if (CurrentKartSoundComponent && CurrentKartSoundComponent->IsPlaying())
+        	CurrentKartSoundComponent->Stop();
+		
 		if (DriftTime > 1.f && DriftTime < 2.f)
 		{
 			StartAddSpeed(1500.f);
@@ -325,8 +329,7 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 		
 		DriftTime = 0;
 		CurrentDriftType = 0;
-		if(CurrentKartSoundComponent->IsPlaying())
-			CurrentKartSoundComponent->Stop();
+
 	}
 }
 
