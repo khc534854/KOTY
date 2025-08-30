@@ -13,14 +13,15 @@ APhysicItemBase::APhysicItemBase()
 
 	//충돌체를 루트 컴포넌트로 설정
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SphereComp->SetCollisionProfileName(FName("BlockAll"), true);
+	SphereComp->SetCollisionProfileName(FName("BlockAll"));
 	SphereComp->SetSphereRadius(70);
 	SphereComp->ShapeColor = FColor::Blue;
 	SetRootComponent(SphereComp);
 
 	//적중을 감지하는 콜리전 컴포넌트 부착
 	HitComp = CreateDefaultSubobject<USphereComponent>(TEXT("HitComp"));
-	HitComp->SetCollisionProfileName(FName("OverlapAll"), true);
+	HitComp->SetGenerateOverlapEvents(true);
+	//HitComp->SetCollisionProfileName(FName("ItemHit"));
 	HitComp->SetSphereRadius(80);
 	SphereComp->ShapeColor = FColor::Red;
 	HitComp->SetupAttachment(RootComponent);
@@ -41,6 +42,7 @@ APhysicItemBase::APhysicItemBase()
 	//지면 충돌 사운드를 재생하는 람다식을 무브먼트 컴포넌트에 바인드
 	MoveComp->OnBounceEventDispatcher.AddLambda([this]()
 	{
+		//지면 충돌 사운드 큐 재생
 		if (GroundHitSoundCue)
 		{
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), GroundHitSoundCue, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);

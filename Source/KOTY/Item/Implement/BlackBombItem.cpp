@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BlackBombItem.h"
+
+#include "C_KartBase.h"
 #include "Components/AudioComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Item/Byproduct/BlackBombExplosion.h"
@@ -132,7 +134,13 @@ void ABlackBombItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
 	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
 	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
-	const FVector Velocity = Shoot * 4500;
+	FVector Velocity = Shoot * 4000;
+
+	//합산
+	if (AC_KartBase* Temp = Cast<AC_KartBase>(HoldComp->GetOwner()))
+	{
+		Velocity += Temp->CurVelocity;
+	}
 
 	//사출
 	MoveComp->ThrowLinearDrag(

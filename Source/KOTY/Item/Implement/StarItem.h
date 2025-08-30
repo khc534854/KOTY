@@ -18,6 +18,20 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void OnSimulateBegin() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAudioComponent> SpawnedAudioComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UTimelineComponent> TimelineComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCurveFloat> CurveFloat;
+
+	UFUNCTION()
+	void UpdateStarSoundVolume(float Value) const;
+	
+public:
 	
 	virtual void ApplyItemEffect(AActor* TargetActor) override;
 

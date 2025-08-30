@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "RedTurtleItem.h"
+
+#include "C_KartBase.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/SplineComponent.h"
@@ -78,6 +80,22 @@ void ARedTurtleItem::BeginPlay()
 void ARedTurtleItem::ApplyItemEffect(AActor* OtherActor)
 {
 	UE_LOG(LogTemp, Display, TEXT("RedTurtle Applyed to %s!"), *OtherActor->GetName());
+
+	//상대가 카트라면
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
+	{
+		//스턴
+		Kart->Stun();
+	}
+
+	//아이템 효과 적용 사운드 재생
+	if (ApplyedSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+
+	//효과를 다한 이 아이템 파괴
+	this->Destroy();
 }
 
 void ARedTurtleItem::OnSimulateBegin()
@@ -114,15 +132,15 @@ void ARedTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	//사출 속도
 	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
 	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
-	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
-	const FVector Velocity = Shoot * 3000;
+	const FVector Shoot = Forward.RotateAngleAxis(-30, Right);
+	FVector Velocity = Shoot * 1000;
 	
 	//사출
 	MoveComp->ThrowConstantHorizon(
 		true,
 		FVector::DownVector,
 		6000,
-		3000,
+		6000,
 		4.0,
 		Velocity,
 		0.25);
@@ -209,17 +227,17 @@ void ARedTurtleItem::OnSensorOverlap(UPrimitiveComponent* OverlappedComponent, A
 	{
 		return;
 	}
+
+	//소유자를 목표로 삼을 수는 없다
+	if (OtherActor == ItemOwningActor)
+	{
+		return;
+	}
 	
 	if (MoveComp->IsOnSimulate())
 	{
 		//이미 목표가 있다
 		if (TargetActor)
-		{
-			return;
-		}
-
-		//오버랩 액터가 사실은 이 아이템을 소유 중인 액터다
-		if (TargetActor == ItemOwningActor)
 		{
 			return;
 		}
@@ -247,14 +265,14 @@ void ARedTurtleItem::OnHitOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	if (MoveComp->IsOnSimulate())
 	{
 		//충돌 상대가 다른 아이템이었다
-		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+		if (const AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
 		{
 			UE_LOG(LogTemp, Log, TEXT("%s Item hit with %s!"), *this->GetName(), *OtherItem->GetName());
 			this->Destroy();
 		}
 
 		//충돌 상대가 아이템 충돌체였다
-		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		if (UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 		{
 			//오너를 대상으로 아이템 효과 적용
 			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
@@ -263,9 +281,6 @@ void ARedTurtleItem::OnHitOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 			FItemEffect ItemEffectDelegate;
 			ItemEffectDelegate.BindDynamic(this, &AKotyItemBase::ApplyItemEffect);
 			OtherHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
-
-			//파괴
-			this->Destroy();
 		}	
 	}
 }

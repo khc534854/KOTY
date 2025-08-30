@@ -2,9 +2,11 @@
 
 #include "StarItem.h"
 
+#include "C_KartBase.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TimelineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
@@ -21,6 +23,9 @@ AStarItem::AStarItem()
 	MeshComp->SetCollisionProfileName(FName("NoCollision"), false);
 	MeshComp->SetupAttachment(GetRootComponent());
 
+	//타임라인 컴포넌트 부착
+	TimelineComp = CreateDefaultSubobject<UTimelineComponent>(TEXT("TimelineComp"));
+
 	//스태틱 메시 로드
 	if (const ConstructorHelpers::FObjectFinder<UStaticMesh> Finder(TEXT("/Game/Item/Star/Model/SM_Star.SM_Star"));
 		Finder.Succeeded())
@@ -35,11 +40,18 @@ AStarItem::AStarItem()
 		MeshComp->SetMaterial(0, Finder.Object);
 	}
 
-	//사용 사운드 베이스 로드
+	//적용 사운드 베이스 로드
 	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_StarRunning.SW_StarRunning"));
 		Finder.Succeeded())
 	{
-		UseSound = Finder.Object;
+		ApplyedSound = Finder.Object;
+	}
+
+	//커브 플로트 로드
+	if (const ConstructorHelpers::FObjectFinder<UCurveFloat> Finder(TEXT("/Game/Item/Star/SoundVolumeCurve.SoundVolumeCurve"));
+		Finder.Succeeded())
+	{
+		CurveFloat = Finder.Object;
 	}
 
 	//크기에 맞춰 변경
@@ -57,29 +69,66 @@ void AStarItem::OnSimulateBegin()
 	Super::OnSimulateBegin();
 }
 
+void AStarItem::UpdateStarSoundVolume(const float Value) const
+{
+	if (SpawnedAudioComp)
+	{
+		SpawnedAudioComp->SetVolumeMultiplier(Value);
+	}
+}
+
 void AStarItem::ApplyItemEffect(AActor* TargetActor)
 {
-	Super::ApplyItemEffect(TargetActor);
+	UE_LOG(LogTemp, Warning, TEXT("Star Item Applyed To %s"), *TargetActor->GetName());
 
-	if (UseSound)
+	//무적 시간
+	constexpr float InvincibleTime = 8.0;
+
+	//상대가 카트라면
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
 	{
-		UGameplayStatics::SpawnSoundAttached(
-			UseSound,
+		if (auto Temp = Kart->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			Temp->StartInvincibleTime(InvincibleTime);
+		}
+	}
+	
+	//적용 사운드 재생
+	if (ApplyedSound)
+	{
+		SpawnedAudioComp = UGameplayStatics::SpawnSoundAttached(
+			ApplyedSound,
 			TargetActor->GetRootComponent(),
 			NAME_None,
 			FVector(ForceInit),
 			FRotator(ForceInit),
 			EAttachLocation::Type::KeepRelativeOffset,
 			false,
-			1,
+			0,
 			1,
 			0,
-			SoundAttenuation);	
-	}
-	
-	UE_LOG(LogTemp, Warning, TEXT("Star Item Used by %s"), *TargetActor->GetName());
+			SoundAttenuation);
 
-	this->Destroy();
+		FOnTimelineFloat Callback;
+		Callback.BindUFunction(this, FName("UpdateStarSoundVolume"));
+		TimelineComp->AddInterpFloat(CurveFloat, Callback);
+		TimelineComp->SetPlayRate(1.0/InvincibleTime);
+		TimelineComp->SetLooping(false);
+		TimelineComp->PlayFromStart();
+	}
+
+	//메시와 충돌체 비활성화
+	MeshComp->SetVisibility(false);
+	SphereComp->SetGenerateOverlapEvents(false);
+	
+	//타이머
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+	{
+		this->Destroy();
+		SpawnedAudioComp->Stop();
+		SpawnedAudioComp = nullptr;
+	}, InvincibleTime, false);
 }
 
 void AStarItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
@@ -87,7 +136,7 @@ void AStarItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	Super::OnUseItem(HoldComp);
 
 	//무적 효과 발생
-	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	if (auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
 	{
 		FItemEffect ItemEffectDelegate;
 		ItemEffectDelegate.BindDynamic(this, &AStarItem::ApplyItemEffect);

@@ -3,6 +3,8 @@
 
 #include "KotyItemByproductBase.h"
 
+#include "Item/Component/KotyItemHitComponent.h"
+
 
 // Sets default values
 AKotyItemByproductBase::AKotyItemByproductBase()
@@ -22,9 +24,12 @@ void AKotyItemByproductBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AKotyItemByproductBase::RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp)
+void AKotyItemByproductBase::RequestApplyItemEffectToOtherHitComp(UKotyItemHitComponent* TargetHitComp)
 {
-	
+	//델리게이트 전달
+	FItemEffect ItemEffectDelegate;
+	ItemEffectDelegate.BindDynamic(this, &AKotyItemByproductBase::ApplyItemEffect);
+	TargetHitComp->OnRequestApplyEffectFromItem(ItemEffectDelegate, this);
 }
 
 void AKotyItemByproductBase::ApplyItemEffect(AActor* TargetActor)

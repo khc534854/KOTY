@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MushroomSmallItem.h"
+
+#include "C_KartBase.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
@@ -59,7 +61,7 @@ void AMushroomSmallItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (MoveComp->IsOnSimulate())
 	{
 		//충돌 상대가 아이템 충돌체였다
-		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		if (UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 		{
 			//요청
 			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
@@ -74,15 +76,21 @@ void AMushroomSmallItem::OnSimulateBegin()
 
 void AMushroomSmallItem::ApplyItemEffect(AActor* TargetActor)
 {
-	Super::ApplyItemEffect(TargetActor);
+	UE_LOG(LogTemp, Warning, TEXT("SmallMushroom Item Applyed To %s"), *TargetActor->GetName());
 
-	if (UseSound)
+	//상대가 카트라면
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation());
+		Kart->StartAddSpeed(3000);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("SmallMushroom Item Used by %s"), *TargetActor->GetName());
-	
+	//아이템 효과 적용 사운드 재생
+	if (ApplyedSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+
+	//효과를 다한 이 아이템 파괴
 	this->Destroy();
 }
 
@@ -91,7 +99,7 @@ void AMushroomSmallItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	Super::OnUseItem(HoldComp);
 
 	//가속 효과 발생
-	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	if (auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
 	{
 		FItemEffect ItemEffectDelegate;
 		ItemEffectDelegate.BindDynamic(this, &AMushroomSmallItem::ApplyItemEffect);

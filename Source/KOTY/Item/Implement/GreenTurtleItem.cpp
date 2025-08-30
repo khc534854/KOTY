@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GreenTurtleItem.h"
+
+#include "C_KartBase.h"
 #include "Components/AudioComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
 #include "Item/Component/KotyItemHoldComponent.h"
@@ -80,16 +82,10 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 		}
 
 		//충돌 상대가 아이템 충돌체였다
-		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		if (UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 		{
-			//오너를 대상으로 아이템 효과 적용
-			UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
-
 			//요청
 			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
-		
-			//파괴
-			this->Destroy();
 		}	
 	}
 }
@@ -110,7 +106,23 @@ void AGreenTurtleItem::Tick(const float DeltaTime)
 
 void AGreenTurtleItem::ApplyItemEffect(AActor* TargetActor)
 {
-	UE_LOG(LogTemp, Display, TEXT("GreenTurtle Applyed to %s!"), *TargetActor->GetName());
+	UE_LOG(LogTemp, Display, TEXT("GreenTurtle Applyed To %s!"), *TargetActor->GetName());
+
+	//상대가 카트라면
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
+	{
+		//스턴
+		Kart->Stun();
+	}
+
+	//아이템 효과 적용 사운드 재생
+	if (ApplyedSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+
+	//효과를 다한 이 아이템 파괴
+	this->Destroy();
 }
 
 void AGreenTurtleItem::OnSimulateBegin()
@@ -143,15 +155,15 @@ void AGreenTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	//사출 속도
 	const FVector Forward = HoldComp->GetOwner()->GetActorForwardVector();
 	const FVector Right = HoldComp->GetOwner()->GetActorRightVector();
-	const FVector Shoot = Forward.RotateAngleAxis(-45, Right);
-	const FVector Velocity = Shoot * 3000;
+	const FVector Shoot = Forward.RotateAngleAxis(-30, Right);
+	FVector Velocity = Shoot * 1000;
 	
 	//사출
 	MoveComp->ThrowConstantHorizon(
 		true,
 		FVector::DownVector,
 		6000,
-		3000,
+		6000,
 		4.0,
 		Velocity,
 		0.25);

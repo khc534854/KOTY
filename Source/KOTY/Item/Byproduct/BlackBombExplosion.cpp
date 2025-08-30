@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BlackBombExplosion.h"
+
+#include "C_KartBase.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
@@ -48,11 +50,18 @@ ABlackBombExplosion::ABlackBombExplosion()
 		CurveFloat = Finder.Object;
 	}
 
-	//폭발 사운드 베이스 로드
+	//폭발 사운드 로드
 	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Explosion.SW_Explosion"));
 		Finder.Succeeded())
 	{
 		ExplosionSound = Finder.Object;
+	}
+
+	//폭발 명중 사운드 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_ExplosionHit.SW_ExplosionHit"));
+	Finder.Succeeded())
+	{
+		ExplosionHitSound = Finder.Object;
 	}
 }
 
@@ -91,7 +100,7 @@ void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 
 	//충돌 상대가 아이템 충돌체였다
-	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	if (UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 	{
 		//오너를 대상으로 아이템 효과 적용
 		UE_LOG(LogTemp, Log, TEXT("Apply Item Effect to OtherKart!"));
@@ -103,14 +112,23 @@ void ABlackBombExplosion::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ABlackBombExplosion::ApplyItemEffect(AActor* TargetActor)
 {
-	UE_LOG(LogTemp, Display, TEXT("BlackBombExplosion Applyed to %s!"), *TargetActor->GetName());
+	UE_LOG(LogTemp, Display, TEXT("BlackBombExplosion Applyed To %s!"), *TargetActor->GetName());
+
+	//상대가 카트라면 스턴을 먹인다
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
+	{
+		Kart->Stun();
+
+		//폭발 사운드 재생
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionHitSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
 }
 
 void ABlackBombExplosion::UpdateExplosionAlpha(float Value)
 {
 	//머터리얼의 투명도와 메시 컴포넌트의 스케일을 동시에 조정
 	MaterialInst->SetScalarParameterValue(FName("Opacity"), Value * 0.85);
-	SetActorScale3D(FVector::Zero() + Value * 14);
+	SetActorScale3D(FVector::Zero() + Value * 16);
 }
 
 void ABlackBombExplosion::EndExplosion()

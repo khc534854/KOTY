@@ -8,10 +8,7 @@
 #include "Utility/C_MathUtility.h"
 #include "C_RaceGameMode.h"
 #include "Gimmick/C_RaceManager.h"
-#include "Item/Component/KotyItemHitComponent.h"
-#include "Item/Component/KotyItemHoldComponent.h"
 #include "Kismet/GameplayStatics.h"
-
 
 // Sets default values
 AC_KartBase::AC_KartBase()
@@ -47,12 +44,12 @@ AC_KartBase::AC_KartBase()
 	{
 		i->SetupAttachment(StaticMeshComponent);
 	}
-
-	HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
-	HitComp->SetupAttachment(GetRootComponent());
 	
-	HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
-	HoldComp->SetupAttachment(GetRootComponent());
+	// HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
+	// HitComp->SetupAttachment(GetRootComponent());
+	//
+	// HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
+	// HoldComp->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -740,4 +737,3 @@ void AC_KartBase::CheckSpline()
 		}
 	}
 }
-

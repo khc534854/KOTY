@@ -40,7 +40,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> ExplosionSound;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> ExplosionHitSound;
+
 	UFUNCTION()
 	void UpdateExplosionAlpha(float Value);
 
