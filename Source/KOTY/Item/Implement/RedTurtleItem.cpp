@@ -265,8 +265,9 @@ void ARedTurtleItem::OnHitOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	if (MoveComp->IsOnSimulate())
 	{
 		//충돌 상대가 다른 아이템이었다
-		if (const AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
+		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
 		{
+			OtherItem->Destroy();
 			UE_LOG(LogTemp, Log, TEXT("%s Item hit with %s!"), *this->GetName(), *OtherItem->GetName());
 			this->Destroy();
 		}
