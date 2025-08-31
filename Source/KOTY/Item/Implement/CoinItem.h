@@ -25,5 +25,8 @@ public:
 	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp) override;
 
 	virtual void OnLoseItem(UKotyItemHoldComponent* HoldComp) override;
-	
+		
+	void Respawn();
+
+	FTimerHandle RespawnTimerHandle;
 };

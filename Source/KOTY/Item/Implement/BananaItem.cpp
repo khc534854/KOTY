@@ -137,7 +137,7 @@ void ABananaItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	//사출
 	MoveComp->ThrowLinearDrag(
 		true,
-		FVector::DownVector,
+		-HoldComp->GetUpVector(), //FVector::DownVector,
 		6000,
 		5.0,
 		4.0,

@@ -112,6 +112,9 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	if (this->IsHidden())
+		return;
+
 	//충돌 상대가 아이템 충돌체였다
 	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 	{
@@ -124,7 +127,7 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 			//아이템 선택 사운드 재생
 			if (UseSound)
 			{
-				UGameplayStatics::PlaySound2D(GetWorld(), UseSound, 1, 1, 0);	
+				UGameplayStatics::PlaySound2D(OtherActor, UseSound, 1, 1, 0);	
 			}
 
 			//아이템 코드
@@ -153,8 +156,12 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
 		}
 
-		//이 아이템 박스 파괴
-		this->Destroy();
+		//이 아이템 박스 파괴(안보이게)
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+		GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &AItemBox::Respawn, 5.f, false);
+
+		//this->Destroy();
 	}
 }
 
@@ -176,4 +183,10 @@ void AItemBox::Tick(const float DeltaTime)
 	//아이템 박스는 동적 축을 기준으로 회전
 	const FQuat RotationQuat(RotateAxis, FMath::DegreesToRadians(60.0f) * DeltaTime);
 	BoxMeshComp->AddLocalRotation(RotationQuat, false);
+}
+
+void AItemBox::Respawn()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
 }

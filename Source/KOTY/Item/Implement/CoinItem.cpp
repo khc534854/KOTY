@@ -97,11 +97,14 @@ void ACoinItem::ApplyItemEffect(AActor* TargetActor)
 	//아이템 효과 적용 사운드 재생
 	if (ApplyedSound)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 50, 1, 0, SoundAttenuation);
 	}
 
 	//효과를 다한 이 아이템 파괴
-	this->Destroy();
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &ACoinItem::Respawn, 5.f, false);
+	//this->Destroy();
 }
 
 void ACoinItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
@@ -140,4 +143,10 @@ void ACoinItem::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 		4.0,
 		Velocity,
 		0.25);
+}
+
+void ACoinItem::Respawn()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
 }

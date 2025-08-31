@@ -21,6 +21,8 @@ protected:
 	
 	virtual void Tick(float DeltaTime) override;
 
+	void Respawn();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class USphereComponent> SphereComp;
 	
@@ -51,4 +53,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EItemList ItemCode;
 	
+	FTimerHandle RespawnTimerHandle;
 };

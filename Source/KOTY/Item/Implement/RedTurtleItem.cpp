@@ -138,7 +138,7 @@ void ARedTurtleItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	//사출
 	MoveComp->ThrowConstantHorizon(
 		true,
-		FVector::DownVector,
+		-HoldComp->GetUpVector(),//FVector::DownVector,
 		6000,
 		6000,
 		4.0,
