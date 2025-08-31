@@ -2,6 +2,7 @@
 
 #include "KotyItemHitComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 UKotyItemHitComponent::UKotyItemHitComponent()
 {
@@ -13,6 +14,20 @@ UKotyItemHitComponent::UKotyItemHitComponent()
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	//BoxComp->SetCollisionProfileName(TEXT("ItemHit"));
 	BoxComp->SetupAttachment(this);
+
+	//방어 사운드 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_StarBarrier.SW_StarBarrier"));
+		Finder.Succeeded())
+	{
+		BarrierSound = Finder.Object;
+	}
+
+	//아이템 사운드 감쇠 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundAttenuation> Finder(TEXT("/Game/Item/Sound/SA_Item.SA_Item"));
+		Finder.Succeeded())
+	{
+		SoundAttenuation = Finder.Object;
+	}
 }
 
 void UKotyItemHitComponent::BeginPlay()
@@ -37,6 +52,12 @@ void UKotyItemHitComponent::OnRequestApplyEffectFromItem(const FItemEffect ItemE
 	//데미지를 받지 않는 시간
 	if (NoDamageTimerHandle.IsValid())
 	{
+		//방어 사운드 재생
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), BarrierSound, GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+		
+		//해당 아이템 파괴
+		OtherItem->Destroy();
+		
 		return;
 	}
 	

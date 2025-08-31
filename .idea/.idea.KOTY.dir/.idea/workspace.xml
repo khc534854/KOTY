@@ -10,31 +10,16 @@
     <list default="true" id="26d0b874-4a66-4f88-bbf1-0ba25475647c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.KOTY.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/Banana/BP_BananaItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Banana/BP_BananaItemFinal.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_BlackBombItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/BlackBomb/BP_BlackBombItemFinal.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Item/ItemBox/BP_ItemBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/ItemBox/BP_ItemBox.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Item/Star/BP_StarItemFinal.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Item/Star/BP_StarItemFinal.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/Level/NewMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Koty/PlayerKart/BPC_PlayerKart.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SM_PlayerKart1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SM_PlayerKart1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SM_Tire.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Standard_Kart_MK_Switch2_by_VinVinMario2025/SM_Tire.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemByproductBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemByproductBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemByproductBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/KotyItemByproductBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Base/PhysicItemBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Byproduct/BlackBombExplosion.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/C_KartBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHitComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Component/KotyItemHoldComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BananaItem.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/BlackBombItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/CoinItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/GreenTurtleItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomBigItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/MushroomSmallItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/RedTurtleItem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/SquidItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/KOTY/Item/Implement/StarItem.h" afterDir="false" />
     </list>
@@ -289,6 +274,7 @@
       <workItem from="1756520776233" duration="733000" />
       <workItem from="1756521550094" duration="3825000" />
       <workItem from="1756536500520" duration="20013000" />
+      <workItem from="1756611291573" duration="2971000" />
     </task>
     <servers />
   </component>

@@ -33,6 +33,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UBoxComponent> BoxComp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> BarrierSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundAttenuation> SoundAttenuation;
+
 private:
 	FTimerHandle NoDamageTimerHandle;
 

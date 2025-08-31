@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCurveFloat> CurveFloat;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UMaterial> RainbowMaterial;
+
 	UFUNCTION()
 	void UpdateStarSoundVolume(float Value) const;
 	

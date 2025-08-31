@@ -46,6 +46,13 @@ ABananaItem::ABananaItem()
 		UseSound = Finder.Object;
 	}
 
+	//파괴 사운드 로드
+	if (const ConstructorHelpers::FObjectFinder<USoundBase> Finder(TEXT("/Game/Item/Sound/SW_Destroyed.SW_Destroyed"));
+		Finder.Succeeded())
+	{
+		DestroySound = Finder.Object;
+	}
+
 	//크기에 맞춰 변경
 	SphereComp->SetSphereRadius(30);
 	HitComp->SetSphereRadius(60);

@@ -54,6 +54,13 @@ AStarItem::AStarItem()
 		CurveFloat = Finder.Object;
 	}
 
+	//무지개 이펙트 머터리얼 로드
+	if (const ConstructorHelpers::FObjectFinder<UMaterial> Finder(TEXT("/Game/Item/Star/MT_Rainbow.MT_Rainbow"));
+	Finder.Succeeded())
+	{
+		RainbowMaterial = Finder.Object;
+	}
+
 	//크기에 맞춰 변경
 	SphereComp->SetSphereRadius(70);
 	HitComp->SetSphereRadius(100);
@@ -91,6 +98,8 @@ void AStarItem::ApplyItemEffect(AActor* TargetActor)
 		{
 			Temp->StartInvincibleTime(InvincibleTime);
 		}
+
+		Kart->SwitchMaterialForTime(InvincibleTime, RainbowMaterial);
 	}
 	
 	//적용 사운드 재생
