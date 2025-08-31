@@ -11,7 +11,7 @@ UKotyItemHoldComponent::UKotyItemHoldComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	//부착
-	ShootArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootArrowComp"));
+	ShootArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
 	ShootArrowComp->SetupAttachment(this);
 	
 	//아이템 열거형 획득

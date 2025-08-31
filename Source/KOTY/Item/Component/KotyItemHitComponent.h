@@ -25,7 +25,6 @@ class KOTY_API UKotyItemHitComponent : public USceneComponent
 
 public:
 	UKotyItemHitComponent();
-
 protected:
 	virtual void BeginPlay() override;		                                         
 	
@@ -33,8 +32,21 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UBoxComponent> BoxComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> BarrierSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundAttenuation> SoundAttenuation;
+
+private:
+	FTimerHandle NoDamageTimerHandle;
+
 	
 public:	
 	UFUNCTION(BlueprintCallable)
-	void OnRequestApplyEffectFromItem(FItemEffect ItemEffectDelegate, AActor* OtherItem) const;
+	void OnRequestApplyEffectFromItem(FItemEffect ItemEffectDelegate, AActor* OtherItem);
+
+	UFUNCTION(BlueprintCallable)
+	void StartInvincibleTime(float InvincibleTime);
 };

@@ -2,6 +2,8 @@
 
 
 #include "CoinItem.h"
+
+#include "C_KartBase.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Item/Component/KotyItemHitComponent.h"
@@ -59,7 +61,7 @@ void ACoinItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (MoveComp->IsOnSimulate())
 	{
 		//충돌 상대가 아이템 충돌체였다
-		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		if (UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 		{
 			//요청
 			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
@@ -69,12 +71,22 @@ void ACoinItem::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ACoinItem::ApplyItemEffect(AActor* TargetActor)
 {
-	Super::ApplyItemEffect(TargetActor);
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation());
+	UE_LOG(LogTemp, Log, TEXT("Coin Item Used To %s"), *TargetActor->GetName());
 	
-	UE_LOG(LogTemp, Log, TEXT("Coin Item Used by %s"), *TargetActor->GetName());
+	//상대가 카트라면
+	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
+	{
+		//최대 속도 상승
+		Kart->MaxSpeed = 3100;
+	}
 
+	//아이템 효과 적용 사운드 재생
+	if (ApplyedSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ApplyedSound, TargetActor->GetActorLocation(), TargetActor->GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+
+	//효과를 다한 이 아이템 파괴
 	this->Destroy();
 }
 
@@ -83,7 +95,7 @@ void ACoinItem::OnUseItem(UKotyItemHoldComponent* HoldComp)
 	Super::OnUseItem(HoldComp);
 
 	//최고 속도 상승 효과 발생
-	if (const auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
+	if (auto* OtherHitComp = HoldComp->GetOwner()->GetComponentByClass<UKotyItemHitComponent>())
 	{
 		FItemEffect ItemEffectDelegate;
 		ItemEffectDelegate.BindDynamic(this, &ACoinItem::ApplyItemEffect);

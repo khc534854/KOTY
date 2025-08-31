@@ -18,6 +18,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	virtual void OnSimulateBegin() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<USoundBase> SpinSound;
 	
 public:
 	virtual void ApplyItemEffect(AActor* TargetActor) override;

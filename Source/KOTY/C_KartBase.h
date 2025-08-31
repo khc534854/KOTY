@@ -194,6 +194,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Kart Settings|Stun")
 	float StunSpeedMultiplier = 0.2f;
 
+	UFUNCTION()
+	void SwitchMaterialForTime(float Duration, UMaterial* Material);
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

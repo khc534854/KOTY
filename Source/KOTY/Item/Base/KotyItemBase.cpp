@@ -24,11 +24,11 @@ AKotyItemBase::AKotyItemBase()
 
 void AKotyItemBase::ApplyItemEffect(AActor* TargetActor)
 {
-	//하위 아이템에서 오버라이드하여 구체적인 기능 구현
+	//하위 아이템에서 완전 오버라이드하여 구체적인 기능 구현
 	UE_LOG(LogTemp, Warning, TEXT("You are Trying to Call ItemBase Effect! There is No Effect on ItemBase!"));
 }
 
-void AKotyItemBase::RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp)
+void AKotyItemBase::RequestApplyItemEffectToOtherHitComp(UKotyItemHitComponent* TargetHitComp)
 {
 	//델리게이트 전달
 	FItemEffect ItemEffectDelegate;
@@ -38,6 +38,12 @@ void AKotyItemBase::RequestApplyItemEffectToOtherHitComp(const UKotyItemHitCompo
 
 void AKotyItemBase::OnUseItem(UKotyItemHoldComponent* HoldComp)
 {
+	//사용 사운드 재생
+	if (UseSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), UseSound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+	
 	//일반 아이템의 경우 자신에게 바로 효과 적용
 	//물리 아이템의 경우 전방 혹은 후방을 향해 사출
 }
@@ -54,6 +60,12 @@ void AKotyItemBase::OnLoseItem(UKotyItemHoldComponent* HoldComp)
 void AKotyItemBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//준비 사운드 재생
+	if (ReadySound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ReadySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
 }
 
 void AKotyItemBase::Destroyed()
@@ -63,6 +75,6 @@ void AKotyItemBase::Destroyed()
 	//파괴 사운드 재생
 	if (DestroySound)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);	
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
 	}
 }

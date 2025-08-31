@@ -29,7 +29,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp);
+	void RequestApplyItemEffectToOtherHitComp(UKotyItemHitComponent* TargetHitComp);
 
 	UFUNCTION()
 	virtual void ApplyItemEffect(AActor* TargetActor);

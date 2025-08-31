@@ -20,7 +20,13 @@ public:
 	TObjectPtr<UAudioComponent> AudioComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> ReadySound;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> UseSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USoundBase> ApplyedSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USoundBase> DestroySound;
@@ -35,7 +41,7 @@ public:
 	virtual void ApplyItemEffect(AActor* TargetActor);
 
 	UFUNCTION(BlueprintCallable)
-	void RequestApplyItemEffectToOtherHitComp(const UKotyItemHitComponent* TargetHitComp);
+	void RequestApplyItemEffectToOtherHitComp(UKotyItemHitComponent* TargetHitComp);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void OnUseItem(UKotyItemHoldComponent* HoldComp);

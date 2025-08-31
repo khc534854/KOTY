@@ -9,10 +9,7 @@
 #include "C_RaceGameMode.h"
 #include "Components/AudioComponent.h"
 #include "Gimmick/C_RaceManager.h"
-#include "Item/Component/KotyItemHitComponent.h"
-#include "Item/Component/KotyItemHoldComponent.h"
 #include "Kismet/GameplayStatics.h"
-
 
 // Sets default values
 AC_KartBase::AC_KartBase()
@@ -48,12 +45,12 @@ AC_KartBase::AC_KartBase()
 	{
 		i->SetupAttachment(StaticMeshComponent);
 	}
-
-	HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
-	HitComp->SetupAttachment(GetRootComponent());
 	
-	HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
-	HoldComp->SetupAttachment(GetRootComponent());
+	// HitComp = CreateDefaultSubobject<UKotyItemHitComponent>(TEXT("HitComp"));
+	// HitComp->SetupAttachment(GetRootComponent());
+	//
+	// HoldComp = CreateDefaultSubobject<UKotyItemHoldComponent>(TEXT("HoldComp"));
+	// HoldComp->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -811,6 +808,34 @@ void AC_KartBase::UpdateStunEffect(float DeltaTime)
 	}
 }
 
+void AC_KartBase::SwitchMaterialForTime(float Duration, UMaterial* Material)
+{
+	auto Mat0 = StaticMeshComponent->GetMaterial(0);
+	auto Mat1 = StaticMeshComponent->GetMaterial(1);
+	auto Mat2 = StaticMeshComponent->GetMaterial(2);
+	auto Mat3 = WheelL->GetMaterial(2);
+	auto Mat4 = WheelR->GetMaterial(2);
+	auto Mat5 = WheelB->GetMaterial(2);
+	
+	StaticMeshComponent->SetMaterial(0, Material);
+	StaticMeshComponent->SetMaterial(1, Material);
+	StaticMeshComponent->SetMaterial(2, Material);
+	WheelL->SetMaterial(2, Material);
+	WheelR->SetMaterial(2, Material);
+	WheelB->SetMaterial(2, Material);
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, [this, Mat0, Mat1, Mat2, Mat3, Mat4, Mat5]()
+	{
+		StaticMeshComponent->SetMaterial(0, Mat0);
+		StaticMeshComponent->SetMaterial(1, Mat1);
+		StaticMeshComponent->SetMaterial(2, Mat2);
+		WheelL->SetMaterial(2, Mat3);
+		WheelR->SetMaterial(2, Mat4);
+		WheelB->SetMaterial(2, Mat5);
+	}, Duration, false);
+}
+
 int32 AC_KartBase::FindClosestSplinePointIndex(const FVector& WorldLocation)
 {
 	if (!SplineComponent || SplineComponent->GetNumberOfSplinePoints() < 1)
@@ -865,4 +890,3 @@ void AC_KartBase::CheckSpline()
 		}
 	}
 }
-
