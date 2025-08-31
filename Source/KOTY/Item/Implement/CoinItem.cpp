@@ -11,6 +11,9 @@
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "PlayerKart/C_PlayerKart.h"
+#include "PlayerKart/C_PlayerController.h"
+#include "UI/C_RaceWidget.h"
 
 ACoinItem::ACoinItem()
 {
@@ -65,7 +68,12 @@ void ACoinItem::NotifyActorBeginOverlap(AActor* OtherActor)
 		{
 			//요청
 			RequestApplyItemEffectToOtherHitComp(OtherHitComp);
-		}	
+		}
+	}
+
+	if (UKotyItemHoldComponent* OtherHoldComp = OtherActor->GetComponentByClass<UKotyItemHoldComponent>())
+	{
+		OnUseItem(OtherHoldComp);
 	}
 }
 
@@ -77,7 +85,13 @@ void ACoinItem::ApplyItemEffect(AActor* TargetActor)
 	if (AC_KartBase* Kart = Cast<AC_KartBase>(TargetActor))
 	{
 		//최대 속도 상승
-		Kart->MaxSpeed = 3100;
+		Kart->CoinCount = FMath::Clamp(Kart->CoinCount + 1, 0, 10);
+		
+		if (TargetActor->IsA<AC_PlayerKart>())
+		{
+			auto* pc = Cast<AC_PlayerController>(GetWorld()->GetFirstPlayerController());
+			pc->CurrentHUD->ChangeCoinNum();
+		}
 	}
 
 	//아이템 효과 적용 사운드 재생

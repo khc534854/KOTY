@@ -71,8 +71,11 @@ void AC_KartBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GamemodeRef->CurrentState == RaceLevelState::Ready || GamemodeRef->CurrentState == RaceLevelState::Cinematic)
-		return;
+	if (GamemodeRef)
+	{
+		if (GamemodeRef->CurrentState == RaceLevelState::Ready || GamemodeRef->CurrentState == RaceLevelState::Cinematic)
+			return;
+	}
 
 	CheckIsGround();
 	CheckSpline();
@@ -808,33 +811,50 @@ void AC_KartBase::UpdateStunEffect(float DeltaTime)
 	}
 }
 
-void AC_KartBase::SwitchMaterialForTime(float Duration, UMaterial* Material)
-{
-	auto Mat0 = StaticMeshComponent->GetMaterial(0);
-	auto Mat1 = StaticMeshComponent->GetMaterial(1);
-	auto Mat2 = StaticMeshComponent->GetMaterial(2);
-	auto Mat3 = WheelL->GetMaterial(2);
-	auto Mat4 = WheelR->GetMaterial(2);
-	auto Mat5 = WheelB->GetMaterial(2);
-	
-	StaticMeshComponent->SetMaterial(0, Material);
-	StaticMeshComponent->SetMaterial(1, Material);
-	StaticMeshComponent->SetMaterial(2, Material);
-	WheelL->SetMaterial(2, Material);
-	WheelR->SetMaterial(2, Material);
-	WheelB->SetMaterial(2, Material);
-
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, [this, Mat0, Mat1, Mat2, Mat3, Mat4, Mat5]()
-	{
-		StaticMeshComponent->SetMaterial(0, Mat0);
-		StaticMeshComponent->SetMaterial(1, Mat1);
-		StaticMeshComponent->SetMaterial(2, Mat2);
-		WheelL->SetMaterial(2, Mat3);
-		WheelR->SetMaterial(2, Mat4);
-		WheelB->SetMaterial(2, Mat5);
-	}, Duration, false);
-}
+//void AC_KartBase::SwitchMaterialForTime(float Duration, UMaterial* Material)
+//{
+//	auto Mat0 = StaticMeshComponent->GetMaterial(0);
+//	auto Mat1 = StaticMeshComponent->GetMaterial(1);
+//	auto Mat2 = StaticMeshComponent->GetMaterial(2);
+//	auto Mat3 = WheelL->GetMaterial(2);
+//	auto Mat4 = WheelR->GetMaterial(2);
+//	auto Mat5 = WheelB->GetMaterial(2);
+//
+//	USkeletalMeshComponent* SkeletalComp;
+//	TArray<USkeletalMeshComponent*> SKMesh;
+//	GetComponents<USkeletalMeshComponent>(SKMesh);
+//
+//	for (USkeletalMeshComponent* Child : SKMesh)
+//	{
+//		if (IsValid(Child))
+//		{
+//			SkeletalComp = Child;
+//
+//		}
+//	}
+//	auto Mat6 = SkeletalComp->GetMaterial(0);
+//
+//	
+//	StaticMeshComponent->SetMaterial(0, Material);
+//	StaticMeshComponent->SetMaterial(1, Material);
+//	StaticMeshComponent->SetMaterial(2, Material);
+//	WheelL->SetMaterial(2, Material);
+//	WheelR->SetMaterial(2, Material);
+//	WheelB->SetMaterial(2, Material);
+//	SkeletalComp->SetMaterial(0, Material);
+//
+//	FTimerHandle TimerHandle;
+//	GetWorldTimerManager().SetTimer(TimerHandle, [this, Mat0, Mat1, Mat2, Mat3, Mat4, Mat5, Mat6, SkeletalComp]()
+//	{
+//		StaticMeshComponent->SetMaterial(0, Mat0);
+//		StaticMeshComponent->SetMaterial(1, Mat1);
+//		StaticMeshComponent->SetMaterial(2, Mat2);
+//		WheelL->SetMaterial(2, Mat3);
+//		WheelR->SetMaterial(2, Mat4);
+//		WheelB->SetMaterial(2, Mat5);
+//		SkeletalComp->SetMaterial(0, Mat6);
+//	}, Duration, false);
+//}
 
 int32 AC_KartBase::FindClosestSplinePointIndex(const FVector& WorldLocation)
 {

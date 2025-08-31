@@ -236,29 +236,29 @@ void AC_PlayerController::ChangeCamera()
 	
 	if (IsValid(PlayerKartRef))
 	{
-		TArray<USkeletalMeshComponent*> SKMesh;
-		PlayerKartRef->GetComponents<USkeletalMeshComponent>(SKMesh);
-
-		for (USkeletalMeshComponent* Child : SKMesh)
+		if (PlayerKartRef->CurRank == 0)
 		{
-			if (IsValid(Child))
-			{
-				if (PlayerKartRef->CurRank == 0)
-				{
-					Child->PlayAnimation(PlayerKartRef->WinMontage, true);
-					PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("WinVoice")), 2.f);
-					PlayerKartRef->CurrentVoiceComponent->Play();
-				}
-				else
-				{
-					Child->PlayAnimation(PlayerKartRef->LoseMontage, true);
-					PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("LoseVoice")), 2.f);
-					PlayerKartRef->CurrentVoiceComponent->Play();
-
-				}
-			}
+			PlayerKartRef->SkeletalComp->PlayAnimation(PlayerKartRef->WinMontage, true);
+			PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("WinVoice")), 2.f);
+			PlayerKartRef->CurrentVoiceComponent->Play();
+		}
+		else
+		{
+			PlayerKartRef->SkeletalComp->PlayAnimation(PlayerKartRef->LoseMontage, true);
+			PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("LoseVoice")), 2.f);
+			PlayerKartRef->CurrentVoiceComponent->Play();
 
 		}
+
+		//TArray<USkeletalMeshComponent*> SKMesh;
+		//PlayerKartRef->GetComponents<USkeletalMeshComponent>(SKMesh);
+
+		//for (USkeletalMeshComponent* Child : SKMesh)
+		//{
+		//	if (IsValid(Child))
+		//	{
+			//}
+		//}
 	}
 }
 

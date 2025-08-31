@@ -11,6 +11,7 @@
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "PlayerKart/C_PlayerKart.h"
 #include "UObject/ConstructorHelpers.h"
 
 AStarItem::AStarItem()
@@ -99,7 +100,11 @@ void AStarItem::ApplyItemEffect(AActor* TargetActor)
 			Temp->StartInvincibleTime(InvincibleTime);
 		}
 
-		Kart->SwitchMaterialForTime(InvincibleTime, RainbowMaterial);
+		if (Kart->IsA<AC_PlayerKart>())
+		{
+			AC_PlayerKart* Player = Cast<AC_PlayerKart>(Kart);
+			Player->SwitchMaterialForTime(InvincibleTime, RainbowMaterial);
+		}
 	}
 	
 	//적용 사운드 재생

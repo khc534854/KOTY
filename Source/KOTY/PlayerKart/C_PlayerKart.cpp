@@ -48,7 +48,8 @@ AC_PlayerKart::AC_PlayerKart()
 	// ✨ 처음에는 소리가 자동으로 재생되지 않도록 설정합니다.
 	CurrentAccelSoundComponent->bAutoActivate = false;
 
-	
+	SkeletalComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComp"));
+	SkeletalComp->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned
@@ -360,30 +361,38 @@ void AC_PlayerKart::UseItem(const FInputActionValue& Value)
 	TArray<USkeletalMeshComponent*> SKMesh;
 	GetComponents<USkeletalMeshComponent>(SKMesh);
 
-	for (USkeletalMeshComponent* Child : SKMesh)
-	{
-		if (IsValid(Child))
-		{
-			UAnimInstance* AnimInstance = Child->GetAnimInstance();
-			if (AnimInstance)
-			{
-				AnimInstance->OnMontageEnded.AddDynamic(this, &AC_PlayerKart::OnThrowMontageEnded);
-				AnimInstance->Montage_Play(ThrowMontage);
-			}
-		}
-		PCRef->CurrentHUD->ChangeUsingItemImg();
-	}
+	UAnimInstance* AnimInstance = SkeletalComp->GetAnimInstance();
+
+	AnimInstance->OnMontageEnded.AddDynamic(this, &AC_PlayerKart::OnThrowMontageEnded);
+	AnimInstance->Montage_Play(ThrowMontage);
+	PCRef->CurrentHUD->ChangeUsingItemImg();
+	PCRef->CurrentHUD->ChangeCoinNum();
+
+
+	//for (USkeletalMeshComponent* Child : SKMesh)
+	//{
+	//	if (IsValid(Child))
+	//	{
+	//		UAnimInstance* AnimInstance = Child->GetAnimInstance();
+	//		if (AnimInstance)
+	//		{
+	//			AnimInstance->OnMontageEnded.AddDynamic(this, &AC_PlayerKart::OnThrowMontageEnded);
+	//			AnimInstance->Montage_Play(ThrowMontage);
+	//		}
+	//	}
+	//}
 }
 
 void AC_PlayerKart::OnThrowMontageEnded(UAnimMontage* Montage, bool bInterrupted)
 {
 	if (!bInterrupted)
 	{
-		USkeletalMeshComponent* KartMesh = FindComponentByClass<USkeletalMeshComponent>();
-		if (IsValid(KartMesh) && DriveMontage)
-		{
-			KartMesh->PlayAnimation(DriveMontage, true);
-		}
+		SkeletalComp->PlayAnimation(DriveMontage, true);
+		//USkeletalMeshComponent* KartMesh = FindComponentByClass<USkeletalMeshComponent>();
+		//if (IsValid(KartMesh) && DriveMontage)
+		//{
+		//	KartMesh->PlayAnimation(DriveMontage, true);
+		//}
 	}
 }
 
@@ -439,6 +448,37 @@ void AC_PlayerKart::UpdateEngineSound(float DeltaTime)
 		CurrentEngineSoundState = EEngineSoundState::None;
 		return;
 	}
+}
+
+void AC_PlayerKart::SwitchMaterialForTime(float Duration, UMaterial* Material)
+{
+	auto Mat0 = StaticMeshComponent->GetMaterial(0);
+	auto Mat1 = StaticMeshComponent->GetMaterial(1);
+	auto Mat2 = StaticMeshComponent->GetMaterial(2);
+	auto Mat3 = WheelL->GetMaterial(2);
+	auto Mat4 = WheelR->GetMaterial(2);
+	auto Mat5 = WheelB->GetMaterial(2);
+	auto Mat6 = SkeletalComp->GetMaterial(0);
+
+	StaticMeshComponent->SetMaterial(0, Material);
+	StaticMeshComponent->SetMaterial(1, Material);
+	StaticMeshComponent->SetMaterial(2, Material);
+	WheelL->SetMaterial(2, Material);
+	WheelR->SetMaterial(2, Material);
+	WheelB->SetMaterial(2, Material);
+	SkeletalComp->SetMaterial(0, Material);
+
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, [this, Mat0, Mat1, Mat2, Mat3, Mat4, Mat5, Mat6]()
+		{
+			StaticMeshComponent->SetMaterial(0, Mat0);
+			StaticMeshComponent->SetMaterial(1, Mat1);
+			StaticMeshComponent->SetMaterial(2, Mat2);
+			WheelL->SetMaterial(2, Mat3);
+			WheelR->SetMaterial(2, Mat4);
+			WheelB->SetMaterial(2, Mat5);
+			SkeletalComp->SetMaterial(0, Mat6);
+		}, Duration, false);
 }
 
 

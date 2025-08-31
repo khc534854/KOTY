@@ -133,4 +133,10 @@ public:
 
 	void UpdateEngineSound(float DeltaTime);
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USkeletalMeshComponent* SkeletalComp;
+
+	UFUNCTION()
+	void SwitchMaterialForTime(float Duration, UMaterial* Material);
+
 };
