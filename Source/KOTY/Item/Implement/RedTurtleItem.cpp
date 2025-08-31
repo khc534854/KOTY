@@ -10,6 +10,7 @@
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "CoinItem.h"
 
 class UKotyItemHitComponent;
 
@@ -267,6 +268,9 @@ void ARedTurtleItem::OnHitOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 		//충돌 상대가 다른 아이템이었다
 		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
 		{
+			if (OtherItem->IsA<ACoinItem>())
+				return;
+
 			OtherItem->Destroy();
 			UE_LOG(LogTemp, Log, TEXT("%s Item hit with %s!"), *this->GetName(), *OtherItem->GetName());
 			this->Destroy();

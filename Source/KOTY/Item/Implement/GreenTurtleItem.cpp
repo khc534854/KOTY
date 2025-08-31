@@ -8,6 +8,7 @@
 #include "Item/Component/KotyItemHoldComponent.h"
 #include "Item/Component/KotyMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "CoinItem.h"
 
 class UKotyItemHitComponent;
 
@@ -77,6 +78,9 @@ void AGreenTurtleItem::NotifyActorBeginOverlap(AActor* OtherActor)
 		//충돌 상대가 다른 아이템이었다
 		if (AKotyItemBase* OtherItem = Cast<AKotyItemBase>(OtherActor))
 		{
+			if (OtherItem->IsA<ACoinItem>())
+				return;
+
 			OtherItem->Destroy();
 			this->Destroy();
 			UE_LOG(LogTemp, Log, TEXT("Item Hit with OtherItem!"));
