@@ -34,24 +34,27 @@ void AC_EndZone::OnBoxCompOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	auto* Kart = Cast<AC_KartBase>(OtherActor);
 	auto* pc = Cast<AC_PlayerController>(GetWorld()->GetFirstPlayerController());
 	
-	if (Kart && Kart->MaxProgressPointIndex > 15 && pc->RaceGameModeRef->CurrentState == RaceLevelState::Play)
+	if (Kart && Kart->MaxProgressPointIndex > 50 && pc->RaceGameModeRef->CurrentState == RaceLevelState::Play)
 	{
 		Kart->MaxProgressPointIndex = 0;
+		Kart->CurrentLap++;		
+
 		if (Kart->IsA(AC_PlayerKart::StaticClass()))
 		{
-			pc->CurLaps += 1;
-		}
-		
-		Kart->CurrentLap++;
+			pc->CurLaps++;
+			int32 tempNum = pc->MaxLaps - pc->CurLaps;
+			if (tempNum == 0)
+				pc->PlayLapSound(2);
+			else if (tempNum == 1)
+				pc->PlayLapSound(1);
 
-		
-		
-		if (pc->CurLaps > pc->MaxLaps)
-		{
-			pc->SetFinished();
-			return;
+			if (pc->CurLaps > pc->MaxLaps)
+			{
+				pc->SetFinished();
+				return;
+			}
+
+			pc->CurrentHUD->ChangeLaps();
 		}
-		
-		pc->CurrentHUD->ChangeLaps();
 	}
 }

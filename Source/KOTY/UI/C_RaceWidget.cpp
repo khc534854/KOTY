@@ -5,6 +5,7 @@
 #include "Components/Image.h"
 #include "Engine/Texture2D.h"
 #include "PlayerKart/C_PlayerController.h"
+#include "PlayerKart/C_PlayerKart.h"
 #include "Item/Component/KotyItemHoldComponent.h"
 
 void UC_RaceWidget::NativeConstruct()
@@ -114,4 +115,25 @@ void UC_RaceWidget::ChangeRank(int32 CurRank)
 	brush.SetResourceObject(NewTexture);
 		
 	IMG_CurRank->SetBrush(brush);
+}
+
+void UC_RaceWidget::ChangeCoinNum()
+{
+	auto pc = Cast<AC_PlayerController>(GetWorld()->GetFirstPlayerController());
+
+	int32 currentCoin = pc->PlayerKartRef->CoinCount;
+
+	if (currentCoin == 10)
+	{
+		FString t = FString::Printf(TEXT("%d"), currentCoin);
+		TXT_Coin->SetText(FText::FromString(t));
+		TXT_Coin->SetColorAndOpacity(FLinearColor(1.f, 0.3f, 0.f, 1.f));
+	}
+	else
+	{ 
+		FString t = FString::Printf(TEXT("0%d"), currentCoin);
+		TXT_Coin->SetText(FText::FromString(t));
+		TXT_Coin->SetColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 1.f));
+	}
+
 }

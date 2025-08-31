@@ -166,6 +166,18 @@ void AC_PlayerKart::Stun()
 {
 	Super::Stun();
 	//FVector SaveVelocity = CurVelocity;
+
+	if (CurrentAccelSoundComponent)
+	{
+		if (CurrentAccelSoundComponent->IsPlaying())
+			CurrentAccelSoundComponent->Stop();
+
+		CurrentAccelSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("Stun")));
+		CurrentAccelSoundComponent->Play();
+	}
+
+	CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *VoiceData.Find(FName("StunVoice")));
+	CurrentAccelSoundComponent->Play();
 }
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)
@@ -288,15 +300,15 @@ void AC_PlayerKart::DriftStart(const FInputActionValue& Value)
 		CurVelocity += GroundNormal * DriftHopImpulse;
 	}
 	
-	if (DriftTime > 1.f && DriftTime < 2.0f)
+	if (DriftTime > 0.6f && DriftTime < 1.5f)
 	{
 		PlayDriftEffect(1, DriftStartDir);
 	}
-	else if (DriftTime > 2.0f && DriftTime < 3.5f)
+	else if (DriftTime >= 1.5f && DriftTime < 2.3f)
 	{
 		PlayDriftEffect(2, DriftStartDir);
 	}
-	else if (DriftTime > 3.5f)
+	else if (DriftTime >= 2.3f)
 	{
 		PlayDriftEffect(3, DriftStartDir);
 	}
@@ -314,15 +326,15 @@ void AC_PlayerKart::DriftEnd(const FInputActionValue& Value)
 		if (CurrentKartSoundComponent && CurrentKartSoundComponent->IsPlaying())
         	CurrentKartSoundComponent->Stop();
 		
-		if (DriftTime > 1.f && DriftTime < 2.f)
+		if (DriftTime > 0.6f && DriftTime < 1.5f)
 		{
 			StartAddSpeed(1500.f);
 		}
-		else if (DriftTime > 2.f && DriftTime < 3.5f)
+		else if (DriftTime >= 1.5f && DriftTime < 2.3f)
 		{
 			StartAddSpeed(2000.f);
 		}
-		else if (DriftTime > 3.5f)
+		else if (DriftTime >= 2.3f)
 		{
 			StartAddSpeed(2500.f);
 		}

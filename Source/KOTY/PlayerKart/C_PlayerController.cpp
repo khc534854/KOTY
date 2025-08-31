@@ -49,6 +49,7 @@ void AC_PlayerController::BeginPlay()
 	CountdownState = 0;
 	
 	StartLakituRef = Cast<AC_StartLakitu>(UGameplayStatics::GetActorOfClass(GetWorld(), AC_StartLakitu::StaticClass()));
+
 }
 
 void AC_PlayerController::Tick(float DeltaTime)
@@ -95,6 +96,8 @@ void AC_PlayerController::SetReady()
 	CurrentRaceTime = 0;
 	CountdownState = 0;
 	SetInputMode(FInputModeGameOnly());
+	//PlayerKartRef->CoinCount = 10;
+	//CurrentHUD->ChangeCoinNum();
 }
 
 void AC_PlayerController::SetFinished()
@@ -104,7 +107,9 @@ void AC_PlayerController::SetFinished()
 	CurrentHUD->PlayAnimation(CurrentHUD->ANIM_Finish);
 	UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("GoalIn")));
 	CurrentBGMComponent->FadeOut(0.5f, 0);
-	
+	if (CurrentAccelComponent)
+		CurrentAccelComponent->FadeOut(0.5f, 0.f);
+
 
 	UPlayerInput* PlayerInputObject = this->PlayerInput;
 	
@@ -166,6 +171,9 @@ void AC_PlayerController::CheckReadyState()
 		CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("MapBGM")));
 		CurrentBGMComponent->FadeIn(0.5f);
 		CountdownState = 4;
+
+		CurrentAccelComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("AccelIdle")), 2.f);
+		CurrentAccelComponent->FadeIn(1.f);
 	}
 }
 
@@ -173,8 +181,21 @@ void AC_PlayerController::ChangeCamera()
 {
 	const FVector PrevCameraLocation = PlayerKartRef->Camera->GetComponentLocation();
 	const FRotator PrevCameraRotation = PlayerKartRef->Camera->GetComponentRotation();
-	CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("GoalInFinish")));
-	CurrentBGMComponent->FadeIn(0.2f);
+	
+
+	if (CurrentBGMComponent)
+	{
+		if (CurrentBGMComponent->IsPlaying())
+		{
+			CurrentBGMComponent->Stop();
+		}
+		else
+		{
+			CurrentBGMComponent = UGameplayStatics::CreateSound2D(this, *SoundData.Find(FName("GoalInFinish")));
+			CurrentBGMComponent->Play();
+		}
+	}
+
 	
 	
 	ACameraActor* TempCamera = GetWorld()->SpawnActor<ACameraActor>(PrevCameraLocation, PrevCameraRotation);
@@ -223,9 +244,18 @@ void AC_PlayerController::ChangeCamera()
 			if (IsValid(Child))
 			{
 				if (PlayerKartRef->CurRank == 0)
+				{
 					Child->PlayAnimation(PlayerKartRef->WinMontage, true);
+					PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("WinVoice")), 2.f);
+					PlayerKartRef->CurrentVoiceComponent->Play();
+				}
 				else
+				{
 					Child->PlayAnimation(PlayerKartRef->LoseMontage, true);
+					PlayerKartRef->CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *PlayerKartRef->VoiceData.Find(FName("LoseVoice")), 2.f);
+					PlayerKartRef->CurrentVoiceComponent->Play();
+
+				}
 			}
 
 		}
@@ -244,4 +274,16 @@ void AC_PlayerController::CheckBoostState()
 void AC_PlayerController::OnItemAcquired(EItemList AcquiredItem)
 {
 	CurrentHUD->ChangeItemImg(int(AcquiredItem));
+}
+
+void AC_PlayerController::PlayLapSound(int32 LapNum)
+{
+	if (LapNum == 1)
+	{
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("Lap1")));
+	}
+	else if(LapNum == 2)
+	{
+		UGameplayStatics::PlaySound2D(this, *SoundData.Find(FName("Lap2")));
+	}
 }

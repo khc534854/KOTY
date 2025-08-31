@@ -74,8 +74,12 @@ void AC_KartBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (GamemodeRef->CurrentState == RaceLevelState::Ready || GamemodeRef->CurrentState == RaceLevelState::Cinematic)
+		return;
+
 	CheckIsGround();
 	CheckSpline();
+
 	
 	if (bIsGround)
 	{
@@ -528,7 +532,7 @@ void AC_KartBase::SetVelocity()
 		CurVelocity = FVector::VectorPlaneProject(CurVelocity, GroundNormal);
 	}
 	
-	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
+	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed + (CoinCount * 100));
 	CurSpeed = CurVelocity.Size();
 	SpeedRatio = CurVelocity.Size() / MaxSpeed;
 }
@@ -549,7 +553,7 @@ void AC_KartBase::SetFlyVelocity()
 	FVector FinalForce = ThrustForce + GravityForce + SidewaysFrictionForce;
 	CurVelocity += FinalForce * GetWorld()->GetDeltaSeconds();
 	
-	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed);
+	CurVelocity = CurVelocity.GetClampedToMaxSize(MaxSpeed + AddSpeed + (CoinCount * 100));
 	CurSpeed = CurVelocity.Size();
 	SpeedRatio = CurVelocity.Size() / MaxSpeed;
 }
@@ -731,7 +735,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftBlue")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 0.8f);
 					}
 					else if (EffectType == 2 && DriftEffect2)
 					{
@@ -754,7 +758,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftRed")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 0.8f);
 					}
 					else if (EffectType == 3 && DriftEffect3)
 					{					
@@ -777,7 +781,7 @@ void AC_KartBase::PlayDriftEffect(int EffectType, float DriftStartDirEffect)
 						if (CurrentKartSoundComponent)
 							CurrentKartSoundComponent->FadeOut(0.1f, 0);
 						CurrentKartSoundComponent = UGameplayStatics::CreateSound2D(this, *KartSoundData.Find(FName("DriftPurple")));
-						CurrentKartSoundComponent->FadeIn(0.1f, 1.f);
+						CurrentKartSoundComponent->FadeIn(0.1f, 0.8f);
 					}
 
 				}
@@ -846,12 +850,11 @@ void AC_KartBase::CheckSpline()
 		int32 ClosestIndex = FindClosestSplinePointIndex(GetActorLocation());
 		if (MaxProgressPointIndex == 0)
 		{
-			if (ClosestIndex == 20 || ClosestIndex == 19)
+			if (ClosestIndex >= 40)
 				return;
 		}
 	
-		// ✨ 핵심: 새로 찾은 포인트가 이전에 도달했던 최대 진행도보다 크거나 같을 때만 인정
-		if (ClosestIndex > MaxProgressPointIndex)
+		if ((ClosestIndex - MaxProgressPointIndex) < 3 && (ClosestIndex - MaxProgressPointIndex) > 0)
 		{
 			// 정주행으로 인정하고, 최대 진행도를 갱신합니다.
 			MaxProgressPointIndex = ClosestIndex;

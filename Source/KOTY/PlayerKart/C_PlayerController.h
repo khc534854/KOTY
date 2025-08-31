@@ -38,6 +38,8 @@ public:
 	UFUNCTION()
 	void OnItemAcquired(EItemList AcquiredItem);
 
+	void PlayLapSound(int32 LapNum);
+
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> HUDWidgetClass;
@@ -61,7 +63,7 @@ public:
 	int32 CurLaps = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxLaps = 2;
+	int32 MaxLaps = 3;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentRaceTime;
@@ -79,6 +81,9 @@ public:
 
 	UPROPERTY()
 	UAudioComponent* CurrentBGMComponent;
+
+	UPROPERTY()
+	UAudioComponent* CurrentAccelComponent;
 
 	bool bIsTestMap = false;
 };

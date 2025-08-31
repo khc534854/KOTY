@@ -36,6 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeRank(int32 CurRank);
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeCoinNum();
+
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* IMG_Ready;

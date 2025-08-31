@@ -258,4 +258,7 @@ public://Koty Item
 	UPROPERTY()
 	UAudioComponent* CurrentKartSoundComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CoinCount = 0;
+
 };
