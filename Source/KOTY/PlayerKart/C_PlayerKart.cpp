@@ -178,7 +178,7 @@ void AC_PlayerKart::Stun()
 	}
 
 	CurrentVoiceComponent = UGameplayStatics::CreateSound2D(this, *VoiceData.Find(FName("StunVoice")));
-	CurrentAccelSoundComponent->Play();
+	CurrentVoiceComponent->Play();
 }
 
 void AC_PlayerKart::StartAccelerator(const FInputActionValue& Value)

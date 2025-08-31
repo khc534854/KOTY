@@ -3,6 +3,7 @@
 #include "KotyItemHoldComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Item/Base/KotyItemBase.h"
+#include <Item/Implement/CoinItem.h>
 
 UKotyItemHoldComponent::UKotyItemHoldComponent()
 {
@@ -198,6 +199,8 @@ void UKotyItemHoldComponent::UseCurrentItem()
 		
 		//아이템 사용
 		Temp->OnUseItem(this);
+		if (Temp.IsA<ACoinItem>())
+			Temp->Destroy();
 		
 		//정보 업데이트
 		CodeOfHoldingItems[0] = CodeOfHoldingItems[1];
