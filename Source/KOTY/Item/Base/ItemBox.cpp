@@ -115,54 +115,88 @@ void AItemBox::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (this->IsHidden())
 		return;
 
-	//충돌 상대가 아이템 충돌체였다
-	if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+	if (OtherActor == PlayerPawn)
 	{
-		//아이템 획득
-		UE_LOG(LogTemp, Log, TEXT("ItemBox Hit with Kart!"));
-
-		//플레이어의 경우
-		if (UKotyItemHoldComponent* OtherHoldComp = OtherActor->GetComponentByClass<UKotyItemHoldComponent>())
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
 		{
-			//아이템 선택 사운드 재생
-			if (UseSound)
-			{
-				UGameplayStatics::PlaySound2D(OtherActor, UseSound, 1, 1, 0);	
-			}
+			//아이템 획득
+			UE_LOG(LogTemp, Log, TEXT("ItemBox Hit with Kart!"));
 
-			//아이템 코드
-			switch (ItemCode)
+			//플레이어의 경우
+			if (UKotyItemHoldComponent* OtherHoldComp = OtherActor->GetComponentByClass<UKotyItemHoldComponent>())
 			{
-			case EItemList::Start:
-			case EItemList::End:
-			case EItemList::None:
+				//아이템 선택 사운드 재생
+				if (UseSound)
 				{
-					//랜덤 아이템 부여
-					OtherHoldComp->GetRandomItem();
-					break;
+					UGameplayStatics::PlaySound2D(OtherActor, UseSound, 1, 1, 0);	
 				}
-			default:
+
+				//아이템 코드
+				switch (ItemCode)
 				{
-					//특정 아이템 부여
-					OtherHoldComp->GetSpecifiedItem(ItemCode);
-					break;
-				};
-			}
+				case EItemList::Start:
+				case EItemList::End:
+				case EItemList::None:
+					{
+						//랜덤 아이템 부여
+						OtherHoldComp->GetRandomItem();
+						break;
+					}
+				default:
+					{
+						//특정 아이템 부여
+						OtherHoldComp->GetSpecifiedItem(ItemCode);
+						break;
+					};
+				}
+			}	
 		}
-
-		//아이템 박스 파괴 사운드 재생
-		if (DestroySound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
-		}
-
-		//이 아이템 박스 파괴(안보이게)
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
-		GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &AItemBox::Respawn, 5.f, false);
-
 		//this->Destroy();
 	}
+	else
+	{
+		//충돌 상대가 아이템 충돌체였다
+		if (const UKotyItemHitComponent* OtherHitComp2 = OtherActor->GetComponentByClass<UKotyItemHitComponent>())
+		{
+			//아이템 획득
+			UE_LOG(LogTemp, Log, TEXT("ItemBox Hit with Kart!"));
+
+			//플레이어의 경우
+			if (UKotyItemHoldComponent* OtherHoldComp2 = OtherActor->GetComponentByClass<UKotyItemHoldComponent>())
+			{
+				int Rand = FMath::RandRange(0, 3);
+
+				switch (Rand)
+				{
+				case 0:
+					OtherHoldComp2->GetSpecifiedItem(EItemList::Banana);
+					break;
+				case 1:
+					OtherHoldComp2->GetSpecifiedItem(EItemList::BlackBomb);
+					break;
+				case 2:
+					OtherHoldComp2->GetSpecifiedItem(EItemList::GreenTurtle);
+					break;
+				case 3:
+					OtherHoldComp2->GetSpecifiedItem(EItemList::RedTurtle);
+					break;
+				}
+			}
+		}
+	}
+
+	//아이템 박스 파괴 사운드 재생
+	if (DestroySound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestroySound, GetActorLocation(), GetActorRotation(), 1, 1, 0, SoundAttenuation);
+	}
+
+	//이 아이템 박스 파괴(안보이게)
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &AItemBox::Respawn, 5.f, false);
+
 }
 
 void AItemBox::Tick(const float DeltaTime)
